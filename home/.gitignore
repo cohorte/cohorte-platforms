@@ -1,0 +1,6 @@
+!bin/
+!conf/
+!repo/
+lib/*
+!lib/README
+var/
