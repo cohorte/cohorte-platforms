@@ -26,7 +26,7 @@
 
 	/* Distributor criteria */
 	{
-		"name" : "cohorte.composer.criteria.distance.configuration"
+		"name" : "cohorte.composer.top.criteria.distance.configuration"
 	},
 
 	/* Shell commands */
