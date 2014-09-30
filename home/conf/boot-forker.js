@@ -39,17 +39,6 @@
 	},
 
 	/*
-	 * Forker discovery
-	 */
-	/*
-	{
-		"name" : "cohorte.forker.discovery.core"
-	}, {
-		"name" : "cohorte.forker.discovery.heartbeat_multicast"
-	},
-	*/
-
-	/*
 	 * Monitor bundles
 	 */
 	{
@@ -107,24 +96,6 @@
 		"factory" : "cohorte-forker-state-updater-factory",
 		"name" : "cohorte-forker-state-updater"
 	},
-	
-	/* Forker discovery */
-	/*
-	{
-		"factory" : "cohorte-forker-discovery-factory",
-		"name" : "cohorte-forker-discovery",
-		"properties" : {
-			"cohorte.application" : "demo-august-2013"
-		}
-	}, {
-		"factory" : "cohorte-forker-heartbeat-multicast-factory",
-		"name" : "cohorte-forker-heartbeat-multicast",
-		"properties" : {
-			"multicast.group" : "239.0.0.1",
-			"multicast.port" : 42001
-		}
-	},
-	*/
 
 	/* Configuration of monitor components */
 	{
