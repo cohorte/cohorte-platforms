@@ -15,14 +15,16 @@
             <include>base/**</include>
          </includes>
          <useDefaultExcludes>false</useDefaultExcludes>
-         <!--excludes>
+         <excludes>
             <exclude>pom.xml</exclude>
             <exclude>all-assembly.xml</exclude>
             <exclude>src/**</exclude>
             <exclude>log/**</exclude>
             <exclude>target/**</exclude>
+            <exclude>home/target/**</exclude>
+            <exclude>base/target/**</exclude>
             <exclude>**/*.DS_Store</exclude>
-         </excludes-->
+         </excludes>
       </fileSet>
    </fileSets>
 </assembly>
