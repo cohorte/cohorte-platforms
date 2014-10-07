@@ -11,24 +11,18 @@
          <directory>${project.basedir}</directory>
          <outputDirectory>/</outputDirectory>
          <includes>            
-            <include>bin/**</include>
-            <include>conf/**</include>
-            <include>lib/**</include>
-            <include>repo/**</include>    
-            <include>run.sh</include>
-            <include>README.txt</include>
-            <include>NOTICE.txt</include>
-            <include>LICENSE.txt</include>
+            <include>home/**</include>
+            <include>base/**</include>
          </includes>
          <useDefaultExcludes>false</useDefaultExcludes>
-         <excludes>
+         <!--excludes>
             <exclude>pom.xml</exclude>
-            <exclude>assembly.xml</exclude>
+            <exclude>all-assembly.xml</exclude>
             <exclude>src/**</exclude>
             <exclude>log/**</exclude>
             <exclude>target/**</exclude>
             <exclude>**/*.DS_Store</exclude>
-         </excludes>
+         </excludes-->
       </fileSet>
    </fileSets>
 </assembly>
