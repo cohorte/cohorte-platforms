@@ -4,7 +4,6 @@ echo "[INFO] Preparing Python dependencies..."
 
 # Set up the virtual environment
 VENV_NAME=tmp_venv
-PYTHON_INSTALLED=python3.2
 INDEX_URL=http://forge.isandlatech.com:3080/devpi/jenkins/cohorte/+simple/
 rm -fr $VENV_NAME
 virtualenv $VENV_NAME -p python3 || return 1
@@ -26,6 +25,7 @@ mv home/lib/README $VENV_NAME
 rm -rf home/lib/*
 mv $VENV_NAME/README home/lib
 ## copy python packages
+PYTHON_INSTALLED=`ls $VENV_NAME/lib`
 ### Jsonrpclib
 mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/jsonrpclib home/lib
 ### sleekxmpp
