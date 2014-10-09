@@ -1,5 +1,4 @@
 Cohorte-Python==1.0.0.dev
-JPype1-py3==0.5.5.2
 Cohorte-Herald==0.0.2.dev
 iPOPO==0.5.7
 jsonrpclib-pelix==0.2.1

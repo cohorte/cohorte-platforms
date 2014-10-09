@@ -2,6 +2,18 @@
 
 echo "[INFO] Preparing Python dependencies..."
 
+# Clean up
+mkdir tmp
+mv home/lib/README tmp
+rm -rf home/lib/*
+mv tmp/README home/lib
+rm -rf tmp
+
+# analyse parameters
+if test "$1" == "minimal"; then
+exit;
+fi
+
 # Set up the virtual environment
 VENV_NAME=tmp_venv
 INDEX_URL=http://forge.isandlatech.com:3080/devpi/jenkins/cohorte/+simple/
@@ -16,14 +28,22 @@ pip install --upgrade --index-url=$INDEX_URL wheel || return 2
 pip install --upgrade --index-url=$INDEX_URL nose || return 2
 pip install --upgrade --index-url=$INDEX_URL devpi-client || return 2
 
+# install JPype
+# JPype1-py3==0.5.5.2
+if test "$1" == "macosx"; then
+python deps.py --package=JPype-py3 --platform=darwin --install
+elif test "$1" == "linux"; then
+python deps.py --package=JPype-py3 --platform=linux-x86_64 --install
+elif test "$1" == "win32"; then
+echo "[ERROR] windows is not yet supported for JPype binaries!"
+fi
+
 # Install dependencies
 pip install --upgrade --index-url=$INDEX_URL -r requirements.txt
 
 # Copy dependencies to home/lib
 ## cleanup home/lib directory
-mv home/lib/README $VENV_NAME
-rm -rf home/lib/*
-mv $VENV_NAME/README home/lib
+
 ## copy python packages
 PYTHON_INSTALLED=`ls $VENV_NAME/lib`
 ### Jsonrpclib
