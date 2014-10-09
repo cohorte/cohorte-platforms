@@ -65,54 +65,7 @@
 		</dependency>	
 	</dependencies>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-		        <artifactId>maven-dependency-plugin</artifactId>
-		        <version>2.9</version>
-		        <executions>
-		          <execution>
-		            <id>copy-dependencies</id>
-		            <phase>package</phase>
-		            <goals>
-		              <goal>copy-dependencies</goal>
-		            </goals>
-		            <configuration>
-		              <outputDirectory>home/lib</outputDirectory>
-		              <overWriteReleases>false</overWriteReleases>
-		              <overWriteSnapshots>true</overWriteSnapshots>		               
-		              <excludeTypes>pom</excludeTypes>            
-		              <includeGroupIds>
-		              	org.cohorte.utilities,
-		              	org.cohorte.jabsorb,
-		              	org.cohorte.remote,
-		              	org.cohorte.herald, 
-		              	org.cohorte.runtime
-		              </includeGroupIds>
-		            </configuration>
-		          </execution>
-		        </executions>
-		      </plugin>		
-		      <plugin>
-            	<artifactId>maven-assembly-plugin</artifactId>
-            	<version>2.4.1</version>            			        
-		        <executions>
-		        	<execution>
-		        		<id>assembly</id>
-		        		<phase>package</phase>
-		        		<goals><goal>single</goal></goals>
-		        		<configuration>
-				        	<finalName>${project.artifactId}-${project.version}</finalName>
-				        	<tarLongFileMode>gnu</tarLongFileMode>
-				        	<descriptors>
-				        		<descriptor>all-assembly.xml</descriptor>
-				        	</descriptors>
-				        </configuration>
-				    </execution>
-				</executions>
-            </plugin>
-		</plugins>	
+	<build>		
     	<extensions>
 	      <!-- Enabling the use of FTP -->
 	      <extension>
@@ -180,4 +133,79 @@
 	      <layout>default</layout>
 	    </snapshotRepository>
 	</distributionManagement>
+
+
+	<profiles>
+		<profile>
+			<!-- Linux Distribution -->
+			<id>linux</id>
+			<build>
+				<plugins>
+					<plugin>
+					  <groupId>org.codehaus.mojo</groupId>
+					  <artifactId>exec-maven-plugin</artifactId>
+					  <version>1.2.1</version>
+					    <executions>
+					        <execution>
+					            <id>prepare-python-dependencies</id>
+					            <phase>compile</phase>
+					            <goals>
+					                <goal>exec</goal>
+					            </goals>
+					            <configuration>
+					                <executable>./prepare-python-dependencies.sh</executable>
+					                <workingDirectory>${basedir}</workingDirectory>
+					            </configuration>
+					        </execution>
+					    </executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+				        <artifactId>maven-dependency-plugin</artifactId>
+				        <version>2.9</version>
+				        <executions>
+				          <execution>
+				            <id>copy-dependencies</id>
+				            <phase>package</phase>
+				            <goals>
+				              <goal>copy-dependencies</goal>
+				            </goals>
+				            <configuration>
+				              <outputDirectory>home/lib</outputDirectory>
+				              <overWriteReleases>false</overWriteReleases>
+				              <overWriteSnapshots>true</overWriteSnapshots>		               
+				              <excludeTypes>pom</excludeTypes>            
+				              <includeGroupIds>
+				              	org.cohorte.utilities,
+				              	org.cohorte.jabsorb,
+				              	org.cohorte.remote,
+				              	org.cohorte.herald, 
+				              	org.cohorte.runtime
+				              </includeGroupIds>
+				            </configuration>
+				          </execution>
+				        </executions>
+				      </plugin>		
+				      <plugin>
+		            	<artifactId>maven-assembly-plugin</artifactId>
+		            	<version>2.4.1</version>            			        
+				        <executions>
+				        	<execution>
+				        		<id>assembly</id>
+				        		<phase>package</phase>
+				        		<goals><goal>single</goal></goals>
+				        		<configuration>
+						        	<finalName>${project.artifactId}-${project.version}</finalName>						        	
+						        	<tarLongFileMode>gnu</tarLongFileMode>
+						        	<descriptors>
+						        		<descriptor>linux-assembly.xml</descriptor>
+						        	</descriptors>
+						        </configuration>
+						    </execution>
+						</executions>
+		            </plugin>
+				</plugins>	
+			</build>
+		</profile>
+	</profiles>
 </project>
