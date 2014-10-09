@@ -4,6 +4,7 @@ echo "[INFO] Preparing Python dependencies..."
 
 # Set up the virtual environment
 VENV_NAME=tmp_venv
+PYTHON_INSTALLED=python3.2
 INDEX_URL=http://forge.isandlatech.com:3080/devpi/jenkins/cohorte/+simple/
 rm -fr $VENV_NAME
 virtualenv $VENV_NAME -p python3 || return 1
@@ -26,19 +27,19 @@ rm -rf home/lib/*
 mv $VENV_NAME/README home/lib
 ## copy python packages
 ### Jsonrpclib
-mv tmp_venv/lib/python3.4/site-packages/jsonrpclib home/lib
+mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/jsonrpclib home/lib
 ### sleekxmpp
-mv tmp_venv/lib/python3.4/site-packages/sleekxmpp home/lib
+mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/sleekxmpp home/lib
 ### requests
-mv tmp_venv/lib/python3.4/site-packagesrequestshome/lib
+mv tmp_venv/lib/$PYTHON_INSTALLED/site-packagesrequestshome/lib
 ### Herald
-mv tmp_venv/lib/python3.4/site-packages/herald home/lib
+mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/herald home/lib
 ### JPYPE
-mv tmp_venv/lib/python3.4/site-packages/_jpype.so home/lib
-mv tmp_venv/lib/python3.4/site-packages/jpype home/lib
-mv tmp_venv/lib/python3.4/site-packages/jpypex home/lib
+mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/_jpype.so home/lib
+mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/jpype home/lib
+mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/jpypex home/lib
 ### iPOPO
-mv tmp_venv/lib/python3.4/site-packages/pelix home/lib
+mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/pelix home/lib
 
 # Install project
 #pip install --index-url=$INDEX_URL .
