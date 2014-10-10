@@ -31,9 +31,9 @@ pip install --upgrade --index-url=$INDEX_URL devpi-client || return 2
 # install JPype
 # JPype1-py3==0.5.5.2
 if test "$1" == "macosx"; then
-python deps.py --package=JPype-py3 --platform=darwin --install
+python deps.py --package=JPype1-py3 --platform=darwin --install
 elif test "$1" == "linux"; then
-python deps.py --package=JPype-py3 --platform=linux-x86_64 --install
+python deps.py --package=JPype1-py3 --platform=linux-x86_64 --install
 elif test "$1" == "win32"; then
 echo "[ERROR] windows is not yet supported for JPype binaries!"
 fi
