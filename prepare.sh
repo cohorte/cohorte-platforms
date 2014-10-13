@@ -51,7 +51,7 @@ mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/jsonrpclib home/lib
 ### sleekxmpp
 mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/sleekxmpp home/lib
 ### requests
-mv tmp_venv/lib/$PYTHON_INSTALLED/site-packagesrequestshome/lib
+mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/requests home/lib
 ### Herald
 mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/herald home/lib
 ### JPYPE
@@ -60,6 +60,8 @@ mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/jpype home/lib
 mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/jpypex home/lib
 ### iPOPO
 mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/pelix home/lib
+### Cohorte Python
+mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/cohorte home/lib
 
 # Install project
 #pip install --index-url=$INDEX_URL .
