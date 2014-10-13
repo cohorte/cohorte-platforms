@@ -8,4 +8,4 @@ release.properties
 .project
 .classpath
 .settings
-
+tmp_venv/ 

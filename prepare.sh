@@ -75,7 +75,7 @@ mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/pelix home/lib
 
 # Clean up
 deactivate
-#rm -fr $VENV_NAME
+rm -fr $VENV_NAME
 
 echo "[INFO] Python dependencies are installed on home/lib"
 
