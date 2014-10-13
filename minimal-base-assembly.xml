@@ -16,6 +16,7 @@
          <useDefaultExcludes>false</useDefaultExcludes>
          <excludes>
             <exclude>pom.xml</exclude>
+            <exclude>home/setup.command</exclude>
             <exclude>minimal-assembly.xml</exclude>
             <exclude>python-assembly.xml</exclude>
             <exclude>linux-assembly.xml</exclude>

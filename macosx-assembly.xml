@@ -11,7 +11,13 @@
          <directory>${project.basedir}</directory>
          <outputDirectory>/</outputDirectory>
          <includes>            
-            <include>home/**</include>
+            <include>home/bin/**</include>
+            <include>home/conf/**</include>
+            <include>home/lib/**</include>
+            <include>home/repo/**</include>
+            <include>home/*.txt</include>
+            <include>home/run.sh</include>
+            <include>home/setup.command</include>
             <include>base/**</include>
          </includes>
          <useDefaultExcludes>false</useDefaultExcludes>
