@@ -3,13 +3,10 @@
 echo "[INFO] COHORTE sutup.."
 echo "[INFO] exporting the COHORTE_HOME environment variable..."
 
-# Keep the current working directory
-old_pwd="$(pwd)"
+cd "$(dirname "$0")"
 
-# Compute the path to this file
-cd "$(dirname $0)"
 export COHORTE_HOME="$(pwd)"
-
+echo "[INFO] COHORTE_HOME=$COHORTE_HOME"
 if test -e "$HOME/.bashrc"; then
     echo "[INFO] there is already a .bashrc file in your home folder."
     if grep "COHORTE_HOME" $HOME/.bashrc &> /dev/null; then
