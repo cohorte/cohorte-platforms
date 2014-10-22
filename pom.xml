@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-  <!--   
-    Copyright 2014 isandlaTech (http://isandlatech.com/) 
-     
-    Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file 
-	except in compliance with the License. You may obtain a copy of the License 
-	at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable 
-	law or agreed to in writing, software distributed under the License is distributed 
-	on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either 
-	express or implied. See the License for the specific language governing permissions 
-	and limitations under the License. 
-	-->
-	
+<!--
+	Copyright 2014 isandlaTech (http://isandlatech.com/)
+
+	Licensed under the Apache License, Version 2.0 (the "License"); you may 
+	not use this file
+	except in compliance with the License. You may obtain a copy of the License
+	at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable
+	law or agreed to in writing, software distributed under the License is distributed
+	on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+	express or implied. See the License for the specific language governing 
+	permissions
+	and limitations under the License.
+-->
+
 <project
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -18,10 +20,10 @@
 	<groupId>org.cohorte.platforms</groupId>
 	<artifactId>cohorte</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
-	<packaging>pom</packaging>	
+	<packaging>pom</packaging>
 
 	<name>COHORTE Project ::: Platforms :: HOME </name>
-	
+
 	<url>https://github.com/isandlaTech/cohorte-platforms</url>
 
 	<dependencies>
@@ -38,7 +40,7 @@
 			<artifactId>org.jabsorb.ng</artifactId>
 			<version>1.1.0-SNAPSHOT</version>
 			<scope>provided</scope>
-		</dependency>	
+		</dependency>
 		<!-- cohorte-remote -->
 		<dependency>
 			<groupId>org.cohorte.remote</groupId>
@@ -46,7 +48,7 @@
 			<version>1.2.0-SNAPSHOT</version>
 			<type>pom</type>
 			<scope>provided</scope>
-		</dependency>	
+		</dependency>
 		<!-- cohorte-runtime -->
 		<dependency>
 			<groupId>org.cohorte.runtime</groupId>
@@ -54,100 +56,102 @@
 			<version>1.0.0-SNAPSHOT</version>
 			<type>pom</type>
 			<scope>provided</scope>
-		</dependency>		
-		<!-- cohorte-herald -->	
+		</dependency>
+		<!-- cohorte-herald -->
 		<dependency>
 			<groupId>org.cohorte.herald</groupId>
 			<artifactId>cohorte-herald-package</artifactId>
 			<version>0.0.2-SNAPSHOT</version>
 			<type>pom</type>
 			<scope>provided</scope>
-		</dependency>	
+		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
-			 <plugin>
-			    <artifactId>maven-clean-plugin</artifactId>
-			    <version>2.6</version>
-			    <configuration>
-			      <filesets>
-			        <fileset>
-			          <directory>bin/templates</directory>
-			          <includes>
-			            <include>**/*</include>			            
-			          </includes>
-			          <followSymlinks>false</followSymlinks>
-			        </fileset>
-			        <fileset>
-			          <directory>lib</directory>
-			          <includes>
-			            <include>**/*</include>			            
-			          </includes>
-			          <excludes>
-			          	<exclude>README</exclude>
-			          </excludes>
-			          <followSymlinks>false</followSymlinks>
-			        </fileset>
-			      </filesets>
-			    </configuration>
-			  </plugin>
-			  <plugin>
+			<plugin>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>bin/templates</directory>
+							<includes>
+								<include>**/*</include>
+							</includes>
+							<followSymlinks>false</followSymlinks>
+						</fileset>
+						<fileset>
+							<directory>lib</directory>
+							<includes>
+								<include>**/*</include>
+							</includes>
+							<excludes>
+								<exclude>README</exclude>
+							</excludes>
+							<followSymlinks>false</followSymlinks>
+						</fileset>
+					</filesets>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-		        <artifactId>maven-dependency-plugin</artifactId>
-		        <version>2.9</version>
-		        <executions>
-		          <execution>
-		            <id>copy-dependencies</id>
-		            <phase>generate-sources</phase>
-		            <goals>
-		              <goal>copy-dependencies</goal>
-		            </goals>
-		            <configuration>
-		              <outputDirectory>lib</outputDirectory>
-		              <overWriteReleases>false</overWriteReleases>
-		              <overWriteSnapshots>true</overWriteSnapshots>		               
-		              <excludeTypes>pom</excludeTypes>            
-		              <includeGroupIds>
-		              	org.cohorte.utilities,
-		              	org.cohorte.jabsorb,
-		              	org.cohorte.remote,
-		              	org.cohorte.herald, 
-		              	org.cohorte.runtime
-		              </includeGroupIds>
-		            </configuration>
-		          </execution>
-		        </executions>
-		      </plugin>	
-		      <plugin>
-            	<artifactId>maven-assembly-plugin</artifactId>
-            	<version>2.4.1</version>            			        
-		        <executions>
-		        	<execution>
-		        		<id>base-ssembly</id>
-		        		<phase>generate-sources</phase>
-		        		<goals><goal>single</goal></goals>
-		        		<configuration>
-				        	<finalName>${project.artifactId}-${project.version}</finalName>
-				        	<outputDirectory>bin/templates</outputDirectory>
-				        	<tarLongFileMode>gnu</tarLongFileMode>
-				        	<descriptors>
-				        		<descriptor>base-assembly.xml</descriptor>
-				        	</descriptors>
-				        </configuration>
-				    </execution>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.9</version>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>lib</outputDirectory>
+							<overWriteReleases>false</overWriteReleases>
+							<overWriteSnapshots>true</overWriteSnapshots>
+							<excludeTypes>pom</excludeTypes>
+							<includeGroupIds>
+								org.cohorte.utilities,
+								org.cohorte.jabsorb,
+								org.cohorte.remote,
+								org.cohorte.herald,
+								org.cohorte.runtime
+							</includeGroupIds>
+						</configuration>
+					</execution>
 				</executions>
-            </plugin>
+			</plugin>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.4.1</version>
+				<executions>
+					<execution>
+						<id>base-ssembly</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<finalName>${project.artifactId}-${project.version}</finalName>
+							<outputDirectory>bin/templates</outputDirectory>
+							<tarLongFileMode>gnu</tarLongFileMode>
+							<descriptors>
+								<descriptor>base-assembly.xml</descriptor>
+							</descriptors>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 
-		</plugins>	
+		</plugins>
 		<extensions>
-	      <!-- Enabling the use of FTP -->
-	      <extension>
-	        <groupId>org.apache.maven.wagon</groupId>
-	         <artifactId>wagon-ftp</artifactId>
-	         <version>1.0-beta-6</version>
-	      </extension>
-	    </extensions>
+			<!-- Enabling the use of FTP -->
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ftp</artifactId>
+				<version>1.0-beta-6</version>
+			</extension>
+		</extensions>
 	</build>
 
 	<profiles>
@@ -157,48 +161,50 @@
 			<build>
 				<plugins>
 					<plugin>
-					  <groupId>org.codehaus.mojo</groupId>
-					  <artifactId>exec-maven-plugin</artifactId>
-					  <version>1.2.1</version>
-					    <executions>
-					        <execution>
-					            <id>prepare</id>
-					            <phase>generate-sources</phase>
-					            <goals>
-					                <goal>exec</goal>
-					            </goals>
-					            <configuration>
-					                <executable>bash</executable>					                
-					                <arguments>
-					                	<argument>prepare.sh</argument>
-					                	<argument>macosx</argument>
-					            	</arguments>
-					                <workingDirectory>${basedir}</workingDirectory>
-					            </configuration>
-					        </execution>
-					    </executions>
-					</plugin>					
-				      <plugin>
-		            	<artifactId>maven-assembly-plugin</artifactId>
-		            	<version>2.4.1</version>            			        
-				        <executions>
-				        	<execution>
-				        		<id>macosx-assembly</id>
-				        		<phase>package</phase>
-				        		<goals><goal>single</goal></goals>
-				        		<configuration>
-						        	<finalName>${project.artifactId}-${project.version}</finalName>		
-						        	<outputDirectory>target/</outputDirectory>	
-						        	<directoryMode>755</directoryMode>			        	
-						        	<tarLongFileMode>gnu</tarLongFileMode>
-						        	<descriptors>
-						        		<descriptor>macosx-assembly.xml</descriptor>
-						        	</descriptors>
-						        </configuration>
-						    </execution>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.2.1</version>
+						<executions>
+							<execution>
+								<id>prepare</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>bash</executable>
+									<arguments>
+										<argument>prepare.sh</argument>
+										<argument>macosx</argument>
+									</arguments>
+									<workingDirectory>${basedir}</workingDirectory>
+								</configuration>
+							</execution>
 						</executions>
-		            </plugin>
-				</plugins>	
+					</plugin>
+					<plugin>
+						<artifactId>maven-assembly-plugin</artifactId>
+						<version>2.4.1</version>
+						<executions>
+							<execution>
+								<id>macosx-assembly</id>
+								<phase>package</phase>
+								<goals>
+									<goal>single</goal>
+								</goals>
+								<configuration>
+									<finalName>${project.artifactId}-${project.version}</finalName>
+									<outputDirectory>target/</outputDirectory>
+									<directoryMode>755</directoryMode>
+									<tarLongFileMode>gnu</tarLongFileMode>
+									<descriptors>
+										<descriptor>macosx-assembly.xml</descriptor>
+									</descriptors>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
 			</build>
 		</profile>
 
@@ -208,47 +214,49 @@
 			<build>
 				<plugins>
 					<plugin>
-					  <groupId>org.codehaus.mojo</groupId>
-					  <artifactId>exec-maven-plugin</artifactId>
-					  <version>1.2.1</version>
-					    <executions>
-					        <execution>
-					            <id>prepare</id>
-					            <phase>generate-sources</phase>
-					            <goals>
-					                <goal>exec</goal>
-					            </goals>
-					            <configuration>
-					                <executable>bash</executable>
-					                <arguments>
-					                	<argument>prepare.sh</argument>
-					                	<argument>linux</argument>
-					            	</arguments>
-					                <workingDirectory>${basedir}</workingDirectory>
-					            </configuration>
-					        </execution>
-					    </executions>
-					</plugin>						
-				      <plugin>
-		            	<artifactId>maven-assembly-plugin</artifactId>
-		            	<version>2.4.1</version>            			        
-				        <executions>
-				        	<execution>
-				        		<id>assembly</id>
-				        		<phase>package</phase>
-				        		<goals><goal>single</goal></goals>
-				        		<configuration>
-						        	<finalName>${project.artifactId}-${project.version}</finalName>
-						        	<outputDirectory>target/</outputDirectory>
-						        	<tarLongFileMode>gnu</tarLongFileMode>
-						        	<descriptors>
-						        		<descriptor>linux-assembly.xml</descriptor>
-						        	</descriptors>
-						        </configuration>
-						    </execution>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.2.1</version>
+						<executions>
+							<execution>
+								<id>prepare</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>bash</executable>
+									<arguments>
+										<argument>prepare.sh</argument>
+										<argument>linux</argument>
+									</arguments>
+									<workingDirectory>${basedir}</workingDirectory>
+								</configuration>
+							</execution>
 						</executions>
-		            </plugin>
-				</plugins>	
+					</plugin>
+					<plugin>
+						<artifactId>maven-assembly-plugin</artifactId>
+						<version>2.4.1</version>
+						<executions>
+							<execution>
+								<id>assembly</id>
+								<phase>package</phase>
+								<goals>
+									<goal>single</goal>
+								</goals>
+								<configuration>
+									<finalName>${project.artifactId}-${project.version}</finalName>
+									<outputDirectory>target/</outputDirectory>
+									<tarLongFileMode>gnu</tarLongFileMode>
+									<descriptors>
+										<descriptor>linux-assembly.xml</descriptor>
+									</descriptors>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
 			</build>
 		</profile>
 
@@ -258,47 +266,49 @@
 			<build>
 				<plugins>
 					<plugin>
-					  <groupId>org.codehaus.mojo</groupId>
-					  <artifactId>exec-maven-plugin</artifactId>
-					  <version>1.2.1</version>
-					    <executions>
-					        <execution>
-					            <id>prepare</id>
-					            <phase>generate-sources</phase>
-					            <goals>
-					                <goal>exec</goal>
-					            </goals>
-					            <configuration>
-					                <executable>bash</executable>
-					                <arguments>
-					                	<argument>prepare.sh</argument>
-					                	<argument>win32</argument>
-					            	</arguments>
-					                <workingDirectory>${basedir}</workingDirectory>
-					            </configuration>
-					        </execution>
-					    </executions>
-					</plugin>
-				      <plugin>
-		            	<artifactId>maven-assembly-plugin</artifactId>
-		            	<version>2.4.1</version>            			        
-				        <executions>
-				        	<execution>
-				        		<id>assembly</id>
-				        		<phase>package</phase>
-				        		<goals><goal>single</goal></goals>
-				        		<configuration>
-						        	<finalName>${project.artifactId}-${project.version}</finalName>	
-						        	<outputDirectory>target/</outputDirectory>					        	
-						        	<tarLongFileMode>gnu</tarLongFileMode>
-						        	<descriptors>
-						        		<descriptor>windows-assembly.xml</descriptor>
-						        	</descriptors>
-						        </configuration>
-						    </execution>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.2.1</version>
+						<executions>
+							<execution>
+								<id>prepare</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>bash</executable>
+									<arguments>
+										<argument>prepare.sh</argument>
+										<argument>win32</argument>
+									</arguments>
+									<workingDirectory>${basedir}</workingDirectory>
+								</configuration>
+							</execution>
 						</executions>
-		            </plugin>
-				</plugins>	
+					</plugin>
+					<plugin>
+						<artifactId>maven-assembly-plugin</artifactId>
+						<version>2.4.1</version>
+						<executions>
+							<execution>
+								<id>assembly</id>
+								<phase>package</phase>
+								<goals>
+									<goal>single</goal>
+								</goals>
+								<configuration>
+									<finalName>${project.artifactId}-${project.version}</finalName>
+									<outputDirectory>target/</outputDirectory>
+									<tarLongFileMode>gnu</tarLongFileMode>
+									<descriptors>
+										<descriptor>windows-assembly.xml</descriptor>
+									</descriptors>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
 			</build>
 		</profile>
 		<profile>
@@ -307,47 +317,49 @@
 			<build>
 				<plugins>
 					<plugin>
-					  <groupId>org.codehaus.mojo</groupId>
-					  <artifactId>exec-maven-plugin</artifactId>
-					  <version>1.2.1</version>
-					    <executions>
-					        <execution>
-					            <id>prepare</id>
-					            <phase>generate-sources</phase>
-					            <goals>
-					                <goal>exec</goal>
-					            </goals>
-					            <configuration>
-					                <executable>bash</executable>
-					                <arguments>
-					                	<argument>prepare.sh</argument>
-					                	<argument>python</argument>
-					            	</arguments>
-					                <workingDirectory>${basedir}</workingDirectory>
-					            </configuration>
-					        </execution>
-					    </executions>
-					</plugin>						
-				      <plugin>
-		            	<artifactId>maven-assembly-plugin</artifactId>
-		            	<version>2.4.1</version>            			        
-				        <executions>
-				        	<execution>
-				        		<id>assembly</id>
-				        		<phase>package</phase>
-				        		<goals><goal>single</goal></goals>
-				        		<configuration>
-						        	<finalName>${project.artifactId}-${project.version}</finalName>			
-						        	<outputDirectory>target/</outputDirectory>			        	
-						        	<tarLongFileMode>gnu</tarLongFileMode>
-						        	<descriptors>
-						        		<descriptor>python-assembly.xml</descriptor>
-						        	</descriptors>
-						        </configuration>
-						    </execution>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.2.1</version>
+						<executions>
+							<execution>
+								<id>prepare</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>bash</executable>
+									<arguments>
+										<argument>prepare.sh</argument>
+										<argument>python</argument>
+									</arguments>
+									<workingDirectory>${basedir}</workingDirectory>
+								</configuration>
+							</execution>
 						</executions>
-		            </plugin>
-				</plugins>	
+					</plugin>
+					<plugin>
+						<artifactId>maven-assembly-plugin</artifactId>
+						<version>2.4.1</version>
+						<executions>
+							<execution>
+								<id>assembly</id>
+								<phase>package</phase>
+								<goals>
+									<goal>single</goal>
+								</goals>
+								<configuration>
+									<finalName>${project.artifactId}-${project.version}</finalName>
+									<outputDirectory>target/</outputDirectory>
+									<tarLongFileMode>gnu</tarLongFileMode>
+									<descriptors>
+										<descriptor>python-assembly.xml</descriptor>
+									</descriptors>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
 			</build>
 		</profile>
 		<profile>
@@ -356,68 +368,70 @@
 			<build>
 				<plugins>
 					<plugin>
-					  <groupId>org.codehaus.mojo</groupId>
-					  <artifactId>exec-maven-plugin</artifactId>
-					  <version>1.2.1</version>
-					    <executions>
-					        <execution>
-					            <id>prepare</id>
-					            <phase>generate-sources</phase>
-					            <goals>
-					                <goal>exec</goal>
-					            </goals>
-					            <configuration>
-					                <executable>bash</executable>
-					                <arguments>
-					                	<argument>prepare.sh</argument>
-					                	<argument>minimal</argument>
-					            	</arguments>
-					                <workingDirectory>${basedir}</workingDirectory>
-					            </configuration>
-					        </execution>
-					    </executions>
-					</plugin>						
-				      <plugin>
-		            	<artifactId>maven-assembly-plugin</artifactId>
-		            	<version>2.4.1</version>            			        
-				        <executions>
-				        	<execution>
-				        		<id>assembly</id>
-				        		<phase>package</phase>
-				        		<goals><goal>single</goal></goals>
-				        		<configuration>
-						        	<finalName>${project.artifactId}-${project.version}</finalName>		
-						        	<outputDirectory>target/</outputDirectory>				        	
-						        	<tarLongFileMode>gnu</tarLongFileMode>
-						        	<descriptors>
-						        		<descriptor>minimal-home-assembly.xml</descriptor>
-						        	</descriptors>
-						        </configuration>
-						    </execution>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.2.1</version>
+						<executions>
+							<execution>
+								<id>prepare</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>bash</executable>
+									<arguments>
+										<argument>prepare.sh</argument>
+										<argument>minimal</argument>
+									</arguments>
+									<workingDirectory>${basedir}</workingDirectory>
+								</configuration>
+							</execution>
 						</executions>
-		            </plugin>
-				</plugins>	
+					</plugin>
+					<plugin>
+						<artifactId>maven-assembly-plugin</artifactId>
+						<version>2.4.1</version>
+						<executions>
+							<execution>
+								<id>assembly</id>
+								<phase>package</phase>
+								<goals>
+									<goal>single</goal>
+								</goals>
+								<configuration>
+									<finalName>${project.artifactId}-${project.version}</finalName>
+									<outputDirectory>target/</outputDirectory>
+									<tarLongFileMode>gnu</tarLongFileMode>
+									<descriptors>
+										<descriptor>minimal-home-assembly.xml</descriptor>
+									</descriptors>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
 			</build>
-		</profile>		
+		</profile>
 	</profiles>
 
 	<licenses>
-        <license>
-            <name>Apache License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
-            <distribution>manual</distribution>
-        </license>
-    </licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+			<distribution>manual</distribution>
+		</license>
+	</licenses>
 
-    <organization>
-        <name>isandlaTech</name>
-        <url>http://isandlatech.com</url>
-    </organization>
+	<organization>
+		<name>isandlaTech</name>
+		<url>http://isandlatech.com</url>
+	</organization>
 
 	<issueManagement>
-        <system>Github</system>
-        <url>https://github.com/isandlaTech/cohorte-platforms/issues</url>
-    </issueManagement>
+		<system>Github</system>
+		<url>https://github.com/isandlaTech/cohorte-platforms/issues</url>
+	</issueManagement>
 
 	<repositories>
 		<repository>
@@ -425,38 +439,38 @@
 			<name>isandlaTech Snapshot Repository</name>
 			<url>http://repo.isandlatech.com/maven/snapshots</url>
 			<releases>
-                <enabled>false</enabled>
-            </releases>
+				<enabled>false</enabled>
+			</releases>
 			<snapshots>
-                <enabled>true</enabled>
-            </snapshots>
+				<enabled>true</enabled>
+			</snapshots>
 		</repository>
 		<repository>
 			<id>isandlatech.releases</id>
 			<name>isandlaTech Releases Repository</name>
 			<url>http://repo.isandlatech.com/maven/releases</url>
 			<releases>
-                <enabled>true</enabled>
-            </releases>
+				<enabled>true</enabled>
+			</releases>
 			<snapshots>
-                <enabled>false</enabled>
-            </snapshots>
+				<enabled>false</enabled>
+			</snapshots>
 		</repository>
 	</repositories>
 	<distributionManagement>
 		<repository>
-	      <id>isandlatech</id>
-	      <name>isandlaTech Releases Repository</name>
-	      <url>ftp://isandlatech.com/maven/releases</url>
-	      <layout>default</layout>
-	    </repository>
-	    <snapshotRepository>
-	      <id>isandlatech</id>
-	      <name>isandlaTech Snapshots Repository</name>
-	      <url>ftp://isandlatech.com/maven/snapshots</url>
-	      <uniqueVersion>true</uniqueVersion>
-	      <layout>default</layout>
-	    </snapshotRepository>
+			<id>isandlatech</id>
+			<name>isandlaTech Releases Repository</name>
+			<url>ftp://isandlatech.com/maven/releases</url>
+			<layout>default</layout>
+		</repository>
+		<snapshotRepository>
+			<id>isandlatech</id>
+			<name>isandlaTech Snapshots Repository</name>
+			<url>ftp://isandlatech.com/maven/snapshots</url>
+			<uniqueVersion>true</uniqueVersion>
+			<layout>default</layout>
+		</snapshotRepository>
 	</distributionManagement>
-	
+
 </project>
