@@ -13,7 +13,7 @@
 	}, {
 		"name" : "org.cohorte.pyboot.config"
 	}, {
-		"name" : "org.psem2m.isolates.utilities"
+		"name" : "org.cohorte.utilities"
 	}, {
 		"name" : "org.psem2m.isolates.base"
 	}, {
