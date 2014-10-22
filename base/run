@@ -13,6 +13,18 @@ fi
 base=$(pwd)
 export PYTHONPATH=${PYTHONPATH:="$base/lib:$base/repo"}
 
+# Set node name
+if test $# -gt 0; then
+	if [[ $1 == -* ]]; then
+		export COHORTE_NODE_NAME=${PWD##*/}
+	else
+		export COHORTE_NODE_NAME=$1
+		shift
+	fi
+else
+	export COHORTE_NODE_NAME=${PWD##*/}
+fi
+
 # Run COHORTE
 echo
 echo "[INFO] starting COHORTE ..."
