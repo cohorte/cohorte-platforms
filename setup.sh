@@ -15,11 +15,20 @@ if test -e "$HOME/.bashrc"; then
     else
         echo "[INFO] COHORTE_HOME not declared! We will add it"
     fi
+    if grep "COHORTE_PATH" $HOME/.bashrc &> /dev/null; then
+    echo "[INFO] COHORTE_PATH already set! But we will update it"
+    echo "`sed  /COHORTE_PATH/d  $HOME/.bashrc`" > $HOME/.bashrc
+    else
+    echo "[INFO] COHORTE_PATH not set! We will set it"
+    fi
+
 else
     echo "[INFO] .bashrc doest not exist on your home folder. We will create it"
 
 fi
-echo "export COHORTE_HOME=\"$COHORTE_HOME\"" >> $HOME/.bashrc
+echo "export COHORTE_HOME=\"$COHORTE_HOME\" #COHORTE_HOME" >> $HOME/.bashrc
+tmp='export PATH=$COHORTE_HOME/bin:$PATH'
+echo "$tmp #COHORTE_PATH" >> $HOME/.bashrc
 source $HOME/.bashrc
 
 # Mac OSX exception

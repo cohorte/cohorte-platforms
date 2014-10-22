@@ -2,34 +2,50 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
   <id>win32-distribution</id>
-  <formats>
+<formats>
     <format>tar.gz</format>
     <format>zip</format>
   </formats>
   <fileSets>
       <fileSet>
+          <directory>${project.basedir}</directory>
+          <outputDirectory>/</outputDirectory>
+          <includes><include>bin/**</include></includes>
+          <excludes><exclude>bin/cohorte-create-node</exclude></excludes>
+      </fileSet>
+      <fileSet>
          <directory>${project.basedir}</directory>
          <outputDirectory>/</outputDirectory>
          <includes>            
-            <include>home/**</include>
-            <include>base/**</include>
+            <include>*</include>       
+            <include>conf/**</include>
+            <include>lib/**</include>
+            <include>repo/**</include>
          </includes>
          <useDefaultExcludes>false</useDefaultExcludes>
          <excludes>
+            <exclude>base/**</exclude>
+            <exclude>deps.py</exclude>
             <exclude>pom.xml</exclude>
-            <exclude>home/setup.command</exclude>
-            <exclude>minimal-assembly.xml</exclude>
-            <exclude>python-assembly.xml</exclude>
             <exclude>linux-assembly.xml</exclude>
             <exclude>macosx-assembly.xml</exclude>
+            <exclude>minimal-home-assembly.xml</exclude>
+            <exclude>python-assembly.xml</exclude>
             <exclude>windows-assembly.xml</exclude>
-            <exclude>src/**</exclude>
-            <exclude>log/**</exclude>
+            <exclude>base-assembly.xml</exclude>
+            <exclude>prepare.sh</exclude>            
+            <exclude>requirements.txt</exclude>
             <exclude>target/**</exclude>
-            <exclude>home/target/**</exclude>
-            <exclude>base/target/**</exclude>
             <exclude>**/*.DS_Store</exclude>
          </excludes>
       </fileSet>
    </fileSets>
+   <files>
+    <file>
+      <source>bin/cohorte-create-node</source>      
+      <filtered>true</filtered>
+      <outputDirectory>bin/</outputDirectory>
+      <fileMode>0744</fileMode>
+    </file>
+  </files>
 </assembly>

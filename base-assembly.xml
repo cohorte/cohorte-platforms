@@ -1,9 +1,8 @@
 <assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
-  <id>minimal-base-distribution</id>
+  <id>base-distribution</id>
   <formats>
-    <format>tar.gz</format>
     <format>zip</format>
   </formats>
   <fileSets>
@@ -15,17 +14,6 @@
          </includes>
          <useDefaultExcludes>false</useDefaultExcludes>
          <excludes>
-            <exclude>pom.xml</exclude>
-            <exclude>home/setup.command</exclude>
-            <exclude>minimal-assembly.xml</exclude>
-            <exclude>python-assembly.xml</exclude>
-            <exclude>linux-assembly.xml</exclude>
-            <exclude>macosx-assembly.xml</exclude>
-            <exclude>src/**</exclude>
-            <exclude>log/**</exclude>
-            <exclude>target/**</exclude>
-            <exclude>home/target/**</exclude>
-            <exclude>base/target/**</exclude>
             <exclude>**/*.DS_Store</exclude>
          </excludes>
       </fileSet>

@@ -27,6 +27,8 @@
 		"name" : "cohorte.shell.forker"
 	}, {
 		"name" : "cohorte.forker.watchers"
+	}, {
+		"name" : "webadmin.webadmin"
 	},
 	
 	/*
@@ -95,6 +97,9 @@
 	}, {
 		"factory" : "cohorte-forker-state-updater-factory",
 		"name" : "cohorte-forker-state-updater"
+	}, {
+		"factory" : "cohorte-webadmin-factory",
+		"name" : "cohorte-webadmin"
 	},
 
 	/* Configuration of monitor components */

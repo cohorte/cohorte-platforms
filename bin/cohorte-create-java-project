@@ -1,0 +1,108 @@
+#!/bin/bash
+
+function pom {
+	pom_file=$1
+	{
+	echo '<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"' 
+	echo '  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">' 
+	echo '  <modelVersion>4.0.0</modelVersion>' 
+	echo '' 
+	echo '  <groupId>'$2'</groupId>' 
+	echo '  <artifactId>'$3'</artifactId>' 
+	echo '  <version>'$4'</version>' 
+	echo '  <packaging>bundle</packaging>'
+	echo ''
+	echo '  <dependencies>'
+	echo '    <dependency>'
+    echo '      <groupId>org.apache.felix</groupId>'
+    echo '      <artifactId>org.apache.felix.ipojo.annotations</artifactId>'
+    echo '      <version>1.12.0</version>'
+    echo '      <scope>provided</scope>'
+	echo '    </dependency>'
+	echo '  </dependencies>' 
+	echo ''
+	echo '  <build>'
+	echo '    <plugins>'
+	echo '      <plugin>'
+	echo '        <groupId>org.apache.felix</groupId>'
+	echo '        <artifactId>maven-bundle-plugin</artifactId>'
+	echo '        <version>2.0.1</version>'
+	echo '        <extensions>true</extensions>'
+	echo '        <configuration>'
+	echo '          <instructions>'
+	echo '            <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>'
+	echo '            <Export-Package>'
+	echo '              mypackage'
+	echo '            </Export-Package>'
+	#echo '            <Private-Package>'
+	#echo '              mypackage.impl'
+	#echo '            </Private-Package>'
+	echo '          </instructions>'
+	echo '        </configuration>'
+	echo '      </plugin>'	
+	echo '      <plugin>'
+    echo '        <groupId>org.apache.felix</groupId>'
+    echo '        <artifactId>maven-ipojo-plugin</artifactId>'
+    echo '        <version>1.12.0</version>'
+    echo '        <executions>'
+    echo '          <execution>'
+    echo '            <goals><goal>ipojo-bundle</goal></goals>'
+    echo '          </execution>'
+    echo '        </executions>'
+    echo '      </plugin>'
+	echo '    </plugins>'
+	echo '  </build>'
+	echo '</project>' 
+	} >> $pom_file 
+}
+
+function MyService {
+	MyService=$1
+	{
+	echo 'package mypackage;'
+	echo ''
+	echo 'public interface MyService {'
+	echo '    void sayHelloTo(String name);'
+	echo '}'
+	} >> $MyService
+}
+
+function MyComponent {
+	MyComponent=$1
+	{
+	echo 'package mypackage.impl;'
+	echo ''
+	echo 'import mypackage.*;'
+	echo 'import org.apache.felix.ipojo.annotations.*;'
+	echo ''
+	echo '@Component'
+	echo '@Provides'
+	echo 'public class MyComponent implements MyService {'
+	echo '    public void sayHelloTo(String name) {'
+	echo '        System.out.println("Hello, " + name + "!");'
+	echo '    }'
+	echo '}'
+	} >> $MyComponent
+}
+
+if test $# -eq 3; then
+	groupId=$1
+	artifactId=$2
+	version=$3
+	if test -e $artifactId; then
+		echo "[ERROR] another project with the same artifactId already exist at this folder!"
+	else
+		mkdir $artifactId
+		cd $artifactId
+		touch pom.xml
+		pom "pom.xml" $groupId $artifactId $version
+		mkdir -p src/main/java/mypackage
+		#touch src/main/java/mypackage/MyService.java
+		#MyService "src/main/java/mypackage/MyService.java"
+		#mkdir src/main/java/mypackage/impl
+		#touch src/main/java/mypackage/impl/MyComponent.java
+		#MyComponent "src/main/java/mypackage/impl/MyComponent.java"
+	fi
+else
+	echo "[ERROR] command syntax error!"
+fi

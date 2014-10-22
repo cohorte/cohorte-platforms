@@ -45,7 +45,7 @@
 		"properties" : {
 			"pelix.http.path" : "/cohorte-debug"
 		}
-	}
+	} 
 	
 	/* Signals components */
 	/*

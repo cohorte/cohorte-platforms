@@ -1,0 +1,20 @@
+#!/bin/bash
+base="base"
+if test $# -eq 0; then
+	base="base"
+	echo "[WARNING] no name is given for your new COHORTE NODE, by default will be named :base:"
+else 
+	base="$1"
+fi
+#cohortebaseversion="1.0.0-SNAPSHOT"
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+FOLDER=$PWD
+rm -rf $HOME/cohorte_tmp &> /dev/null
+if test -e "$base"; then
+	echo "[ERROR] another COHORTE NODE with the same name :$base: already exists!"
+	exit
+fi
+mkdir $base &> /dev/null
+unzip $DIR/templates/cohorte-${project.version}-base-distribution.zip -d $HOME/cohorte_tmp &> /dev/null
+mv $HOME/cohorte_tmp/cohorte-${project.version}/base/* $FOLDER/$base/ &> /dev/null
+rm -rf $HOME/cohorte_tmp &> /dev/null

@@ -54,5 +54,8 @@ else
     rm -r $COHORTE_BASE/var/* 2> /dev/null
 fi
 
+shift
+
 # Run the damn thing
-$PYTHON_INTERPRETER -m cohorte.boot.boot -d -v $*
+$PYTHON_INTERPRETER -m cohorte.boot.boot -c $*
+

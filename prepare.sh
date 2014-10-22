@@ -2,13 +2,6 @@
 
 echo "[INFO] Preparing Python dependencies..."
 
-# Clean up
-mkdir tmp
-mv home/lib/README tmp
-rm -rf home/lib/*
-mv tmp/README home/lib
-rm -rf tmp
-
 # analyse parameters
 if test "$1" == "minimal"; then
 exit;
@@ -41,27 +34,29 @@ fi
 # Install dependencies
 pip install --upgrade --index-url=$INDEX_URL -r requirements.txt
 
-# Copy dependencies to home/lib
-## cleanup home/lib directory
+# Copy dependencies to lib
+## cleanup lib directory
 
 ## copy python packages
 PYTHON_INSTALLED=`ls $VENV_NAME/lib`
 ### Jsonrpclib
-mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/jsonrpclib home/lib
+mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/jsonrpclib lib
 ### sleekxmpp
-mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/sleekxmpp home/lib
+mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/sleekxmpp lib
 ### requests
-mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/requests home/lib
+mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/requests lib
 ### Herald
-mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/herald home/lib
+mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/herald lib
 ### JPYPE
-mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/_jpype.so home/lib
-mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/jpype home/lib
-mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/jpypex home/lib
+mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/_jpype.so lib
+mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/jpype lib
+mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/jpypex lib
 ### iPOPO
-mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/pelix home/lib
+mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/pelix lib
 ### Cohorte Python
-mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/cohorte home/lib
+mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/cohorte lib
+### Cohorte Webadmin
+mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/webadmin lib
 
 # Install project
 #pip install --index-url=$INDEX_URL .
@@ -79,5 +74,5 @@ mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/cohorte home/lib
 deactivate
 rm -fr $VENV_NAME
 
-echo "[INFO] Python dependencies are installed on home/lib"
+echo "[INFO] Python dependencies are installed on lib"
 

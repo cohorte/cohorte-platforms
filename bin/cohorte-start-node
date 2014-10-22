@@ -1,0 +1,4 @@
+#!/bin/bash
+
+sh $COHORTE_HOME/run.sh $(pwd) $*
+

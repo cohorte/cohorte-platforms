@@ -16,4 +16,4 @@ export PYTHONPATH=${PYTHONPATH:="$base/lib:$base/repo"}
 # Run COHORTE
 echo
 echo "[INFO] starting COHORTE ..."
-sh $COHORTE_HOME/run.sh $(pwd) $*
+sh $COHORTE_HOME/bin/cohorte-start-node $(pwd) $*
