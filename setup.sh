@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "[INFO] COHORTE sutup.."
+echo "[INFO] COHORTE setup.."
 echo "[INFO] exporting the COHORTE_HOME environment variable..."
 
 cd "$(dirname "$0")"
@@ -29,7 +29,6 @@ fi
 echo "export COHORTE_HOME=\"$COHORTE_HOME\" #COHORTE_HOME" >> $HOME/.bashrc
 tmp='export PATH=$COHORTE_HOME/bin:$PATH'
 echo "$tmp #COHORTE_PATH" >> $HOME/.bashrc
-source $HOME/.bashrc
 
 # Mac OSX exception
 if test -e "$HOME/.bash_profile"; then
@@ -39,5 +38,8 @@ if test -e "$HOME/.bash_profile"; then
         echo "source $HOME/.bashrc #COHORTE" >> $HOME/.bash_profile
     fi
 fi
+
+# Get back where we were
+cd -
 
 echo "[INFO] Done."
