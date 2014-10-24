@@ -47,7 +47,7 @@ mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/requests repo
 ### Herald
 mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/herald repo
 ### JPYPE
-mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/_jpype.so repo
+mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/_jpype*.so repo
 mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/jpype repo
 mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/jpypex repo
 ### iPOPO

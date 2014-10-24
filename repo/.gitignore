@@ -1,5 +1,6 @@
 org.cohorte.*
 org.jabsorb.ng-*
+_jpype*
 cohorte/
 herald/
 jpype/
