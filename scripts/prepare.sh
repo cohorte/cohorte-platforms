@@ -24,39 +24,38 @@ pip install --upgrade --index-url=$INDEX_URL devpi-client || return 2
 # install JPype
 # JPype1-py3==0.5.5.2
 if test "$1" == "macosx"; then
-python deps.py --package=JPype1-py3 --platform=darwin --install
+python scripts/deps.py --package=JPype1-py3 --platform=darwin --install
 elif test "$1" == "linux"; then
-python deps.py --package=JPype1-py3 --platform=linux-x86_64 --install
+python scripts/deps.py --package=JPype1-py3 --platform=linux-x86_64 --install
 elif test "$1" == "win32"; then
 echo "[ERROR] windows is not yet supported for JPype binaries!"
 fi
 
 # Install dependencies
-pip install --upgrade --index-url=$INDEX_URL -r requirements.txt
+pip install --upgrade --index-url=$INDEX_URL -r scripts/requirements.txt
 
-# Copy dependencies to lib
-## cleanup lib directory
+# Copy dependencies to repo
 
 ## copy python packages
 PYTHON_INSTALLED=`ls $VENV_NAME/lib`
 ### Jsonrpclib
-mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/jsonrpclib lib
+mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/jsonrpclib repo
 ### sleekxmpp
-mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/sleekxmpp lib
+mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/sleekxmpp repo
 ### requests
-mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/requests lib
+mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/requests repo
 ### Herald
-mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/herald lib
+mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/herald repo
 ### JPYPE
-mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/_jpype.so lib
-mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/jpype lib
-mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/jpypex lib
+mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/_jpype.so repo
+mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/jpype repo
+mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/jpypex repo
 ### iPOPO
-mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/pelix lib
+mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/pelix repo
 ### Cohorte Python
-mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/cohorte lib
+mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/cohorte repo
 ### Cohorte Webadmin
-mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/webadmin lib
+mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/webadmin repo
 
 # Install project
 #pip install --index-url=$INDEX_URL .
@@ -74,5 +73,5 @@ mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/webadmin lib
 deactivate
 rm -fr $VENV_NAME
 
-echo "[INFO] Python dependencies are installed on lib"
+echo "[INFO] Python dependencies are installed on repo"
 

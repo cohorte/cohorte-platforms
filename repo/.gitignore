@@ -1,0 +1,11 @@
+org.cohorte.*
+org.jabsorb.ng-*
+cohorte/
+herald/
+jpype/
+jpypex/
+jsonrpclib/
+pelix/
+requests/
+sleekxmpp/
+webadmin/

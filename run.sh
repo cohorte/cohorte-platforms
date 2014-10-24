@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 # Keep the current working directory
 old_pwd="$(pwd)"
 
@@ -53,8 +54,6 @@ then
 else
     rm -r $COHORTE_BASE/var/* 2> /dev/null
 fi
-
-shift
 
 # Run the damn thing
 $PYTHON_INTERPRETER -m cohorte.boot.boot -c $*
