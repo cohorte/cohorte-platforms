@@ -82,9 +82,20 @@
 							<followSymlinks>false</followSymlinks>
 						</fileset>
 						<fileset>
-							<directory>lib</directory>
+							<directory>repo</directory>
 							<includes>
-								<include>**/*</include>
+								<include>**/org.cohorte.*</include>
+								<include>**/org.jabsorb.*</include>
+								<include>**/cohorte/**</include>
+								<include>**/herald/**</include>
+								<include>**/jpype/**</include>
+								<include>**/jpypex/**</include>
+								<include>**/jsonrpclib/**</include>
+								<include>**/pelix/**</include>
+								<include>**/requests/**</include>
+								<include>**/sleekxmpp/**</include>
+								<include>**/webadmin/**</include>
+								<include>**/_jpype*</include>
 							</includes>
 							<excludes>
 								<exclude>README</exclude>
@@ -106,7 +117,7 @@
 							<goal>copy-dependencies</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>lib</outputDirectory>
+							<outputDirectory>repo</outputDirectory>
 							<overWriteReleases>false</overWriteReleases>
 							<overWriteSnapshots>true</overWriteSnapshots>
 							<excludeTypes>pom</excludeTypes>
@@ -136,7 +147,7 @@
 							<outputDirectory>bin/templates</outputDirectory>
 							<tarLongFileMode>gnu</tarLongFileMode>
 							<descriptors>
-								<descriptor>base-assembly.xml</descriptor>
+								<descriptor>assemblies/base-assembly.xml</descriptor>
 							</descriptors>
 						</configuration>
 					</execution>
@@ -174,7 +185,7 @@
 								<configuration>
 									<executable>bash</executable>
 									<arguments>
-										<argument>prepare.sh</argument>
+										<argument>scripts/prepare.sh</argument>
 										<argument>macosx</argument>
 									</arguments>
 									<workingDirectory>${basedir}</workingDirectory>
@@ -198,7 +209,7 @@
 									<directoryMode>755</directoryMode>
 									<tarLongFileMode>gnu</tarLongFileMode>
 									<descriptors>
-										<descriptor>macosx-assembly.xml</descriptor>
+										<descriptor>assemblies/macosx-assembly.xml</descriptor>
 									</descriptors>
 								</configuration>
 							</execution>
@@ -227,7 +238,7 @@
 								<configuration>
 									<executable>bash</executable>
 									<arguments>
-										<argument>prepare.sh</argument>
+										<argument>scripts/prepare.sh</argument>
 										<argument>linux</argument>
 									</arguments>
 									<workingDirectory>${basedir}</workingDirectory>
@@ -250,7 +261,7 @@
 									<outputDirectory>target/</outputDirectory>
 									<tarLongFileMode>gnu</tarLongFileMode>
 									<descriptors>
-										<descriptor>linux-assembly.xml</descriptor>
+										<descriptor>assemblies/linux-assembly.xml</descriptor>
 									</descriptors>
 								</configuration>
 							</execution>
@@ -279,7 +290,7 @@
 								<configuration>
 									<executable>bash</executable>
 									<arguments>
-										<argument>prepare.sh</argument>
+										<argument>scripts/prepare.sh</argument>
 										<argument>win32</argument>
 									</arguments>
 									<workingDirectory>${basedir}</workingDirectory>
@@ -302,7 +313,7 @@
 									<outputDirectory>target/</outputDirectory>
 									<tarLongFileMode>gnu</tarLongFileMode>
 									<descriptors>
-										<descriptor>windows-assembly.xml</descriptor>
+										<descriptor>assemblies/windows-assembly.xml</descriptor>
 									</descriptors>
 								</configuration>
 							</execution>
@@ -330,7 +341,7 @@
 								<configuration>
 									<executable>bash</executable>
 									<arguments>
-										<argument>prepare.sh</argument>
+										<argument>scripts/prepare.sh</argument>
 										<argument>python</argument>
 									</arguments>
 									<workingDirectory>${basedir}</workingDirectory>
@@ -353,7 +364,7 @@
 									<outputDirectory>target/</outputDirectory>
 									<tarLongFileMode>gnu</tarLongFileMode>
 									<descriptors>
-										<descriptor>python-assembly.xml</descriptor>
+										<descriptor>assemblies/python-assembly.xml</descriptor>
 									</descriptors>
 								</configuration>
 							</execution>
@@ -381,7 +392,7 @@
 								<configuration>
 									<executable>bash</executable>
 									<arguments>
-										<argument>prepare.sh</argument>
+										<argument>scripts/prepare.sh</argument>
 										<argument>minimal</argument>
 									</arguments>
 									<workingDirectory>${basedir}</workingDirectory>
@@ -404,7 +415,7 @@
 									<outputDirectory>target/</outputDirectory>
 									<tarLongFileMode>gnu</tarLongFileMode>
 									<descriptors>
-										<descriptor>minimal-home-assembly.xml</descriptor>
+										<descriptor>assemblies/minimal-home-assembly.xml</descriptor>
 									</descriptors>
 								</configuration>
 							</execution>
