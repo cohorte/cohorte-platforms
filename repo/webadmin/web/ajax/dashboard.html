@@ -1,0 +1,113 @@
+<div class="row">
+	<div id="breadcrumb" class="col-md-12">
+		<ol class="breadcrumb">
+			<li><a href="index.html">Home</a></li>
+			<li><a href="#">Dashboard</a></li>
+		</ol>
+	</div>
+</div>
+
+<h3 class="page-header">Dashboard</h3>
+<div class="row">
+    <div class="col-xs-12 col-sm-6 col-md-8">
+    A global view of the COHORTE system.
+    </div>
+</div>
+<br/>
+<div class="row">
+	<div class="col-xs-12">
+		<div id="frm_content"></div>
+		<!-- content will be injected here -->
+	</div>
+</div>
+
+<script>
+
+    var nodes_lastupdate = 0.00;
+
+    function loadComponentsOfIsolate(div_toreplace, isolate_uid) {        
+        $.getJSON( "/admin/api/v1/isolates/"+isolate_uid+"/components", function( data ) {
+            
+            var tmp = "";
+            for (var i in data['components']) {
+                tmp += "<img src='img/component.png' style='max-width: 16px' class='img-circle'></img><a href=''>"+data['components'][i]['name']+"</a><br/>";
+            }            
+            $('#'+div_toreplace).html(tmp);
+        });
+    }
+
+    function loadIsolatesOfNode(div_toreplace, node_uid) {
+        $.getJSON( "/admin/api/v1/nodes/"+node_uid+"/isolates", function( data ) {
+            var tmp = '<div class="box-content no-padding table-responsive">';
+            tmp += '<table class="table table-bordered table-condensed table-striped table-hover table-heading table-datatable" style="height: 100%">';
+            tmp += "<tr >";
+            for (var i in data['isolates']) {
+                if (data['isolates'][i]['type'] != "cohorte-isolate") {
+                    tmp += "<td>"; 
+                    
+                    tmp += '<table class="table m-table table-bordered table-condensed table-hover table-heading">';
+                    tmp += '<thead><tr><th><img src="img/isolate.png" class="img-circle" style="max-width: 16px"></img><a style="color:black" href="">'+data['isolates'][i]['name']+'</a></th>';
+                    tmp += '</thead><tbody>';
+    				//tmp += '<tr><td class="m-ticker"><span>'+data['isolates'][i]['type']+'</span></td></tr>';				
+    				tmp += '<tr><td class="m-ticker"><div id="isolate_components-'+data['isolates'][i]['uid']+'"></div></td></tr>';
+    				//tmp +=	'<span class="bg-info">'+data['isolates'][i]['name']+'<br/>' + data['isolates'][i]['type'] + '</span>';			
+                    //tmp += "<a href=''>"+data['isolates'][i]['name']+"</a><br/>";
+                    //tmp += "<hr/><div id='isolate_components-"+i+"'/>";
+                    tmp += '</tbody></table>'
+                    tmp +="</td>";
+                }
+            }
+            tmp +="</tr>";
+            tmp += "</table>";
+
+            $('#'+div_toreplace).html(tmp);
+            for (var i in data['isolates']) {
+                loadComponentsOfIsolate('isolate_components-'+data['isolates'][i]['uid'], data['isolates'][i]['uid']);
+            }
+        });
+    }
+
+    function loadNodes() {
+        $.getJSON( "/admin/api/v1/nodes", function( data ) {            
+            frame = "";
+            for (var i in data['nodes']) {
+	            // box
+	            frame += '<div class="box" style="box-shadow: 0 0 6px #ABABAB;">';
+	            // header
+                var element = 'node_isolates-'+data['nodes'][i]['uid'];
+                var node_id = data['nodes'][i]['uid'];
+	            frame += '<div class="box-header" style="background: #CCC;"><div class="box-name"><img src="img/node.png" class=""></img> <span><b><a onclick="loadIsolatesOfNode(\''+element+'\',\''+node_id+'\')"  href="#">';
+	            frame += data['nodes'][i]['name'];
+	            frame += '</a></b></span></div>';
+	            frame += '<div class="box-icons"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>';
+				frame += '<a class="expand-link"><i class="fa fa-expand"></i></a></div><div class="no-move"></div></div>';
+				// node isolates
+	            frame += '<div id="node_isolates-'+data['nodes'][i]['uid']+'"/>';
+	            frame += '</div>';
+			}	
+            $('#frm_content').html(frame);
+            for (var i in data['nodes']) {
+                loadIsolatesOfNode('node_isolates-'+data['nodes'][i]['uid'], data['nodes'][i]['uid']);
+            }
+            nodes_lastupdate = data['meta']['lastupdate'];
+        });
+    }
+
+    function refresh() {        
+        // make Ajax call here, inside the callback call:
+        setTimeout(refresh, 2000);
+        $.getJSON( "/admin/api/v1/nodes/lastupdate", function( data ) {
+            var result = data['meta']['lastupdate'];
+            if (result > nodes_lastupdate) {
+                nodes_lastupdate = result;
+                loadNodes();
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        WinMove();
+        loadNodes();
+        setTimeout(refresh, 2000);
+    });
+</script>

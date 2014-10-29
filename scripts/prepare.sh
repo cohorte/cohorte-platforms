@@ -55,7 +55,7 @@ mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/pelix repo
 ### Cohorte Python
 mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/cohorte repo
 ### Cohorte Webadmin
-mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/webadmin repo
+#mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/webadmin repo
 
 # Install project
 #pip install --index-url=$INDEX_URL .

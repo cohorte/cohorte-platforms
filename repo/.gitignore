@@ -9,4 +9,4 @@ jsonrpclib/
 pelix/
 requests/
 sleekxmpp/
-webadmin/
+!webadmin/

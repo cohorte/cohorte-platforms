@@ -93,11 +93,11 @@
 								<include>**/jsonrpclib/**</include>
 								<include>**/pelix/**</include>
 								<include>**/requests/**</include>
-								<include>**/sleekxmpp/**</include>
-								<include>**/webadmin/**</include>
+								<include>**/sleekxmpp/**</include>				
 								<include>**/_jpype*</include>
 							</includes>
 							<excludes>
+								<exclude>**/webadmin/**</exclude>
 								<exclude>README</exclude>
 							</excludes>
 							<followSymlinks>false</followSymlinks>

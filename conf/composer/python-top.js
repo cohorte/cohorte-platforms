@@ -32,6 +32,12 @@
 	/* Shell commands */
 	{
 		"name" : "cohorte.shell.composer_top"
+	},
+
+	/* web admin */
+	{
+		"name" : "webadmin.webadmin"
+	
 	} ]
 
 /* All components of the Composer are automatically instantiated */
