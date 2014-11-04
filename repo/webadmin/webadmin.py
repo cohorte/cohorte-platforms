@@ -186,16 +186,20 @@ class WebAdmin(object):
             ]
         }
         """
+        _logger.critical('get components // %s', self._icomposers)
+
         components = {"meta": {}, "components": []}
         count = 0
-        for c in self._icomposers.keys():
-            comps = self._icomposers.get(c).get_isolate_info().components
-            for com in comps:
+        for rcomposer in self._icomposers.values():
+            uid = rcomposer.get_isolate_uid()
+            info = rcomposer.get_isolate_info()
+            _logger.critical('Getting info: %s -- %s', info, info.components)
+            for com in info.components:
                 components["components"].append({"name": com.name,
                                                  "factory": com.factory,
                                                  "language": com.language,
-                                                 "isolate_uid": self._icomposers.get(c).get_isolate_uid(),
-                                                 "isolate_name": self._icomposers.get(c).get_isolate_info().name})
+                                                 "isolate_uid": uid,
+                                                 "isolate_name": info.name})
                 count += 1
         if self._icomposerlocal is not None:
             for c in self._icomposerlocal.get_isolate_info().components:

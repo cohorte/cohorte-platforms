@@ -7,14 +7,13 @@
         </ol>
     </div>
 </div>
-
 <div class="row">
     <div class="col-xs-12">
         <div class="box">
             <div class="box-header">
                 <div class="box-name">
                     <i class="fa fa-sitemap"></i>
-                    <a onclick="loadGlobalView()" href="#"><span><b>Global View</b></span></a>
+                    <a onclick="updateLayout()" href="#"><span><b>Global View</b></span></a>
                 </div>
                 <div class="box-icons">
                     <a class="collapse-link">
@@ -26,9 +25,13 @@
                 </div>
                 
             </div>
-            <div class="box-content">
+            <div class="box-content">              
+                <select id="select-layout" class="form-control" onchange="updateLayout()">
+                  <option>Circles</option>
+                  <option>Hierarchical</option>  
+                </select>
                 <div style="height: 1000px;">
-                  <div id="circles"></div>
+                  <div id="layout-frame"></div>
                 </div>                
             </div>
         </div>
@@ -61,12 +64,78 @@
 .node--leaf {
   pointer-events: none;
 }
+
+.link {
+  fill: none;
+  stroke: #aaa;
+}
+
+.node text {
+  font: 10px sans-serif;
+}
+
+.node circle {
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+
+.node.active {
+  fill: red;
+}
+
+
 </style>
 
 <script>
+function hierarchicalLayout() {
+  $('#layout-frame').html("");
+  var margin = {top: 40, right: 40, bottom: 40, left: 80},
+      width = 960 - margin.left - margin.right,
+      height = 500 - margin.top - margin.bottom;
 
-function loadGlobalView() {
-  $('#circles').html("");
+  var tree = d3.layout.tree()
+      .size([height, width]);
+
+  var diagonal = d3.svg.diagonal()
+      .projection(function(d) { return [d.y, d.x]; });
+
+  var svg = d3.select("#layout-frame").append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  d3.json("/admin/gui/tabs/globalview", function(root) {
+    var nodes = tree.nodes(root),
+        links = tree.links(nodes);
+
+    // Create the link lines.
+    svg.selectAll(".link")
+        .data(links)
+      .enter().append("path")
+        .attr("class", "link")
+        .attr("d", diagonal);
+
+    // Create the node circles.
+    var node = svg.selectAll(".node")
+        .data(nodes)
+      .enter().append("g")
+        .attr("class", function(d) { return "node " + d.type; })
+        .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; })        
+
+    node.append("circle")
+        .attr("r", 4.5);
+
+    node.append("text")
+        .attr("x", -6)
+        .attr("dy", ".35em")
+        .attr("text-anchor", "end")
+        .text(function(d) { return d.name; });
+  });
+}
+
+function circularLayout() {
+  $('#layout-frame').html("");
   var margin = 20,
       diameter = 960;
 
@@ -80,7 +149,7 @@ function loadGlobalView() {
       .size([diameter - margin, diameter - margin])
       .value(function(d) { return d.size; })
 
-  var svg = d3.select("#circles").append("svg")
+  var svg = d3.select("#layout-frame").append("svg")
       .attr("width", diameter)
       .attr("height", diameter)
     .append("g")
@@ -111,8 +180,7 @@ function loadGlobalView() {
 
     var node = svg.selectAll("circle,text");
 
-    d3.select("body")
-        .style("background", color(-1))
+    d3.select("#layout-frame")
         .on("click", function() { zoom(root); });
 
     zoomTo([root.x, root.y, root.r * 2 + margin]);
@@ -153,13 +221,23 @@ function refresh() {
         var result = data['meta']['lastupdate'];
         if (result > nodes_lastupdate) {
             nodes_lastupdate = result;
-            loadGlobalView();
+            updateLayout();
         }
     });
 }
 
+function updateLayout() {
+  var ind = document.getElementById("select-layout").selectedIndex;
+  if (ind == 1) {   
+    hierarchicalLayout();
+  } else {
+    circularLayout();
+  }
+  
+}
+
 $(document).ready(function() {  
-  loadGlobalView();
+  circularLayout();
   setTimeout(refresh, 2000);
 });
 
