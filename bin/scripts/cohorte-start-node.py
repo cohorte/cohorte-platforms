@@ -65,15 +65,15 @@ def get_external_config(parsed_conf_file, conf_name):
             if conf_name == "node-name":
                 if "name" in parsed_conf_file["node"].keys():
                     return parsed_conf_file["node"]["name"]
-            if conf_name == "is-top-composer":
-                if "is-top-composer" in parsed_conf_file["node"].keys():
-                    return parsed_conf_file["node"]["is-top-composer"]
-            elif conf_name == "web-admin-port":
+            if conf_name == "top-composer":
+                if "top-composer" in parsed_conf_file["node"].keys():
+                    return parsed_conf_file["node"]["top-composer"]
+            elif conf_name == "web-admin":
                 if "web-admin" in parsed_conf_file["node"].keys():
-                    return parsed_conf_file["node"]["web-admin-port"]
-            elif conf_name == "shell-admin-port":
+                    return parsed_conf_file["node"]["web-admin"]
+            elif conf_name == "shell-admin":
                 if "shell-admin" in parsed_conf_file["node"].keys():
-                    return parsed_conf_file["node"]["shell-admin-port"]
+                    return parsed_conf_file["node"]["shell-admin"]
         if "transport" in parsed_conf_file:
             if conf_name == "transport":
                 return parsed_conf_file["transport"]
@@ -130,7 +130,7 @@ def main(args=None):
     group = parser.add_argument_group("Config",
                                       "Startup configuration options")
     
-    group.add_argument("--config", action="store", default="run.js",
+    group.add_argument("--use-config", action="store", default="run.js",
                         dest="config_file", help="Configuration file to use for starting cohorte node. By default the run.js file is used if available")
     
     group.add_argument("--update-config", action="store_true", default=False,
@@ -148,13 +148,13 @@ def main(args=None):
     group.add_argument("-n", "--node", action="store",
                        dest="node_name", help="Node name")
 
-    group.add_argument("--is-top-composer", action="store_true",
-                       dest="is_top_composer", help="Is this node a top composer?")
+    group.add_argument("--top-composer", action="store_true",
+                       dest="is_top_composer", help="Flag indicating that this node is a Top Composer")
     
-    group.add_argument("--web-admin-port", action="store", type=int,
+    group.add_argument("--web-admin", action="store", type=int,
                        dest="web_admin_port", help="Node web admin port")
     
-    group.add_argument("--shell-admin-port", action="store", type=int,
+    group.add_argument("--shell-admin", action="store", type=int,
                        dest="shell_admin_port", help="Node remote shell port")
     
     group = parser.add_argument_group("Transport",
@@ -252,10 +252,10 @@ def main(args=None):
     print("[INFO] COHORTE_LOGFILE: " + os.environ.get('COHORTE_LOGFILE'))
 
     WEB_ADMIN_PORT = set_configuration_value(args.web_admin_port, 
-                                            get_external_config(external_config, "web-admin-port"),
+                                            get_external_config(external_config, "web-admin"),
                                             0)
     SHELL_ADMIN_PORT = set_configuration_value(args.shell_admin_port, 
-                                            get_external_config(external_config, "shell-admin-port"),
+                                            get_external_config(external_config, "shell-admin"),
                                             0)
     # Generate webadmin and shell configs of the cohorte (main) isolate of this node
     common.generate_boot_forker(COHORTE_BASE, WEB_ADMIN_PORT, SHELL_ADMIN_PORT)
@@ -348,7 +348,7 @@ def main(args=None):
     #print("[INFO] boot_args: " , boot_args) 
     if "-t" not in boot_args:
         IS_TOP_COMPOSER = set_configuration_value(args.is_top_composer, 
-                                                get_external_config(external_config, "is-top-composer"),
+                                                get_external_config(external_config, "top-composer"),
                                                 False)
         if IS_TOP_COMPOSER == True:
             boot_args.append("-t")        
@@ -368,9 +368,9 @@ def main(args=None):
             configuration["application-id"] = APPLICATION_ID
             configuration["node"] = {}
             configuration["node"]["name"] = NODE_NAME
-            configuration["node"]["is-top-composer"] = IS_TOP_COMPOSER
-            configuration["node"]["web-admin-port"] = WEB_ADMIN_PORT
-            configuration["node"]["shell-admin-port"] = SHELL_ADMIN_PORT
+            configuration["node"]["top-composer"] = IS_TOP_COMPOSER
+            configuration["node"]["web-admin"] = WEB_ADMIN_PORT
+            configuration["node"]["shell-admin"] = SHELL_ADMIN_PORT
             configuration["transport"] = TRANSPORT_MODES
             if "xmpp" in TRANSPORT_MODES:
                 configuration["transport-xmpp"] = {}
