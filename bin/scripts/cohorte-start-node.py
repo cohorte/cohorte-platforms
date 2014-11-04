@@ -226,7 +226,7 @@ def main(args=None):
         XMPP_SERVER = set_configuration_value(args.xmpp_server, get_external_config(external_config, "xmpp-server"), "")
         XMPP_PORT = set_configuration_value(args.xmpp_port, get_external_config(external_config, "xmpp-port"), 5222)
         XMPP_JID = set_configuration_value(args.xmpp_jid, get_external_config(external_config, "xmpp-jid"), "")
-        XMPP_PASS = set_configuration_value(args.xmpp_password, get_external_config(external_config, "xmpp-passwprd"), "")
+        XMPP_PASS = set_configuration_value(args.xmpp_password, get_external_config(external_config, "xmpp-password"), "")
 
         print("[INFO] connecting into the XMPP server with the following configuration...")
         print("""
