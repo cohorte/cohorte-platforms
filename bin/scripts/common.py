@@ -29,8 +29,12 @@ __docformat__ = "restructuredtext en"
 # Boot module version
 __version__ = "1.0.0"
 
-
+# Standard Library
 import os
+import json
+
+# cohorte scripts
+import common
 
 def generate_run(node_dir): 
     """
@@ -39,7 +43,7 @@ def generate_run(node_dir):
     from stat import S_IRWXU
     file_name = os.path.join(node_dir, "run")
     with open(file_name, "w") as run:
-        os.chmod(file_name, stat.S_IRWXU)
+        os.chmod(file_name, S_IRWXU)
         result = '#!/bin/bash \n' \
             'if test -z "$COHORTE_HOME"\n' \
             'then\n' \
@@ -58,11 +62,12 @@ def generate_autorun_conf(node_dir, app_name):
     Generates conf/autorun_conf.js file.
     """
     file_name = os.path.join(node_dir, 'conf', "autorun_conf.js")
+    app = app_name.split(".")[-1]
     with open(file_name, "w") as autorun_conf:    
         result = '{ \n' \
             '  "name": "' + app_name + '",\n' \
             '  "root": {\n' \
-            '    "name": "' + app_name + '-composition",\n' \
+            '    "name": "' + app + '-composition",\n' \
             '    "components": [\n' \
             '      /* your component descriptions here */\n' \
             '    ]\n' \
@@ -157,3 +162,11 @@ def generate_herald_xmpp_conf(node_dir, server, port, monitor_jid, room_jid, key
             '  ]\n' \
             '}'     
         all_xmpp.write(result)
+
+def update_startup_file(config_file, configuration):
+    """
+    Updates the provided startup file
+    """
+    with open(config_file, 'w') as outfile:
+        json.dump(configuration, outfile, sort_keys=False,
+                indent=4, separators=(',', ': '))

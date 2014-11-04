@@ -36,24 +36,32 @@ import json
 import common
 		
 def create_node(args):
-	"""
-	Create node directory with necessary run script and configuration files
-	"""
-	# create the node directory
-	node_dir = args.node_name
-	if not os.path.exists(node_dir):		
-		os.makedirs(node_dir)
-	else:
-		print("[ERROR] directory '"+ node_dir +"' already exists!")
-		print("        change the parent location or choose another node name.")
-		sys.exit(1)
-	os.makedirs(os.path.join(node_dir, 'repo'))
-	os.makedirs(os.path.join(node_dir, 'conf'))
+    """
+    Create node directory with necessary run script and configuration files
+    """
+    # create the node directory
+    node_dir = args.node_name
+    if not os.path.exists(node_dir):		
+        os.makedirs(node_dir)
+    else:
+        print("[ERROR] directory '"+ node_dir +"' already exists!")
+        print("        change the parent location or choose another node name.")
+        sys.exit(1)
+    os.makedirs(os.path.join(node_dir, 'repo'))
+    os.makedirs(os.path.join(node_dir, 'conf'))
 	# generate run script
-	common.generate_run(args.node_name)	
+    common.generate_run(args.node_name)	
 	# generate configuration files
-	common.generate_autorun_conf(args.node_name, args.app_name)
-	common.generate_boot_common(args.node_name, args.app_name)
+    common.generate_autorun_conf(args.node_name, args.app_name)
+    
+    #configuration = {}
+    #if args.app_name:
+    #    configuration["application-id"] = args.app_name
+    #configuration["node"] = {}
+    #if args.node_name:
+    #    configuration["node"]["name"] = args.node_name    
+    #common.update_startup_file(os.path.join(args.node_name, 'run.js'), configuration)
+    #common.generate_boot_common(args.node_name, args.app_name)
 
 def main(args=None):
     """
@@ -67,15 +75,13 @@ def main(args=None):
     parser = argparse.ArgumentParser(description="Create COHORTE node (base)")
 
     # Node configuration
-    group = parser.add_argument_group("Node",
-                                      "Information about the COHORTE node")
+    group = parser.add_argument_group("Create node options")
+
     group.add_argument("-n", "--node", action="store", default="node",
                        dest="node_name", help="Name of the node")
     
-    # Application configuration
-    group = parser.add_argument_group("Application",
-                                      "Information about the application")
-    group.add_argument("-a", "--app", action="store", default="default-application",
+    # Application configuration    
+    group.add_argument("-a", "--app-name", action="store", default="symbolic-application-name",
                        dest="app_name", help="application's symbolic name")
   
     # Parse arguments
