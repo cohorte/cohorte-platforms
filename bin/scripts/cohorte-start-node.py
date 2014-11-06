@@ -241,7 +241,7 @@ def main(args=None):
     if not APPLICATION_ID:
         print("[ERROR] no application ID is given!")
         print("        You should provide a correct application ID managed by a COHORTE Top Composer!")
-        print("        use '--app' option to provide the application's ID or update your startup configuration file.")
+        print("        use '--app-id' option to provide the application's ID or update your startup configuration file.")
         return 1
     else:
         common.generate_boot_common(COHORTE_BASE, APPLICATION_ID)

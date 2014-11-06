@@ -27,8 +27,8 @@
             </div>
             <div class="box-content">              
                 <select id="select-layout" class="form-control" onchange="updateLayout()">
-                  <option>Circles</option>
                   <option>Hierarchical</option>  
+                  <option>Circles</option>                  
                 </select>
                 <div style="height: 1000px;">
                   <div id="layout-frame"></div>
@@ -71,7 +71,7 @@
 }
 
 .node text {
-  font: 10px sans-serif;
+  font: 13px sans-serif;
 }
 
 .node circle {
@@ -229,15 +229,15 @@ function refresh() {
 function updateLayout() {
   var ind = document.getElementById("select-layout").selectedIndex;
   if (ind == 1) {   
-    hierarchicalLayout();
-  } else {
     circularLayout();
+  } else {
+    hierarchicalLayout();
   }
   
 }
 
 $(document).ready(function() {  
-  circularLayout();
+  hierarchicalLayout();
   setTimeout(refresh, 2000);
 });
 

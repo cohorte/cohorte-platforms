@@ -77,7 +77,7 @@ def main(args=None):
     # Node configuration
     group = parser.add_argument_group("Create node options")
 
-    group.add_argument("-n", "--node", action="store", default="node",
+    group.add_argument("-n", "--node", action="store", 
                        dest="node_name", help="Name of the node")
     
     # Application configuration    
@@ -87,6 +87,9 @@ def main(args=None):
     # Parse arguments
     args = parser.parse_args(args)
 
+    if not args.node_name:
+        print("[ERROR] you should provide a node name (using --node option)")
+        return -1
     # creates the node directory from the template zip file
     create_node(args)
 
