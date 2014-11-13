@@ -68,6 +68,12 @@ def get_external_config(parsed_conf_file, conf_name):
             if conf_name == "top-composer":
                 if "top-composer" in parsed_conf_file["node"].keys():
                     return parsed_conf_file["node"]["top-composer"]
+            elif conf_name == "composition-file":
+                if "composition-file" in parsed_conf_file["node"].keys():
+                    return parsed_conf_file["node"]["composition-file"]
+            elif conf_name == "auto-start":
+                if "auto-start" in parsed_conf_file["node"].keys():
+                    return parsed_conf_file["node"]["auto-start"]
             elif conf_name == "web-admin":
                 if "web-admin" in parsed_conf_file["node"].keys():
                     return parsed_conf_file["node"]["web-admin"]
@@ -116,7 +122,7 @@ def main(args=None):
         print("[ERROR] environment variable COHORTE_HOME not set")
         return 1
     else:
-        print("[INFO] COHORTE_HOME: " + COHORTE_HOME)
+        pass
 
     # Define arguments
     parser = argparse.ArgumentParser(description="Starting a COHORTE Node")
@@ -148,8 +154,14 @@ def main(args=None):
     group.add_argument("-n", "--node", action="store",
                        dest="node_name", help="Node name")
 
-    group.add_argument("--top-composer", action="store_true",
+    group.add_argument("--top-composer", action="store", 
                        dest="is_top_composer", help="Flag indicating that this node is a Top Composer")
+
+    group.add_argument("--composition-file", action="store", 
+                       dest="composition_file", help="Composition file (by default 'composition.js'). All composition files should be placed on 'conf' directory")
+
+    group.add_argument("--auto-start", action="store", 
+                       dest="auto_start", help="Auto-start the composition if this node is a Top Composer")
     
     group.add_argument("--web-admin", action="store", type=int,
                        dest="web_admin_port", help="Node web admin port")
@@ -157,6 +169,8 @@ def main(args=None):
     group.add_argument("--shell-admin", action="store", type=int,
                        dest="shell_admin_port", help="Node remote shell port")
     
+
+
     group = parser.add_argument_group("Transport",
                                       "Information about the transport protocols to use")
 
@@ -184,6 +198,8 @@ def main(args=None):
     WEB_ADMIN_PORT = 0
     SHELL_ADMIN_PORT = 0   
     IS_TOP_COMPOSER = None
+    AUTO_START = None
+    COMPOSITION_FILE = None
     APPLICATION_ID = None
 
     if args.show_config_file == True:
@@ -197,14 +213,12 @@ def main(args=None):
             print("[INFO] there is no startup configuration file! Use '--config' option to refer to your config file")
         return 0
 
-
     # Check if the user has provided the --base option (Node's full path)    
     if not COHORTE_BASE:
         print("[ERROR] the absolute path to the node's directory to execute is required. use --base option")
         return 1
     else:
         os.environ["COHORTE_BASE"] = COHORTE_BASE
-        print("[INFO] COHORTE_BASE: " + os.environ['COHORTE_BASE'])
 
     # export python path
     added_paths = [value
@@ -216,24 +230,20 @@ def main(args=None):
 
     # Change our path
     sys.path = added_paths + sys.path
-    print("[INFO] PYTHONPATH:", os.environ['PYTHONPATH'])
 
     external_config = None
     # Parse config file
     if args.config_file:                
-        external_config = parse_config_file(args.config_file)
-        if external_config:
-            print('[INFO] using startup configuration provided in "'+args.config_file+'" file')
+        external_config = parse_config_file(args.config_file)        
     
     # export Node name 
     NODE_NAME = set_configuration_value(args.node_name, get_external_config(external_config, "node-name"), 
                                         os.path.basename(os.path.normpath(COHORTE_BASE)))    
     os.environ['COHORTE_NODE_NAME'] = NODE_NAME
-    print("[INFO] COHORTE_NODE_NAME: " + os.environ.get('COHORTE_NODE_NAME'))
+    
 
     # export Cohorte Root
-    os.environ['COHORTE_ROOT'] = os.environ.get('COHORTE_HOME')
-    print("[INFO] COHORTE_ROOT: " + os.environ.get('COHORTE_ROOT'))
+    os.environ['COHORTE_ROOT'] = os.environ.get('COHORTE_HOME')    
 
     # configure application id
     APPLICATION_ID = set_configuration_value(args.application_id, get_external_config(external_config, "application-id"), 
@@ -249,7 +259,6 @@ def main(args=None):
     # Node log file
     LOG_DIR = os.path.join(COHORTE_BASE, 'var')
     os.environ['COHORTE_LOGFILE'] = os.path.join(LOG_DIR, 'forker.log')
-    print("[INFO] COHORTE_LOGFILE: " + os.environ.get('COHORTE_LOGFILE'))
 
     WEB_ADMIN_PORT = set_configuration_value(args.web_admin_port, 
                                             get_external_config(external_config, "web-admin"),
@@ -259,8 +268,7 @@ def main(args=None):
                                             0)
     # Generate webadmin and shell configs of the cohorte (main) isolate of this node
     common.generate_boot_forker(COHORTE_BASE, WEB_ADMIN_PORT, SHELL_ADMIN_PORT)
-    print("[INFO] starting node '" + NODE_NAME + "' [web-admin port '"
-            +str(WEB_ADMIN_PORT)+"' | shell-admin port '"+str(SHELL_ADMIN_PORT)+"']");
+    
 
     # Log
     try:
@@ -279,9 +287,7 @@ def main(args=None):
         tmodes = args.transport_modes.split(",")                    
     TRANSPORT_MODES = set_configuration_value(tmodes, 
                                             get_external_config(external_config, "transport"),
-                                            ["http"])
-
-    print("[INFO] using transport modes: "+",".join(TRANSPORT_MODES))
+                                            ["http"])    
     
     if "xmpp" in TRANSPORT_MODES:
         XMPP_SERVER = set_configuration_value(args.xmpp_server, get_external_config(external_config, "xmpp-server"), "")
@@ -344,42 +350,84 @@ def main(args=None):
 
     # Starting Cohorte
     import subprocess
-    print("[INFO] ************* STARTING COHORTE ****************")
+    
     #print("[INFO] boot_args: " , boot_args) 
-    if "-t" not in boot_args:
-        IS_TOP_COMPOSER = set_configuration_value(args.is_top_composer, 
-                                                get_external_config(external_config, "top-composer"),
-                                                False)
-        if IS_TOP_COMPOSER == True:
-            boot_args.append("-t")        
+    if args.is_top_composer:
+        if args.is_top_composer.lower() in ("true"):
+            IS_TOP_COMPOSER = True
+        else:
+            IS_TOP_COMPOSER = False
     else:
-        IS_TOP_COMPOSER = True
+        IS_TOP_COMPOSER = set_configuration_value(None, 
+                                            get_external_config(external_config, "top-composer"),
+                                             "False")
+    if IS_TOP_COMPOSER == True:        
+        boot_args.append("-t")
+        # composition file
+        COMPOSITION_FILE = set_configuration_value(args.composition_file,
+                                                get_external_config(external_config, "composition-file"),
+                                                "composition.js")        
+        # handle auto-start flag
+        AUTO_START = set_configuration_value(args.auto_start, 
+                                                get_external_config(external_config, "auto-start"),
+                                                True)
+        
+        common.generate_top_composer_config(COHORTE_BASE, COMPOSITION_FILE, AUTO_START)
 
-    if IS_TOP_COMPOSER == True:
-        print("[INFO] starting as TOP COMPOSER!")
-    else:
-        print("[INFO] starting as a simple node!")
+    else:         
+        common.delete_top_composer_config(COHORTE_BASE)
     
     # update configuration if not exists
-    if args.update_config_file:
-        if args.update_config_file == True:
-            CONFIG_FILE = args.config_file
-            configuration = {}
-            configuration["application-id"] = APPLICATION_ID
-            configuration["node"] = {}
-            configuration["node"]["name"] = NODE_NAME
-            configuration["node"]["top-composer"] = IS_TOP_COMPOSER
+    if args.update_config_file == True:
+        CONFIG_FILE = args.config_file
+        configuration = {}
+        configuration["application-id"] = APPLICATION_ID
+        configuration["node"] = {}
+        configuration["node"]["name"] = NODE_NAME
+        configuration["node"]["top-composer"] = IS_TOP_COMPOSER
+        if IS_TOP_COMPOSER == True:
+            configuration["node"]["auto-start"] = AUTO_START
+            configuration["node"]["composition-file"] = COMPOSITION_FILE
             configuration["node"]["web-admin"] = WEB_ADMIN_PORT
             configuration["node"]["shell-admin"] = SHELL_ADMIN_PORT
-            configuration["transport"] = TRANSPORT_MODES
-            if "xmpp" in TRANSPORT_MODES:
-                configuration["transport-xmpp"] = {}
-                configuration["transport-xmpp"]["xmpp-server"] = XMPP_SERVER
-                configuration["transport-xmpp"]["xmpp-port"] = XMPP_PORT
-                configuration["transport-xmpp"]["xmpp-jid"] = XMPP_JID
-                configuration["transport-xmpp"]["xmpp-password"] = XMPP_PASS
-            common.update_startup_file(CONFIG_FILE, configuration)
-            
+        configuration["transport"] = TRANSPORT_MODES
+        if "xmpp" in TRANSPORT_MODES:
+            configuration["transport-xmpp"] = {}
+            configuration["transport-xmpp"]["xmpp-server"] = XMPP_SERVER
+            configuration["transport-xmpp"]["xmpp-port"] = XMPP_PORT
+            configuration["transport-xmpp"]["xmpp-jid"] = XMPP_JID
+            configuration["transport-xmpp"]["xmpp-password"] = XMPP_PASS
+        common.update_startup_file(CONFIG_FILE, configuration)
+        print("[INFO] config file '" + CONFIG_FILE + "' updated! ")
+        return 0;
+
+    # show some useful information
+    msg = "\n";    
+    msg += "  ...........:: C.O.H.O.R.T.E ::...........\n"
+    msg += "\n"
+    msg += "  APPLICATION ID : " + APPLICATION_ID + "\n"
+    msg += "       NODE NAME : " + os.environ.get('COHORTE_NODE_NAME') + "\n"
+    msg += "      TRANSPORTS : " + ",".join(TRANSPORT_MODES) + "\n"
+    msg += "\n"
+    msg += "    TOP COMPOSER : " + str(IS_TOP_COMPOSER)  + "\n"
+    msg += "\n"    
+    msg += "       WEB ADMIN : " + str(WEB_ADMIN_PORT)  + "\n"
+    msg += "     SHELL ADMIN : " + str(SHELL_ADMIN_PORT) + "\n"      
+    if IS_TOP_COMPOSER == True:
+        msg += "     AUTO START  : " + str(AUTO_START)  + "\n"
+    msg += "\n"
+    msg += "    COHORTE BASE : " + str(os.environ['COHORTE_BASE']) + "\n"
+    msg += "    COHORTE HOME : " + str(COHORTE_HOME) + "\n"
+    msg += "        LOG FILE : " + str(os.environ.get('COHORTE_LOGFILE')) + "\n"
+    msg += "\n"
+    msg += "      PYTHONPATH : " + str(os.environ.get('PYTHONPATH')) + "\n"
+    msg += "\n"
+    msg += "  .........................................\n"
+    msg += "\n"
+    print(msg)
+    # write to log file
+    with open(str(os.environ.get('COHORTE_LOGFILE')), "w") as log_file:            
+        log_file.write(msg)  
 
     # starting cohorte isolate
     status = subprocess.call("python3" + " -m cohorte.boot.boot " + " ".join(boot_args), shell=True)

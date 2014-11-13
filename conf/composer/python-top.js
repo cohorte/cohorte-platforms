@@ -38,7 +38,14 @@
 	{
 		"name" : "webadmin.webadmin"
 	
-	} ]
+	} ] ,
 
+	"composition" : [ {
+		"factory" : "cohorte-composer-top-factory",
+		"name" : "cohorte-composer-top",
+		"properties" : {
+			"autostart" : "True"
+		}
+	} ]
 /* All components of the Composer are automatically instantiated */
 }

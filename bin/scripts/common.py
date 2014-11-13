@@ -32,6 +32,7 @@ __version__ = "1.0.0"
 # Standard Library
 import os
 import json
+import shutil
 
 # cohorte scripts
 import common
@@ -170,3 +171,42 @@ def update_startup_file(config_file, configuration):
     with open(config_file, 'w') as outfile:
         json.dump(configuration, outfile, sort_keys=False,
                 indent=4, separators=(',', ': '))
+
+def generate_top_composer_config(node_dir, composition_file, autostart):
+    """
+    Generate Top Composer configuration file_name
+    """
+    tc_dir = os.path.join(node_dir, 'conf', 'composer')
+    if not os.path.exists(tc_dir):
+        os.makedirs(tc_dir)
+    file_name = os.path.join(tc_dir, 'python-top.js')
+    with open(file_name, "w") as top_composer:     
+        result = '/* WARNING!: do not edit, this file is generated automatically by COHORTE startup scripts. */ \n' \
+            '{\n' \
+            '    "import-files" : [ "python-top.js" ],\n' \
+            '    \n' \
+            '  "composition" : [ \n' \
+            '   {\n' \
+            '       "factory" : "cohorte-composer-top-factory",\n' \
+            '       "name" : "cohorte-composer-top",\n' \
+            '       "properties" : {\n' \
+            '           "autostart" : "'+str(autostart)+'",\n' \
+            '           "composition.filename" : "'+str(composition_file)+'"\n' \
+            '       }\n' \
+            '   }\n' \
+            '  ]\n' \
+            '} \n' \
+            
+        top_composer.write(result)
+
+def delete_top_composer_config(node_dir):
+    """
+    Delete Top Composer configuration
+    """
+    try:
+        shutil.rmtree(os.path.join(COHORTE_BASE, 'conf', 'composer'))
+    except:
+        pass
+
+
+
