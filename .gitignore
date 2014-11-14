@@ -11,5 +11,7 @@ release.properties
 tmp_venv/ 
 lib/
 target/
-
+*.pyc
+*.pyo
+__pycache__/
 
