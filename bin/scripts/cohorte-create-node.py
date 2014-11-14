@@ -53,7 +53,8 @@ def create_node(args):
     # generate run script
     common.generate_run(args.node_name)
     # generate configuration files
-    common.generate_composition_conf(args.node_name, args.app_name)
+    if args.app_name:
+        common.generate_composition_conf(args.node_name, args.app_name)
 
     #configuration = {}
     #if args.app_name:
@@ -80,19 +81,18 @@ def main(args=None):
     # Node configuration
     group = parser.add_argument_group("Create node options")
 
-    group.add_argument("-n", "--node", action="store",
+    group.add_argument("-n", "--name", action="store",
                        dest="node_name", help="Name of the node")
 
     # Application configuration
-    group.add_argument("-a", "--app-name", action="store",
-                       default="symbolic-application-name",
+    group.add_argument("-a", "--app-name", action="store",                       
                        dest="app_name", help="application's symbolic name")
 
     # Parse arguments
     args = parser.parse_args(args)
 
     if not args.node_name:
-        print("[ERROR] you should provide a node name (using --node option)")
+        print("[ERROR] you should provide a node name (using --name option)")
         return -1
     # creates the node directory from the template zip file
     create_node(args)
