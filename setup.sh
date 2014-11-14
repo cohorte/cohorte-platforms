@@ -5,7 +5,10 @@ echo "[INFO] exporting the COHORTE_HOME environment variable..."
 
 cd "$(dirname "$0")"
 
+# Export for local shell
 export COHORTE_HOME="$(pwd)"
+export PATH="$COHORTE_HOME/bin":$PATH
+
 echo "[INFO] COHORTE_HOME=$COHORTE_HOME"
 if test -e "$HOME/.bashrc"; then
     echo "[INFO] there is already a .bashrc file in your home folder."
