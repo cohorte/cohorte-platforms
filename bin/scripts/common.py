@@ -60,13 +60,13 @@ bash $COHORTE_HOME/bin/cohorte-start-node --base $(pwd) $*
         run.write(result)
 
 
-def generate_autorun_conf(node_dir, app_name):
+def generate_composition_conf(node_dir, app_name):
     """
-    Generates conf/autorun_conf.js file.
+    Generates conf/composition.js file.
     """
-    file_name = os.path.join(node_dir, 'conf', "autorun_conf.js")
+    file_name = os.path.join(node_dir, 'conf', "composition.js")
     app = app_name.rsplit(".", 2)[-1]
-    with open(file_name, "w") as autorun_conf:
+    with open(file_name, "w") as composition:
         result = """{{
     "name": "{app_name}",
     "root": {{
@@ -77,7 +77,7 @@ def generate_autorun_conf(node_dir, app_name):
     }}
 }}
 """.format(app_name=app_name, app=app)
-        autorun_conf.write(result)
+        composition.write(result)
 
 def generate_boot_common(node_dir, app_name):
     """

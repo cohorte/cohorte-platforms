@@ -53,7 +53,7 @@ def create_node(args):
     # generate run script
     common.generate_run(args.node_name)
     # generate configuration files
-    common.generate_autorun_conf(args.node_name, args.app_name)
+    common.generate_composition_conf(args.node_name, args.app_name)
 
     #configuration = {}
     #if args.app_name:
