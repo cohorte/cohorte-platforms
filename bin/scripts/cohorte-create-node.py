@@ -32,36 +32,39 @@ __version__ = "1.0.0"
 
 import os
 import sys
-import json
 import common
-		
+
+
 def create_node(args):
     """
     Create node directory with necessary run script and configuration files
     """
     # create the node directory
     node_dir = args.node_name
-    if not os.path.exists(node_dir):		
+    if not os.path.exists(node_dir):
         os.makedirs(node_dir)
     else:
-        print("[ERROR] directory '"+ node_dir +"' already exists!")
+        print("[ERROR] directory '" + node_dir + "' already exists!")
         print("        change the parent location or choose another node name.")
         sys.exit(1)
+
     os.makedirs(os.path.join(node_dir, 'repo'))
     os.makedirs(os.path.join(node_dir, 'conf'))
-	# generate run script
-    common.generate_run(args.node_name)	
-	# generate configuration files
+    # generate run script
+    common.generate_run(args.node_name)
+    # generate configuration files
     common.generate_autorun_conf(args.node_name, args.app_name)
-    
+
     #configuration = {}
     #if args.app_name:
     #    configuration["application-id"] = args.app_name
     #configuration["node"] = {}
     #if args.node_name:
-    #    configuration["node"]["name"] = args.node_name    
-    #common.update_startup_file(os.path.join(args.node_name, 'run.js'), configuration)
+    #    configuration["node"]["name"] = args.node_name
+    #common.update_startup_file(os.path.join(args.node_name, 'run.js'),
+    #    configuration)
     #common.generate_boot_common(args.node_name, args.app_name)
+
 
 def main(args=None):
     """
@@ -77,13 +80,14 @@ def main(args=None):
     # Node configuration
     group = parser.add_argument_group("Create node options")
 
-    group.add_argument("-n", "--node", action="store", 
+    group.add_argument("-n", "--node", action="store",
                        dest="node_name", help="Name of the node")
-    
-    # Application configuration    
-    group.add_argument("-a", "--app-name", action="store", default="symbolic-application-name",
+
+    # Application configuration
+    group.add_argument("-a", "--app-name", action="store",
+                       default="symbolic-application-name",
                        dest="app_name", help="application's symbolic name")
-  
+
     # Parse arguments
     args = parser.parse_args(args)
 
@@ -92,7 +96,6 @@ def main(args=None):
         return -1
     # creates the node directory from the template zip file
     create_node(args)
-
 
 if __name__ == "__main__":
     sys.exit(main())
