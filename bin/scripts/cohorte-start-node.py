@@ -372,10 +372,9 @@ def main(args=None):
     if args.is_top_composer:
         IS_TOP_COMPOSER = args.is_top_composer.lower() in ("true", "yes")
     else:
-        top_config_value = set_configuration_value(
+        IS_TOP_COMPOSER = set_configuration_value(
             None,
-            get_external_config(external_config, "top-composer"), "false")
-        IS_TOP_COMPOSER = top_config_value.lower() in ("true", "yes")
+            get_external_config(external_config, "top-composer"), False)
 
     if IS_TOP_COMPOSER:
         boot_args.append("-t")
