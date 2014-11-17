@@ -275,7 +275,7 @@ def main(args=None):
     # Log
     try:
         shutil.rmtree(os.path.join(COHORTE_BASE, 'var'))
-    except IOError:
+    except OSError:
         pass
     if not os.path.exists(os.path.join(COHORTE_BASE, 'var')):
         os.makedirs(os.path.join(COHORTE_BASE, 'var'))
@@ -364,7 +364,7 @@ def main(args=None):
         # remove 'conf/herald' folder
         try:
             shutil.rmtree(os.path.join(COHORTE_BASE, 'conf', 'herald'))
-        except IOError:
+        except OSError:
             pass
 
     # Starting Cohorte

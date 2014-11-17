@@ -214,5 +214,5 @@ def delete_top_composer_config(node_dir):
     """
     try:
         shutil.rmtree(os.path.join(node_dir, 'conf', 'composer'))
-    except IOError:
+    except OSError:
         pass
