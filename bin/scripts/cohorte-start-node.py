@@ -50,7 +50,7 @@ def parse_config_file(config_file):
     data = None
     if os.path.isfile(config_file):
         with open(config_file) as json_data:
-            data = json.load(json_data)
+            data = json.load(json_data)    
     return data
 
 
@@ -59,23 +59,28 @@ def get_external_config(parsed_conf_file, conf_name):
     Returns the value of the wanted startup configuration.
     """
     if parsed_conf_file is not None and conf_name is not None:
-        if "application-id" in parsed_conf_file:
-            if conf_name == "application-id":
+        
+        if conf_name == "application-id":
+            if "application-id" in parsed_conf_file:
                 return parsed_conf_file["application-id"]
 
-        if "node" in parsed_conf_file:
-            if conf_name == "node-name":
+        if conf_name == "node-name":
+            if "node" in parsed_conf_file:                       
                 # Different key name
                 return parsed_conf_file["node"].get("name")
+            # return parsed_conf_file["node"].get(conf_name)
 
-            return parsed_conf_file["node"].get(conf_name)
+        if conf_name in ("top-composer", "auto-start", "composition-file", "web-admin", "shell-admin"):
+            if "node" in parsed_conf_file:
+                return parsed_conf_file["node"].get(conf_name)
 
-        if "transport" in parsed_conf_file:
-            if conf_name == "transport":
+        if conf_name == "transport":
+            if "transport" in parsed_conf_file:            
                 return parsed_conf_file["transport"]
 
-        if "transport-xmpp" in parsed_conf_file:
-            return parsed_conf_file["transport-xmpp"].get(conf_name)
+        if conf_name.startswith("xmpp-"):
+            if "transport-xmpp" in parsed_conf_file:
+                return parsed_conf_file["transport-xmpp"].get(conf_name)
 
     return None
 
@@ -208,7 +213,7 @@ def main(args=None):
             print(content)
         else:
             print("[INFO] there is no startup configuration file! "
-                  "Use '--config' option to refer to your config file")
+                  "Use '--use-config' option to refer to your config file")
         return 0
 
     # Check if the user has provided the --base option (Node's full path)
@@ -231,6 +236,7 @@ def main(args=None):
     sys.path = added_paths + sys.path
 
     external_config = None
+
     # Parse config file
     if args.config_file:
         external_config = parse_config_file(args.config_file)
@@ -286,10 +292,14 @@ def main(args=None):
 
     tmodes = None
     if args.transport_modes:
-        tmodes = args.transport_modes.split(",")
-    TRANSPORT_MODES = set_configuration_value(
-        tmodes, get_external_config(external_config, "transport"), ["http"])
-
+        tmodes = str(args.transport_modes).split(',')
+    if not tmodes:        
+        TRANSPORT_MODES = set_configuration_value(
+            None, get_external_config(external_config, "transport"), ["http"])       
+    else:        
+        TRANSPORT_MODES = set_configuration_value(
+            tmodes, get_external_config(external_config, "transport"), ["http"])
+    
     if "xmpp" in TRANSPORT_MODES:
         XMPP_SERVER = set_configuration_value(
             args.xmpp_server,
@@ -304,55 +314,55 @@ def main(args=None):
             args.xmpp_password,
             get_external_config(external_config, "xmpp-password"), "")
 
-        print("[INFO] connecting into the XMPP server with the following "
-              "configuration...")
-        print("""
-            - xmpp server: {server}
-            - xmpp port: {port}
-            - xmpp jid: {jid}
-            - xmpp password: *
-            - xmpp room name: {room_name}
-            - xmpp room jid: {room_jid}
-            - xmpp key: {key}
-            """.format(server=XMPP_SERVER, port=XMPP_PORT, jid=XMPP_JID,
-                       room_name="cohorte",
-                       room_jid="cohorte@conference." + XMPP_SERVER, key="42"))
-        SUCCESSED_RENDEZ_VOUS = "Bite my shiny, metal a**!"
-        FAILED_RENDZ_VOUS = "I'm so embarrassed right now. (XMPP connect failed)"
+        if not args.update_config_file: 
+            print("[INFO] XMPP server configuration :")
+            print("""
+    - xmpp server: {server}
+    - xmpp port: {port}
+    - xmpp jid: {jid}
+    - xmpp password: *
+    - xmpp room name: {room_name}
+    - xmpp room jid: {room_jid}
+    - xmpp key: {key}
+                """.format(server=XMPP_SERVER, port=XMPP_PORT, jid=XMPP_JID,
+                           room_name="cohorte",
+                           room_jid="cohorte@conference." + XMPP_SERVER, key="42"))        
+            SUCCESSED_RENDEZ_VOUS = "Bite my shiny, metal a**!"
+            FAILED_RENDZ_VOUS = "I'm so embarrassed right now. (XMPP connect failed)"
 
-        with open(os.path.join(LOG_DIR, 'xmpp_bot.log'), "w") as xmpp_log_file:
-            # start en XMPP mode
-            from pelix.utilities import to_str, to_bytes
+            with open(os.path.join(LOG_DIR, 'xmpp_bot.log'), "w") as xmpp_log_file:
+                # start en XMPP mode
+                from pelix.utilities import to_str, to_bytes
 
-            # 1) start bot
-            process = subprocess.Popen(
-                ["python3", "-u", "-m", "herald.transports.xmpp.monitor",
-                 "--jid", XMPP_JID,
-                 "--password", XMPP_PASS,
-                 "-r", "cohorte",
-                 "-p", str(XMPP_PORT),
-                 "-s", XMPP_SERVER],
-                stdout=subprocess.PIPE, stderr=xmpp_log_file, bufsize=1)
+                # 1) start bot
+                process = subprocess.Popen(
+                    ["python3", "-u", "-m", "herald.transports.xmpp.monitor",
+                     "--jid", XMPP_JID,
+                     "--password", XMPP_PASS,
+                     "-r", "cohorte",
+                     "-p", str(XMPP_PORT),
+                     "-s", XMPP_SERVER],
+                    stdout=subprocess.PIPE, stderr=xmpp_log_file, bufsize=1)
 
-            try:
-                for line in iter(process.stdout.readline, to_bytes('')):
-                    # print(line)
-                    line = to_str(line)
-                    if SUCCESSED_RENDEZ_VOUS in line:
-                        print("[INFO] COHORTE is correctly connected to "
-                              "the XMPP server.")
-                        break
+                try:
+                    for line in iter(process.stdout.readline, to_bytes('')):
+                        # print(line)
+                        line = to_str(line)
+                        if SUCCESSED_RENDEZ_VOUS in line:
+                            print("[INFO] COHORTE is correctly connected to "
+                                  "the XMPP server.")
+                            break
 
-                    if FAILED_RENDZ_VOUS in line:
-                        print("[ERROR] can not connect to the XMPP server. "
-                              "Check 'var/xmpp_bot.log' file for "
-                              "more information")
-                        raise IOError("Error connecting XMPP bot")
+                        if FAILED_RENDZ_VOUS in line:
+                            print("[ERROR] can not connect to the XMPP server. "
+                                  "Check 'var/xmpp_bot.log' file for "
+                                  "more information")
+                            raise IOError("Error connecting XMPP bot")
 
-            except (IOError, KeyboardInterrupt):
-                if process:
-                    process.terminate()
-                return 1
+                except (IOError, KeyboardInterrupt):
+                    if process:
+                        process.terminate()
+                    return 1
 
         # 2) create conf/herald configs for node
         room_jid = "cohorte@conference." + XMPP_SERVER
@@ -395,8 +405,8 @@ def main(args=None):
         common.delete_top_composer_config(COHORTE_BASE)
 
     # update configuration if not exists
-    if args.update_config_file:
-        CONFIG_FILE = args.config_file
+    CONFIG_FILE = args.config_file
+    if not os.path.exists(CONFIG_FILE) or args.update_config_file:    
         configuration = {}
         configuration["application-id"] = APPLICATION_ID
         configuration["node"] = {}
@@ -406,7 +416,7 @@ def main(args=None):
             configuration["node"]["auto-start"] = AUTO_START
             configuration["node"]["composition-file"] = COMPOSITION_FILE
             configuration["node"]["web-admin"] = WEB_ADMIN_PORT
-            configuration["node"]["shell-admin"] = SHELL_ADMIN_PORT
+        configuration["node"]["shell-admin"] = SHELL_ADMIN_PORT
         configuration["transport"] = TRANSPORT_MODES
         if "xmpp" in TRANSPORT_MODES:
             configuration["transport-xmpp"] = {}
@@ -416,7 +426,8 @@ def main(args=None):
             configuration["transport-xmpp"]["xmpp-password"] = XMPP_PASS
         common.update_startup_file(CONFIG_FILE, configuration)
         print("[INFO] config file '" + CONFIG_FILE + "' updated! ")
-        return 0
+        if args.update_config_file:
+            return 0
 
     # show some useful information
     msg = """
