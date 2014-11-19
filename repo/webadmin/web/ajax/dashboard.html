@@ -37,8 +37,8 @@
         </div>
       </div>    
       <div class="modal-footer">
-        <a id="restart-node-btn" class="btn btn-default" data-dismiss="modal" data-uid="0" href="#" >Restart</a>
-        <a id="stop-node-btn" class="btn btn-danger" data-dismiss="modal" data-uid="0" href="#" >Stop</a>        
+        <a id="restart-node-btn" class="btn btn-default disabled" data-dismiss="modal" data-uid="0" href="#" >Restart</a>
+        <a id="stop-node-btn" class="btn btn-danger disabled" data-dismiss="modal" data-uid="0" href="#" >Stop</a>        
       </div>    
 
     </div>
@@ -58,7 +58,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <a id="kill-isolate-btn" class="btn btn-danger" data-dismiss="modal" data-uid="0" href="#" >Kill isolate</a>        
+        <a id="kill-isolate-btn" class="btn btn-danger disabled" data-dismiss="modal" data-uid="0" href="#" >Destroy isolate</a>        
       </div>  
     </div>
   </div>
@@ -97,9 +97,19 @@
       var name = button.data('name')
       var uid = button.data('uid')       
       var modal = $(this)
+      // update modal title
       modal.find('.modal-title').html('<img src="img/isolate.png" class="img-circle" style="max-width: 16px"></img> <b>Isolate :</b> ' + name)
       // update destroy btn isolate's uid
       modal.find('#kill-isolate-btn').attr('data-uid', uid); 
+      // update modal content
+      $.getJSON( "/admin/api/v1/isolates/"+uid, function( data ) {            
+            var content = '<table class="table table-condensed table-striped table-hover">'
+            content += '<tr><td>ISOLATE UID</td><td>' + uid + '</td></tr>'
+            content += '<tr><td>ISOLATE NAME</td><td>' + name + '</td></tr>'
+            content += '<tr><td>HTTP SERVICE</td><td><a href="http://' + data['isolate']['http_access'] + ':' + data['isolate']['http_port'] + '" target="_blanc">' + data['isolate']['http_access'] + ':' + data['isolate']['http_port'] + '</a></td></tr>'            
+            content += '</table>'
+            modal.find('#isolate_modal_ajax-content').html(content);
+        });      
     })
 
     $('#component_modal').on('show.bs.modal', function (event) {

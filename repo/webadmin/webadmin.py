@@ -15,6 +15,7 @@ import cohorte.composer
 import pelix.remote
 
 import herald
+import herald.beans as beans
 
 import logging
 # Basic HTTP server
@@ -31,6 +32,11 @@ except ImportError:
 
 _logger = logging.getLogger("webadmin.webadmin")
 
+
+# collecting information 
+SUBJECT_GET_HTTP = "cohorte/shell/agent/get_http"
+""" Signal to request the ports to access HTTP services """
+
 """
     TODO: should have a local cache of all information.
 """
@@ -40,7 +46,8 @@ _logger = logging.getLogger("webadmin.webadmin")
 @Provides(['pelix.http.servlet', herald.SERVICE_DIRECTORY_LISTENER])
 @Property('_path', 'pelix.http.path', "/admin")
 # Consume a single Herald Directory service
-@Requires("_directory", "herald.directory")
+@Requires("_directory", herald.SERVICE_DIRECTORY)
+@Requires('_herald', herald.SERVICE_HERALD)
 # Consume an Isolate Composer service
 @RequiresMap("_icomposers", cohorte.composer.SERVICE_COMPOSER_ISOLATE, 'endpoint.framework.uuid',
              optional=True, allow_none=False)
@@ -62,6 +69,7 @@ class WebAdmin(object):
         self._path = None
         # herald directory service
         self._directory = None
+        self._herald = None
         # isolate composer service
         self._icomposers = {}
         self._icomposerlocal = None
@@ -243,6 +251,11 @@ class WebAdmin(object):
         node["meta"]["code"] = 200
         return node
 
+    def get_isolate_http_port(self, uid):
+        msg = beans.Message(SUBJECT_GET_HTTP)
+        reply = self._herald.send(uid, msg)
+        return reply.content['http.port']
+
     def get_isolate_detail(self, isolate_uid):
         """
         Get Isolate details.
@@ -257,7 +270,10 @@ class WebAdmin(object):
                 "type": "application dynamic isolate",
                 "nbr_components": 3,
                 "node_uid": "",
-                "node_name": ""
+                "node_name": "",
+                "http_port": 9000,
+                "http_access" : "localhost",
+                "shell_port": 9001
             }
         }"""
         isolate = {"meta": {}, "isolate": {}}
@@ -267,6 +283,16 @@ class WebAdmin(object):
             isolate["isolate"]["name"] = lp.name
             isolate["isolate"]["node_uid"] = lp.node_uid
             isolate["isolate"]["node_name"] = lp.node_name
+            isolate["isolate"]["http_port"] = self.get_isolate_http_port(isolate_uid)
+            try:
+                http_access = self._directory.get_local_peer().get_access("http").host
+                if http_access.startswith("::ffff:"):
+                    http_access = http_access[7:]
+            except KeyError:
+                http_access = ""
+            isolate["isolate"]["http_access"] = http_access
+
+            isolate["isolate"]["shell_port"] = 0
             if lp.name == "cohorte.internals.forker":
                 isolate["isolate"]["type"] = "cohorte-isolate"
         else:
@@ -275,6 +301,15 @@ class WebAdmin(object):
                     isolate["isolate"]["name"] = p.name
                     isolate["isolate"]["node_uid"] = p.node_uid
                     isolate["isolate"]["node_name"] = p.node_name
+                    isolate["isolate"]["http_port"] = self.get_isolate_http_port(isolate_uid)
+                    try:
+                        http_access = p.get_access("http").host
+                        if http_access.startswith("::ffff:"):
+                            http_access = http_access[7:]
+                    except KeyError:
+                        http_access = None
+                    isolate["isolate"]["http_access"] = http_access
+                    isolate["isolate"]["shell_port"] = 0
                     if p.name == "cohorte.internals.forker":
                         isolate["isolate"]["type"] = "cohorte-isolate"
                     break
