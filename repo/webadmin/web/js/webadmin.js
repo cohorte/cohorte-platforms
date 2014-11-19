@@ -319,6 +319,10 @@ function initializePage() {
 
 $(document).ready(function() {
 	loadTabs();
+	/* notifications */
+	$("#notifications-container").notify();
 });
+
+
 
 

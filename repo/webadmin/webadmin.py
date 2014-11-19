@@ -450,6 +450,23 @@ class WebAdmin(object):
         components["meta"]["count"] = count
         return components
 
+    def kill_isolate(self, isolate_uid):
+        """
+        Kill Isolate destroys the identified isolate and return an empty json
+        {
+            "meta": {
+                "isolate": "50684926acb4387d0f007ced"
+                "code": 200
+            }            
+        }
+        """
+
+        components = {"meta": {}}
+        
+        components["meta"]["isolate"] = isolate_uid
+        components["meta"]["code"] = 200
+        return components
+
 
     """
     Polling-------------------------------------------------------------------------------------------------------------
@@ -693,6 +710,9 @@ class WebAdmin(object):
                             if str(parts[5]).lower() == "components":
                                 components = self.get_isolate_components(str(parts[4]))
                                 self.sendJson(components, response)
+                            elif str(parts[5]).lower() == "kill":
+                                result = self.kill_isolate(str(parts[4]))
+                                self.sendJson(result, response)
                 elif str(parts[1]) == "gui":
                     if len(parts) == 3:
                         if str(parts[2]).lower() == "tabs":

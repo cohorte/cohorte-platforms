@@ -10,6 +10,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link href="plugins/bootstrap/bootstrap.css" rel="stylesheet">
 		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+		
 		<link href="plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet">
 		<link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 		<link href='http://fonts.googleapis.com/css?family=Righteous' rel='stylesheet' type='text/css'>
@@ -18,6 +19,8 @@
 		<link href="plugins/xcharts/xcharts.min.css" rel="stylesheet">
 		<link href="plugins/select2/select2.css" rel="stylesheet">
 		<link href="css/style.css" rel="stylesheet">
+		<!-- notifications -->
+		<link href="css/ui.notify.css" rel="stylesheet">
 		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 		<!--[if lt IE 9]>
 				<script src="http://getbootstrap.com/docs-assets/js/html5shiv.js"></script>
@@ -94,7 +97,25 @@
 	</div>
 </div>
 
+<!-- set the container hidden to avoid a flash of unstyled content
+when the page first loads -->
+<div id="notifications-container" style="display:none">
+  <!-- 
+  Later on, you can choose which template to use by referring to the 
+  ID assigned to each template.  Alternatively, you could refer
+  to each template by index, so in this example, "basic-tempate" is
+  index 0 and "advanced-template" is index 1.
+  -->
+  <div id="basic-template">
+      <a class="ui-notify-cross ui-notify-close" href="#">x</a>
+      <h1>#{title}</h1>
+      <p>#{text}</p>
+  </div>
 
+  <div id="advanced-template">
+      <!-- ... you get the idea ... -->
+  </div>
+</div>
 
 <!--End Container-->
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -102,6 +123,8 @@
 <script src="plugins/d3/d3.v3.js"></script>
 <script src="plugins/jquery/jquery.min.js"></script>
 <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
+<!-- notification -->
+<script src="plugins/notify/jquery.notify.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="plugins/bootstrap/bootstrap.min.js"></script>
 <script src="plugins/justified-gallery/jquery.justifiedgallery.min.js"></script>

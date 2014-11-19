@@ -14,6 +14,7 @@
     </div>
 </div>
 <br/>
+
 <div class="row">
 	<div class="col-xs-12">
 		<div id="frm_content"></div>
@@ -21,7 +22,105 @@
 	</div>
 </div>
 
+
+<!-- Modals -->
+<div class="modal" id="node_modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body">
+        <div id="node_modal_ajax-content">
+            <img src="img/devoops_getdata.gif"  alt="preloader"/>
+        </div>
+      </div>    
+      <div class="modal-footer">
+        <a id="restart-node-btn" class="btn btn-default" data-dismiss="modal" data-uid="0" href="#" >Restart</a>
+        <a id="stop-node-btn" class="btn btn-danger" data-dismiss="modal" data-uid="0" href="#" >Stop</a>        
+      </div>    
+
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="isolate_modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body">
+        <div id="isolate_modal_ajax-content">
+            <img src="img/devoops_getdata.gif"  alt="preloader"/>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a id="kill-isolate-btn" class="btn btn-danger" data-dismiss="modal" data-uid="0" href="#" >Kill isolate</a>        
+      </div>  
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="component_modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body">
+        <div id="component_modal_ajax-content">
+            <img src="img/devoops_getdata.gif"  alt="preloader"/>
+        </div>
+      </div>      
+    </div>
+  </div>
+</div>
+
 <script>
+    /* modals */ 
+    $('#node_modal').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget) // Button that triggered the modal
+      var recipient = button.data('whatever') // Extract info from data-* attributes
+      // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+      // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+      var modal = $(this)
+      modal.find('.modal-title').html('<img src="img/node.png" class="img-circle" style="max-width: 16px"></img> <b>Node :</b> ' + recipient)
+      //modal.find('.modal-body input').val(recipient)
+    })
+    
+    $('#isolate_modal').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget) 
+      var name = button.data('name')
+      var uid = button.data('uid')       
+      var modal = $(this)
+      modal.find('.modal-title').html('<img src="img/isolate.png" class="img-circle" style="max-width: 16px"></img> <b>Isolate :</b> ' + name)
+      // update destroy btn isolate's uid
+      modal.find('#kill-isolate-btn').attr('data-uid', uid); 
+    })
+
+    $('#component_modal').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget) 
+      var recipient = button.data('whatever') 
+      var modal = $(this)
+      modal.find('.modal-title').html('<img src="img/component.png" class="img-circle" style="max-width: 16px"></img> <b>Component :</b> ' + recipient)
+    })
+
+    function destroyIsolate(isolate_uid) {
+        console.log("destroying isolate "+isolate_uid+"...")
+        $.getJSON( "/admin/api/v1/isolates/"+isolate_uid+"/kill", function( data ) {
+            console.log("isolate destroyed!")
+            var instance = $("#notifications-container").notify("create", {
+              title: 'Isolate Destroyed',
+              text: 'The isolate ' + isolate_uid + ' is successfully destroyed!'
+            })
+            /*instance.close();
+            instance.open();*/
+        });
+    }
 
     var nodes_lastupdate = 0.00;
 
@@ -30,7 +129,7 @@
             
             var tmp = "";
             for (var i in data['components']) {
-                tmp += "<img src='img/component.png' style='max-width: 16px' class='img-circle'></img><a href=''>"+data['components'][i]['name']+"</a><br/>";
+                tmp += '<img src="img/component.png" style="max-width: 16px" class="img-circle"></img><a href="#" data-toggle="modal" data-target="#component_modal" data-whatever="'+data['components'][i]['name']+'">'+data['components'][i]['name']+'</a><br/>';
             }            
             $('#'+div_toreplace).html(tmp);
         });
@@ -46,13 +145,9 @@
                     tmp += "<td>"; 
                     
                     tmp += '<table class="table m-table table-bordered table-condensed table-hover table-heading">';
-                    tmp += '<thead><tr><th><img src="img/isolate.png" class="img-circle" style="max-width: 16px"></img><a style="color:black" href="">'+data['isolates'][i]['name']+'</a></th>';
-                    tmp += '</thead><tbody>';
-    				//tmp += '<tr><td class="m-ticker"><span>'+data['isolates'][i]['type']+'</span></td></tr>';				
-    				tmp += '<tr><td class="m-ticker"><div id="isolate_components-'+data['isolates'][i]['uid']+'"></div></td></tr>';
-    				//tmp +=	'<span class="bg-info">'+data['isolates'][i]['name']+'<br/>' + data['isolates'][i]['type'] + '</span>';			
-                    //tmp += "<a href=''>"+data['isolates'][i]['name']+"</a><br/>";
-                    //tmp += "<hr/><div id='isolate_components-"+i+"'/>";
+                    tmp += '<thead><tr><th><img src="img/isolate.png" class="img-circle" style="max-width: 16px"></img><a style="color:black" href="#" data-toggle="modal" data-target="#isolate_modal" data-name="'+data['isolates'][i]['name']+'" data-uid="'+data['isolates'][i]['uid']+'">'+data['isolates'][i]['name']+'</a></th>';
+                    tmp += '</thead><tbody>';    							
+    				tmp += '<tr><td class="m-ticker"><div id="isolate_components-'+data['isolates'][i]['uid']+'"></div></td></tr>';    				
                     tmp += '</tbody></table>'
                     tmp +="</td>";
                 }
@@ -76,7 +171,7 @@
 	            // header
                 var element = 'node_isolates-'+data['nodes'][i]['uid'];
                 var node_id = data['nodes'][i]['uid'];
-	            frame += '<div class="box-header" style="background: #CCC;"><div class="box-name"><img src="img/node.png" class=""></img> <span><b><a onclick="loadIsolatesOfNode(\''+element+'\',\''+node_id+'\')"  href="#">';
+	            frame += '<div class="box-header" style="background: #CCC;"><div class="box-name"><img src="img/node.png" class=""></img> <span><b><a onclick="loadIsolatesOfNode(\''+element+'\',\''+node_id+'\')" href="#" data-toggle="modal" data-target="#node_modal" data-whatever="'+data['nodes'][i]['name']+'">';
 	            frame += data['nodes'][i]['name'];
 	            frame += '</a></b></span></div>';
 	            frame += '<div class="box-icons"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>';
@@ -109,5 +204,10 @@
         WinMove();
         loadNodes();
         setTimeout(refresh, 2000);
+
+        $('#kill-isolate-btn').click(function() {
+            var uid = $(this).attr('data-uid');            
+            destroyIsolate(uid)
+        })
     });
 </script>
