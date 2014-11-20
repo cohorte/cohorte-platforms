@@ -132,7 +132,7 @@ def generate_boot_forker(node_dir, http_port, shell_port):
         boot_forker.write(result)
 
 
-def generate_herald_xmpp_conf(node_dir, server, port, monitor_jid, room_jid, key):
+def generate_herald_conf(node_dir, transport_modes, server, port, monitor_jid, room_jid, key):
     """
     Generates Herald XMPP transport configuration
     """
@@ -142,22 +142,37 @@ def generate_herald_xmpp_conf(node_dir, server, port, monitor_jid, room_jid, key
     herald_dir = os.path.join(conf_dir, 'herald')
     if not os.path.exists(herald_dir):
         os.makedirs(herald_dir)
+
+    tfiles = ['"java-xmpp.js"', '"java-http.js"', '"python-xmpp.js"', '"python-http.js"']
+    
+    transport_files1 = []
+    if "http" in transport_modes:
+        transport_files1.append(tfiles[1])
+    if "xmpp" in transport_modes:
+        transport_files1.append(tfiles[0])
+
     file_name = os.path.join(herald_dir, 'java-transport.js')
-    with open(file_name, "w") as java_transport:
+    with open(file_name, "w") as java_transport:        
         result = """{header}
 {{
-    "import-files" : [ "java-xmpp.js" ]
+    "import-files" : [ {files} ]
 }}
-""".format(header=WARNING_COMMENT)
+""".format(header=WARNING_COMMENT, files=",".join(transport_files1))
         java_transport.write(result)
 
+    transport_files2 = []
+    if "http" in transport_modes:
+        transport_files2.append(tfiles[3])
+    if "xmpp" in transport_modes:
+        transport_files2.append(tfiles[2])
+    
     file_name = os.path.join(herald_dir, 'python-transport.js')
     with open(file_name, "w") as python_transport:
         result = """{header}
 {{
-    "import-files" : [ "python-xmpp.js" ]
+    "import-files" : [ {files} ]
 }}
-""".format(header=WARNING_COMMENT)
+""".format(header=WARNING_COMMENT, files=",".join(transport_files2))
         python_transport.write(result)
 
     file_name = os.path.join(herald_dir, 'all-xmpp.js')

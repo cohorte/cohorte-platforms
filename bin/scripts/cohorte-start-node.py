@@ -394,7 +394,7 @@ def main(args=None):
 
         # 2) create conf/herald configs for node
         room_jid = "cohorte@conference." + XMPP_SERVER
-        common.generate_herald_xmpp_conf(COHORTE_BASE, XMPP_SERVER, XMPP_PORT,
+        common.generate_herald_conf(COHORTE_BASE, TRANSPORT_MODES, XMPP_SERVER, XMPP_PORT,
                                          XMPP_JID, room_jid, "42")
         # all-xmpp.js
         #
