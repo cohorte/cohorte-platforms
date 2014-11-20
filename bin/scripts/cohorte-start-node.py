@@ -286,6 +286,32 @@ def main(args=None):
     if not os.path.exists(os.path.join(COHORTE_BASE, 'var')):
         os.makedirs(os.path.join(COHORTE_BASE, 'var'))
 
+    # Top Composer
+    if args.is_top_composer:
+        IS_TOP_COMPOSER = args.is_top_composer.lower() in ("true", "yes")
+    else:
+        IS_TOP_COMPOSER = set_configuration_value(
+            None,
+            get_external_config(external_config, "top-composer"), False)
+
+    if IS_TOP_COMPOSER:
+        boot_args.append("-t")
+        # composition file
+        COMPOSITION_FILE = set_configuration_value(
+            args.composition_file,
+            get_external_config(external_config, "composition-file"),
+            "composition.js")
+
+        # handle auto-start flag
+        AUTO_START = set_configuration_value(
+            args.auto_start,
+            get_external_config( external_config, "auto-start"), True)
+
+        common.generate_top_composer_config(COHORTE_BASE, COMPOSITION_FILE,
+                                            AUTO_START)
+    else:
+        common.delete_top_composer_config(COHORTE_BASE)
+
     # transport mode
     process = None
     xmpp_log_file = None
@@ -327,42 +353,44 @@ def main(args=None):
                 """.format(server=XMPP_SERVER, port=XMPP_PORT, jid=XMPP_JID,
                            room_name="cohorte",
                            room_jid="cohorte@conference." + XMPP_SERVER, key="42"))        
-            SUCCESSED_RENDEZ_VOUS = "Bite my shiny, metal a**!"
-            FAILED_RENDZ_VOUS = "I'm so embarrassed right now. (XMPP connect failed)"
+            
+            if IS_TOP_COMPOSER == True:
+                SUCCESSED_RENDEZ_VOUS = "Bite my shiny, metal a**!"
+                FAILED_RENDZ_VOUS = "I'm so embarrassed right now. (XMPP connect failed)"
 
-            with open(os.path.join(LOG_DIR, 'xmpp_bot.log'), "w") as xmpp_log_file:
-                # start en XMPP mode
-                from pelix.utilities import to_str, to_bytes
+                with open(os.path.join(LOG_DIR, 'xmpp_bot.log'), "w") as xmpp_log_file:
+                    # start en XMPP mode
+                    from pelix.utilities import to_str, to_bytes
 
-                # 1) start bot
-                process = subprocess.Popen(
-                    ["python3", "-u", "-m", "herald.transports.xmpp.monitor",
-                     "--jid", XMPP_JID,
-                     "--password", XMPP_PASS,
-                     "-r", "cohorte",
-                     "-p", str(XMPP_PORT),
-                     "-s", XMPP_SERVER],
-                    stdout=subprocess.PIPE, stderr=xmpp_log_file, bufsize=1)
+                    # 1) start bot
+                    process = subprocess.Popen(
+                        ["python3", "-u", "-m", "herald.transports.xmpp.monitor",
+                         "--jid", XMPP_JID,
+                         "--password", XMPP_PASS,
+                         "-r", "cohorte",
+                         "-p", str(XMPP_PORT),
+                         "-s", XMPP_SERVER],
+                        stdout=subprocess.PIPE, stderr=xmpp_log_file, bufsize=1)
 
-                try:
-                    for line in iter(process.stdout.readline, to_bytes('')):
-                        # print(line)
-                        line = to_str(line)
-                        if SUCCESSED_RENDEZ_VOUS in line:
-                            print("[INFO] COHORTE is correctly connected to "
-                                  "the XMPP server.")
-                            break
+                    try:
+                        for line in iter(process.stdout.readline, to_bytes('')):
+                            # print(line)
+                            line = to_str(line)
+                            if SUCCESSED_RENDEZ_VOUS in line:
+                                print("[INFO] COHORTE is correctly connected to "
+                                      "the XMPP server.")
+                                break
 
-                        if FAILED_RENDZ_VOUS in line:
-                            print("[ERROR] can not connect to the XMPP server. "
-                                  "Check 'var/xmpp_bot.log' file for "
-                                  "more information")
-                            raise IOError("Error connecting XMPP bot")
+                            if FAILED_RENDZ_VOUS in line:
+                                print("[ERROR] can not connect to the XMPP server. "
+                                      "Check 'var/xmpp_bot.log' file for "
+                                      "more information")
+                                raise IOError("Error connecting XMPP bot")
 
-                except (IOError, KeyboardInterrupt):
-                    if process:
-                        process.terminate()
-                    return 1
+                    except (IOError, KeyboardInterrupt):
+                        if process:
+                            process.terminate()
+                        return 1
 
         # 2) create conf/herald configs for node
         room_jid = "cohorte@conference." + XMPP_SERVER
@@ -376,33 +404,6 @@ def main(args=None):
             shutil.rmtree(os.path.join(COHORTE_BASE, 'conf', 'herald'))
         except OSError:
             pass
-
-    # Starting Cohorte
-    # print("[INFO] boot_args: " , boot_args)
-    if args.is_top_composer:
-        IS_TOP_COMPOSER = args.is_top_composer.lower() in ("true", "yes")
-    else:
-        IS_TOP_COMPOSER = set_configuration_value(
-            None,
-            get_external_config(external_config, "top-composer"), False)
-
-    if IS_TOP_COMPOSER:
-        boot_args.append("-t")
-        # composition file
-        COMPOSITION_FILE = set_configuration_value(
-            args.composition_file,
-            get_external_config(external_config, "composition-file"),
-            "composition.js")
-
-        # handle auto-start flag
-        AUTO_START = set_configuration_value(
-            args.auto_start,
-            get_external_config( external_config, "auto-start"), True)
-
-        common.generate_top_composer_config(COHORTE_BASE, COMPOSITION_FILE,
-                                            AUTO_START)
-    else:
-        common.delete_top_composer_config(COHORTE_BASE)
 
     # update configuration if not exists
     CONFIG_FILE = args.config_file
