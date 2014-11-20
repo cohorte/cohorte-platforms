@@ -64,7 +64,10 @@ def generate_composition_conf(node_dir, app_name):
     """
     Generates conf/composition.js file.
     """
-    file_name = os.path.join(node_dir, 'conf', "composition.js")
+    conf_dir = os.path.join(node_dir, 'conf')
+    if not os.path.exists(conf_dir):
+        os.makedirs(conf_dir)
+    file_name = os.path.join(conf_dir, "composition.js")
     app = app_name.rsplit(".", 2)[-1]
     with open(file_name, "w") as composition:
         result = """{{
@@ -83,7 +86,10 @@ def generate_boot_common(node_dir, app_name):
     """
     Generates boot-common.js file which defines the application's id on which the node will be connected.
     """
-    file_name = os.path.join(node_dir, 'conf', "boot-common.js")
+    conf_dir = os.path.join(node_dir, 'conf')
+    if not os.path.exists(conf_dir):
+        os.makedirs(conf_dir)
+    file_name = os.path.join(conf_dir, "boot-common.js")
     with open(file_name, "w") as boot_common:
         result = """{header}
 {{
@@ -100,7 +106,10 @@ def generate_boot_forker(node_dir, http_port, shell_port):
     """
     Generates conf/boot_forker.js file.
     """
-    file_name = os.path.join(node_dir, 'conf', "boot-forker.js")
+    conf_dir = os.path.join(node_dir, 'conf')
+    if not os.path.exists(conf_dir):
+        os.makedirs(conf_dir)
+    file_name = os.path.join(conf_dir, "boot-forker.js")
     with open(file_name, "w") as boot_forker:
         result = """{header}
 {{
@@ -127,7 +136,10 @@ def generate_herald_xmpp_conf(node_dir, server, port, monitor_jid, room_jid, key
     """
     Generates Herald XMPP transport configuration
     """
-    herald_dir = os.path.join(node_dir, 'conf', 'herald')
+    conf_dir = os.path.join(node_dir, 'conf')
+    if not os.path.exists(conf_dir):
+        os.makedirs(conf_dir)
+    herald_dir = os.path.join(conf_dir, 'herald')
     if not os.path.exists(herald_dir):
         os.makedirs(herald_dir)
     file_name = os.path.join(herald_dir, 'java-transport.js')
@@ -184,7 +196,10 @@ def generate_top_composer_config(node_dir, composition_file, autostart):
     """
     Generate Top Composer configuration file_name
     """
-    tc_dir = os.path.join(node_dir, 'conf', 'composer')
+    conf_dir = os.path.join(node_dir, 'conf')
+    if not os.path.exists(conf_dir):
+        os.makedirs(conf_dir)
+    tc_dir = os.path.join(conf_dir, 'composer')
     if not os.path.exists(tc_dir):
         os.makedirs(tc_dir)
     file_name = os.path.join(tc_dir, 'python-top.js')
