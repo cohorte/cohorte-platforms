@@ -370,6 +370,7 @@ def main(args=None):
                          "-r", "cohorte",
                          "-p", str(XMPP_PORT),
                          "-s", XMPP_SERVER],
+                        stdin=subprocess.PIPE,
                         stdout=subprocess.PIPE, stderr=xmpp_log_file, bufsize=1)
 
                     try:
