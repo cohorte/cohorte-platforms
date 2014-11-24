@@ -11,15 +11,18 @@ Cohorte Web Admin Servlet
 # iPOPO decorators
 from pelix.ipopo.decorators import ComponentFactory, Provides, Property, Instantiate, \
     Validate, Invalidate, Requires, RequiresMap, Bind, BindField, UnbindField
-import cohorte.composer
 import pelix.remote
 
+# Herald
 import herald
 import herald.beans as beans
 
-import logging
-# Basic HTTP server
+# Cohorte 
+import cohorte.composer
+import cohorte.monitor
 
+import logging
+import threading 
 import json, time, os
 
 try:
@@ -194,14 +197,12 @@ class WebAdmin(object):
             ]
         }
         """
-        _logger.critical('get components // %s', self._icomposers)
-
         components = {"meta": {}, "components": []}
         count = 0
         for rcomposer in self._icomposers.values():
             uid = rcomposer.get_isolate_uid()
             info = rcomposer.get_isolate_info()
-            _logger.critical('Getting info: %s -- %s', info, info.components)
+            #_logger.critical('Getting info: %s -- %s', info, info.components)
             for com in info.components:
                 components["components"].append({"name": com.name,
                                                  "factory": com.factory,
@@ -244,7 +245,7 @@ class WebAdmin(object):
             count = 1
         for p in self._directory.get_peers():
             if p.node_uid == node_uid:
-                node["node"]["name"] = lp.node_name
+                node["node"]["name"] = p.node_name
                 count += 1
         node["node"]["nbr_isolates"] = count
         node["meta"]["node"] = node_uid
@@ -284,7 +285,7 @@ class WebAdmin(object):
             isolate["isolate"]["node_uid"] = lp.node_uid
             isolate["isolate"]["node_name"] = lp.node_name
             isolate["isolate"]["http_port"] = self.get_isolate_http_port(isolate_uid)
-            try:
+            try:                
                 http_access = self._directory.get_local_peer().get_access("http").host
                 if http_access.startswith("::ffff:"):
                     http_access = http_access[7:]
@@ -318,15 +319,18 @@ class WebAdmin(object):
             isolate["isolate"]["nbr_components"] = -1
         else:
             count = 0
-            for c in self._icomposers.keys():
-                if self._icomposers.get(c).get_isolate_uid() == isolate_uid:
-                    comps = self._icomposers.get(c).get_isolate_info().components
-                    for com in comps:
-                        count += 1
-            if self._icomposerlocal is not None:            
-                if self._icomposerlocal.get_isolate_uid() == isolate_uid:
-                    for c in self._icomposerlocal.get_isolate_info().components:
-                        count += 1
+            try:
+                for c in self._icomposers.keys():
+                    if self._icomposers.get(c).get_isolate_uid() == isolate_uid:
+                        comps = self._icomposers.get(c).get_isolate_info().components
+                        for com in comps:
+                            count += 1
+                if self._icomposerlocal is not None:            
+                    if self._icomposerlocal.get_isolate_uid() == isolate_uid:
+                        for c in self._icomposerlocal.get_isolate_info().components:
+                            count += 1
+            except:
+                pass
             isolate["isolate"]["nbr_components"] = count
 
         isolate["meta"]["isolate"] = isolate_uid
@@ -467,40 +471,129 @@ class WebAdmin(object):
 
         components = {"meta": {}, "components": []}
         count = 0
-        for c in self._icomposers.keys():
-            if self._icomposers.get(c) is not None:
-                if self._icomposers.get(c).get_isolate_uid() == isolate_uid:
-                    comps = self._icomposers.get(c).get_isolate_info().components
-                    for com in comps:
-                        components["components"].append(dict(name=com.name, factory=com.factory, language=com.language))
+        try:
+            for c in self._icomposers.keys():
+                if self._icomposers.get(c) is not None:
+                    if self._icomposers.get(c).get_isolate_uid() == isolate_uid:
+                        comps = self._icomposers.get(c).get_isolate_info().components
+                        for com in comps:
+                            components["components"].append(dict(name=com.name, factory=com.factory, language=com.language))
+                            count += 1
+            if self._icomposerlocal is not None:
+                if self._icomposerlocal.get_isolate_uid() == isolate_uid:
+                    for c in self._icomposerlocal.get_isolate_info().components:
+                        components["components"].append(dict(name=c.name, factory=c.factory, language=c.language))
                         count += 1
-        if self._icomposerlocal is not None:
-            if self._icomposerlocal.get_isolate_uid() == isolate_uid:
-                for c in self._icomposerlocal.get_isolate_info().components:
-                    components["components"].append(dict(name=c.name, factory=c.factory, language=c.language))
-                    count += 1
-
+        except:
+            pass
         components["meta"]["isolate"] = isolate_uid
         components["meta"]["code"] = 200
         components["meta"]["count"] = count
         return components
 
-    def kill_isolate(self, isolate_uid):
+    """
+    Actions-------------------------------------------------------------------------------------------------------------
+    """
+
+    def killall_nodes(self):
         """
-        Kill Isolate destroys the identified isolate and return an empty json
+        Safely destroy all nodes
         {
-            "meta": {
-                "isolate": "50684926acb4387d0f007ced"
+            "meta": {                
                 "code": 200
-            }            
+            },
+            "status": {
+                "code": 0,
+                "description": "Node successfully destroyed"
+            }
         }
         """
+        status = {"meta": {}, "status": {}}        
+        status["meta"]["code"] = 200
+        msg = beans.Message(cohorte.monitor.SIGNAL_STOP_PLATFORM)
+        try:
+            # send to other monitors            
+            self._herald.fire_group('monitors', msg)                        
+        except:
+            pass
 
-        components = {"meta": {}}
-        
-        components["meta"]["isolate"] = isolate_uid
-        components["meta"]["code"] = 200
-        return components
+        try:
+            msg2 = beans.MessageReceived(msg.uid, msg.subject, msg.content, "local", "local", "local")
+            threading.Thread(target=self._herald.handle_message, args=[msg2]).start()            
+            status["status"]["code"] = 0
+            status["status"]["description"] = "All nodes successfully destroyed"    
+        except:    
+            # send to local monitor
+            status["status"]["code"] = 1
+            status["status"]["description"] = "Error destroying all nodes"
+        return status
+
+    def kill_node(self, node_uid):
+        """
+        Safely destroys the identified node 
+        {
+            "meta": {
+                "node": "41110b1d-b510-4e51-9945-a752da04a16d",
+                "code": 200
+            },
+            "status": {
+                "code": 0,
+                "description": "Node successfully destroyed"
+            }
+        }
+        """        
+        status = {"meta": {}, "status": {}}
+        status["meta"]["node"] = node_uid
+        status["meta"]["code"] = 200
+
+        # get its "cohorte.internals.forker" UID
+        isolates = self.get_node_isolates(node_uid)
+        forker_uid = None
+        for i in isolates["isolates"]:
+            if i["name"] == "cohorte.internals.forker":
+                forker_uid = i["uid"]     
+
+        msg = beans.Message(cohorte.monitor.SIGNAL_STOP_NODE)
+        try:            
+            self._herald.fire(forker_uid, msg)
+        except KeyError:
+            # if forker is the local one, send the message locally
+            lp = self._directory.get_local_peer()
+            if lp.node_uid == node_uid:
+                if lp.name == "cohorte.internals.forker":                   
+                    msg2 = beans.MessageReceived(msg.uid, msg.subject, msg.content, "local", "local", "local")
+                    threading.Thread(target=self._herald.handle_message, args=[msg2]).start()
+            
+        status["status"]["code"] = 0
+        status["status"]["description"] = "Node successfully destroyed"
+        return status
+
+    def kill_isolate(self, isolate_uid):
+        """
+        Safely destroys the identified isolate
+        {
+            "meta": {
+                "isolate": "41110b1d-b510-4e51-9945-a752da04a16d",
+                "code": 200
+            },
+            "status": {
+                "code": 0,
+                "description": "Isolate successfully destroyed"
+            }
+        }
+        """        
+        status = {"meta": {}, "status": {}}
+        status["meta"]["isolate"] = isolate_uid
+        status["meta"]["code"] = 200
+
+        # STOP ISOLATE
+        # fire (uid, cohorte.monitor.SIGNAL_STOP_ISOLATE)
+        msg = beans.Message(cohorte.monitor.SIGNAL_STOP_ISOLATE)
+        self._herald.fire(isolate_uid, msg)
+
+        status["status"]["code"] = 0
+        status["status"]["description"] = "Isolate successfully destroyed"
+        return status
 
 
     """
@@ -720,7 +813,10 @@ class WebAdmin(object):
 
                     if len(parts) == 5:
                         if str(parts[3]).lower() == "nodes":
-                            if str(parts[4]) == "lastupdate":
+                            if str(parts[4]).lower() == "killall":
+                                result = self.killall_nodes()
+                                self.sendJson(result, response)
+                            elif str(parts[4]) == "lastupdate":
                                 node = self.get_nodes_lastupdate()
                                 self.sendJson(node, response)
                             else:
@@ -736,10 +832,13 @@ class WebAdmin(object):
                             self.sendJson(isolate, response)
 
                     if len(parts) == 6:
-                        if str(parts[3]).lower() == "nodes":
+                        if str(parts[3]).lower() == "nodes":                            
                             if str(parts[5]).lower() == "isolates":
                                 isolates = self.get_node_isolates(str(parts[4]))
                                 self.sendJson(isolates, response)
+                            elif str(parts[5]).lower() == "kill":
+                                result = self.kill_node(str(parts[4]))
+                                self.sendJson(result, response)
 
                         if str(parts[3]).lower() == "isolates":
                             if str(parts[5]).lower() == "components":

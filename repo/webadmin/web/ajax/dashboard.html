@@ -1,10 +1,10 @@
 <div class="row">
-	<div id="breadcrumb" class="col-md-12">
-		<ol class="breadcrumb">
-			<li><a href="index.html">Home</a></li>
-			<li><a href="#">Dashboard</a></li>
-		</ol>
-	</div>
+  <div id="breadcrumb" class="col-md-12">
+    <ol class="breadcrumb">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="#">Dashboard</a></li>
+    </ol>
+  </div>
 </div>
 
 <h3 class="page-header">Dashboard</h3>
@@ -12,14 +12,17 @@
     <div class="col-xs-12 col-sm-6 col-md-8">
     A global view of the COHORTE system.
     </div>
+    <div class="">
+    <a id="killall-nodes-btn" href="#" class="btn btn-danger" style="float:right;margin-right:20px;">Stop all nodes</a>
+    </div>
 </div>
 <br/>
 
 <div class="row">
-	<div class="col-xs-12">
-		<div id="frm_content"></div>
-		<!-- content will be injected here -->
-	</div>
+  <div class="col-xs-12">
+    <div id="frm_content"></div>
+    <!-- content will be injected here -->
+  </div>
 </div>
 
 
@@ -37,8 +40,7 @@
         </div>
       </div>    
       <div class="modal-footer">
-        <a id="restart-node-btn" class="btn btn-default disabled" data-dismiss="modal" data-uid="0" href="#" >Restart</a>
-        <a id="stop-node-btn" class="btn btn-danger disabled" data-dismiss="modal" data-uid="0" href="#" >Stop</a>        
+        <a id="kill-node-btn" class="btn btn-danger" data-dismiss="modal" data-uid="0" href="#" >Stop</a>        
       </div>    
 
     </div>
@@ -58,7 +60,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <a id="kill-isolate-btn" class="btn btn-danger disabled" data-dismiss="modal" data-uid="0" href="#" >Destroy isolate</a>        
+        <a id="kill-isolate-btn" class="btn btn-danger" data-dismiss="modal" data-uid="0" href="#" >Destroy isolate</a>        
       </div>  
     </div>
   </div>
@@ -84,12 +86,16 @@
     /* modals */ 
     $('#node_modal').on('show.bs.modal', function (event) {
       var button = $(event.relatedTarget) // Button that triggered the modal
-      var recipient = button.data('whatever') // Extract info from data-* attributes
-      // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-      // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-      var modal = $(this)
-      modal.find('.modal-title').html('<img src="img/node.png" class="img-circle" style="max-width: 16px"></img> <b>Node :</b> ' + recipient)
-      //modal.find('.modal-body input').val(recipient)
+      var name = button.data('name') // Extract info from data-* attributes
+      var uid = button.data('uid')      
+      var modal = $(this)      
+      modal.find('.modal-title').html('<img src="img/node.png" class="img-circle" style="max-width: 16px"></img> <b>Node :</b> ' + name)
+      modal.find('#kill-node-btn').attr('data-uid', uid);       
+      var content = '<table class="table table-condensed table-striped table-hover">'
+      content += '<tr><td>NODE UID</td><td>' + uid + '</td></tr>'
+      content += '<tr><td>NODE NAME</td><td>' + name + '</td></tr>'            
+      modal.find('#node_modal_ajax-content').html(content);
+           
     })
     
     $('#isolate_modal').on('show.bs.modal', function (event) {
@@ -107,6 +113,7 @@
             content += '<tr><td>ISOLATE UID</td><td>' + uid + '</td></tr>'
             content += '<tr><td>ISOLATE NAME</td><td>' + name + '</td></tr>'
             content += '<tr><td>HTTP SERVICE</td><td><a href="http://' + data['isolate']['http_access'] + ':' + data['isolate']['http_port'] + '" target="_blanc">' + data['isolate']['http_access'] + ':' + data['isolate']['http_port'] + '</a></td></tr>'            
+            //content += '<tr><td>REMOTE SHELL PORT</td><td>' + data['isolate']['shell_port'] + '</td></tr>'
             content += '</table>'
             modal.find('#isolate_modal_ajax-content').html(content);
         });      
@@ -119,18 +126,42 @@
       modal.find('.modal-title').html('<img src="img/component.png" class="img-circle" style="max-width: 16px"></img> <b>Component :</b> ' + recipient)
     })
 
-    function destroyIsolate(isolate_uid) {
-        console.log("destroying isolate "+isolate_uid+"...")
-        $.getJSON( "/admin/api/v1/isolates/"+isolate_uid+"/kill", function( data ) {
-            console.log("isolate destroyed!")
+    /* ************************ Actions ************************** */
+
+    function killAllNodes() {
+      console.log("destroying all nodes...")
+        $.getJSON( "/admin/api/v1/nodes/killall", function( data ) {
+            console.log("killall nodes OK")
             var instance = $("#notifications-container").notify("create", {
-              title: 'Isolate Destroyed',
-              text: 'The isolate ' + isolate_uid + ' is successfully destroyed!'
+              title: 'COHORTE Platform Stopping...',
+              text: 'All Cohorte nodes will be destroyed! this interface will no longer be accessible.'
             })
-            /*instance.close();
-            instance.open();*/
         });
     }
+
+    function killNode(node_uid) {
+      console.log("destroying node "+node_uid+"...")
+        $.getJSON( "/admin/api/v1/nodes/"+node_uid+"/kill", function( data ) {
+            console.log("node destroyed!")
+          var instance = $("#notifications-container").notify("create", {
+            title: 'Node stopping...',
+            text: 'Node ' + node_uid + ' will be destroyed!'
+          })
+        });
+    }
+
+    function killIsolate(isolate_uid) {
+      console.log("destroying isolate "+isolate_uid+"...")
+      $.getJSON( "/admin/api/v1/isolates/"+isolate_uid+"/kill", function( data ) {
+          console.log("isolate destroyed!")
+          var instance = $("#notifications-container").notify("create", {
+            title: 'Isolate stopping...',
+            text: 'Isolate ' + isolate_uid + ' will be destroyed!'
+          })
+      });
+    }
+
+    /* ************************ Updates ************************** */
 
     var nodes_lastupdate = 0.00;
 
@@ -156,8 +187,8 @@
                     
                     tmp += '<table class="table m-table table-bordered table-condensed table-hover table-heading">';
                     tmp += '<thead><tr><th><img src="img/isolate.png" class="img-circle" style="max-width: 16px"></img><a style="color:black" href="#" data-toggle="modal" data-target="#isolate_modal" data-name="'+data['isolates'][i]['name']+'" data-uid="'+data['isolates'][i]['uid']+'">'+data['isolates'][i]['name']+'</a></th>';
-                    tmp += '</thead><tbody>';    							
-    				tmp += '<tr><td class="m-ticker"><div id="isolate_components-'+data['isolates'][i]['uid']+'"></div></td></tr>';    				
+                    tmp += '</thead><tbody>';                 
+            tmp += '<tr><td class="m-ticker"><div id="isolate_components-'+data['isolates'][i]['uid']+'"></div></td></tr>';           
                     tmp += '</tbody></table>'
                     tmp +="</td>";
                 }
@@ -176,20 +207,20 @@
         $.getJSON( "/admin/api/v1/nodes", function( data ) {            
             frame = "";
             for (var i in data['nodes']) {
-	            // box
-	            frame += '<div class="box" style="box-shadow: 0 0 6px #ABABAB;">';
-	            // header
+              // box
+              frame += '<div class="box" style="box-shadow: 0 0 6px #ABABAB;">';
+              // header
                 var element = 'node_isolates-'+data['nodes'][i]['uid'];
                 var node_id = data['nodes'][i]['uid'];
-	            frame += '<div class="box-header" style="background: #CCC;"><div class="box-name"><img src="img/node.png" class=""></img> <span><b><a onclick="loadIsolatesOfNode(\''+element+'\',\''+node_id+'\')" href="#" data-toggle="modal" data-target="#node_modal" data-whatever="'+data['nodes'][i]['name']+'">';
-	            frame += data['nodes'][i]['name'];
-	            frame += '</a></b></span></div>';
-	            frame += '<div class="box-icons"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>';
-				frame += '<a class="expand-link"><i class="fa fa-expand"></i></a></div><div class="no-move"></div></div>';
-				// node isolates
-	            frame += '<div id="node_isolates-'+data['nodes'][i]['uid']+'"/>';
-	            frame += '</div>';
-			}	
+              frame += '<div class="box-header" style="background: #CCC;"><div class="box-name"><img src="img/node.png" class=""></img> <span><b><a onclick="loadIsolatesOfNode(\''+element+'\',\''+node_id+'\')" href="#" data-toggle="modal" data-target="#node_modal" data-name="'+data['nodes'][i]['name']+'" data-uid="'+data['nodes'][i]['uid']+'">';
+              frame += data['nodes'][i]['name'];
+              frame += '</a></b></span></div>';
+              frame += '<div class="box-icons"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>';
+        frame += '<a class="expand-link"><i class="fa fa-expand"></i></a></div><div class="no-move"></div></div>';
+        // node isolates
+              frame += '<div id="node_isolates-'+data['nodes'][i]['uid']+'"/>';
+              frame += '</div>';
+      } 
             $('#frm_content').html(frame);
             for (var i in data['nodes']) {
                 loadIsolatesOfNode('node_isolates-'+data['nodes'][i]['uid'], data['nodes'][i]['uid']);
@@ -214,10 +245,16 @@
         WinMove();
         loadNodes();
         setTimeout(refresh, 2000);
-
+        $('#killall-nodes-btn').click(function() {                         
+            killAllNodes()
+        })
+        $('#kill-node-btn').click(function() {
+            var uid = $(this).attr('data-uid');            
+            killNode(uid)
+        })
         $('#kill-isolate-btn').click(function() {
             var uid = $(this).attr('data-uid');            
-            destroyIsolate(uid)
+            killIsolate(uid)
         })
     });
 </script>
