@@ -490,18 +490,20 @@ C:::::C             O:::::O     O:::::O H:::::H     H:::::H O:::::O     O:::::O 
         log_file.write(msg)
 
     # starting cohorte isolate
-    status = subprocess.call(
-        "python3" + " -m cohorte.boot.boot " + " ".join(boot_args), shell=True)
+    try:
+        subprocess.call(["python3", "-m", "cohorte.boot.boot"] + boot_args, 
+            stdin=None, stdout=None, stderr=None, shell=False)
+    except KeyboardInterrupt:
+        print("Killing Top Composer... ")
+        print("Other COHORTE nodes still alive!")
 
-    #xmpp_log_file.flush()
-    # terminate XMPP bot if stopped
+    # stopping XMPP bot process
     if process:
         process.terminate()
         if not xmpp_log_file:
             xmpp_log_file.close()
+    
     return 0
-    #import cohorte.boot.boot
-    #return cohorte.boot.boot.main(boot_args)
 
 if __name__ == "__main__":
     sys.exit(main())
