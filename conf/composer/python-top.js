@@ -7,10 +7,10 @@
 	 */
 	"bundles" : [
 	/* Parser */
-	{
+	/*{
 		"name" : "cohorte.composer.parser"
 	},
-
+	*/
 	/* Top Composer components */
 	{
 		"name" : "cohorte.composer.top.composer"
