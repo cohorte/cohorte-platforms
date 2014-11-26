@@ -70,7 +70,7 @@ def get_external_config(parsed_conf_file, conf_name):
                 return parsed_conf_file["node"].get("name")
             # return parsed_conf_file["node"].get(conf_name)
 
-        if conf_name in ("top-composer", "auto-start", "composition-file", "web-admin", "shell-admin"):
+        if conf_name in ("top-composer", "auto-start", "composition-file", "web-admin", "shell-admin", "use-cache"):
             if "node" in parsed_conf_file:
                 return parsed_conf_file["node"].get(conf_name)
 
@@ -166,6 +166,9 @@ def main(args=None):
     group.add_argument("--shell-admin", action="store", type=int,
                        dest="shell_admin_port", help="Node remote shell port")
 
+    group.add_argument("--use-cache", action="store",
+                       dest="use_cache", help="Use cache to accelerate startup time")
+
     group = parser.add_argument_group("Transport",
                                       "Information about the transport "
                                       "protocols to use")
@@ -199,6 +202,7 @@ def main(args=None):
     AUTO_START = None
     COMPOSITION_FILE = None
     APPLICATION_ID = None
+    USE_CACHE = None
     XMPP_SERVER = None
     XMPP_PORT = None
     XMPP_JID = None
@@ -240,6 +244,12 @@ def main(args=None):
     # Parse config file
     if args.config_file:
         external_config = parse_config_file(args.config_file)
+ 
+    # useing cache
+    USE_CACHE = set_configuration_value(
+            args.use_cache,
+            get_external_config( external_config, "use-cache"), False)
+    os.environ['COHORTE_USE_CACHE'] = str(USE_CACHE)
 
     # export Node name
     NODE_NAME = set_configuration_value(
@@ -417,7 +427,8 @@ def main(args=None):
         if IS_TOP_COMPOSER:
             configuration["node"]["auto-start"] = AUTO_START
             configuration["node"]["composition-file"] = COMPOSITION_FILE
-            configuration["node"]["web-admin"] = WEB_ADMIN_PORT
+        configuration["node"]["web-admin"] = WEB_ADMIN_PORT
+        configuration["node"]["use-cache"] = USE_CACHE
         configuration["node"]["shell-admin"] = SHELL_ADMIN_PORT
         configuration["transport"] = TRANSPORT_MODES
         if "xmpp" in TRANSPORT_MODES:

@@ -8,10 +8,12 @@ dev
 -------------
 
 BUG FIX :
-- Fixing problem of lost STDIN
+  - Fixing the problem of lost STDIN.
+  - Fixing the problem of the dirty stop of nodes.
 
 NEW FEATURES :
+  - adding "--use-cache" (experimental) option to the startup script "run". If set to "true", a cache file of the repository is created and used next startup time to accelerate the loading time (ATTENTION: limited support! only python nodes).
 
 ENHANCEMENT :
- - clean-up directory structure (build artifacts are now in 'build' folder and there is no base template)
- - small COHORTE logo at startup 
+  - clean-up directory structure (build artifacts are now in 'build' folder and there is no base template)
+  - small COHORTE logo at startup 
