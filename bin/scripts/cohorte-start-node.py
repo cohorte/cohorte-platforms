@@ -432,6 +432,26 @@ def main(args=None):
             return 0
 
     # show some useful information
+    msg1 = """
+   _____ ____  _    _  ____  _____ _______ ______ 
+  / ____/ __ \| |  | |/ __ \|  __ \__   __|  ____|
+ | |   | |  | | |__| | |  | | |__) | | |  | |__   
+ | |   | |  | |  __  | |  | |  _  /  | |  |  __|  
+ | |___| |__| | |  | | |__| | | \ \  | |  | |____ 
+  \_____\____/|_|  |_|\____/|_|  \_\ |_|  |______|
+    
+
+     APPLICATION ID : {appid}
+          NODE NAME : {node_name}
+         TRANSPORTS : {transports}
+
+       TOP COMPOSER : {is_top}
+
+          WEB ADMIN : {http_port}
+        SHELL ADMIN : {shell_port}
+""".format(appid=APPLICATION_ID, node_name=os.environ.get('COHORTE_NODE_NAME'),
+           transports=",".join(TRANSPORT_MODES), is_top=IS_TOP_COMPOSER,
+           http_port=WEB_ADMIN_PORT, shell_port=SHELL_ADMIN_PORT)
     msg = """
   .........................................
 
@@ -452,51 +472,54 @@ C:::::C             O:::::O     O:::::O H:::::H     H:::::H O:::::O     O:::::O 
      CCC::::::::::::C  OO:::::::::OO  H:::::::H     H:::::::H  OO:::::::::OO  R::::::R     R:::::R     T:::::::::T     E::::::::::::::::::::E
         CCCCCCCCCCCCC    OOOOOOOOO    HHHHHHHHH     HHHHHHHHH    OOOOOOOOO    RRRRRRRR     RRRRRRR     TTTTTTTTTTT     EEEEEEEEEEEEEEEEEEEEEE
 
+ 
+     APPLICATION ID : {appid}
+          NODE NAME : {node_name}
+         TRANSPORTS : {transports}
 
-    APPLICATION ID : {appid}
-         NODE NAME : {node_name}
-        TRANSPORTS : {transports}
+       TOP COMPOSER : {is_top}
 
-      TOP COMPOSER : {is_top}
-
-         WEB ADMIN : {http_port}
-       SHELL ADMIN : {shell_port}
+          WEB ADMIN : {http_port}
+        SHELL ADMIN : {shell_port}
 """.format(appid=APPLICATION_ID, node_name=os.environ.get('COHORTE_NODE_NAME'),
            transports=",".join(TRANSPORT_MODES), is_top=IS_TOP_COMPOSER,
            http_port=WEB_ADMIN_PORT, shell_port=SHELL_ADMIN_PORT)
 
     if IS_TOP_COMPOSER:
-        msg += """
-  COMPOSITION FILE : {composition}
-        AUTO START : {auto_start}
+        msg1 += """
+   COMPOSITION FILE : {composition}
+         AUTO START : {auto_start}
 """.format(composition=COMPOSITION_FILE, auto_start=AUTO_START)
 
-    msg += """
+    msg1 += """
 
-      COHORTE BASE : {base}
-      COHORTE HOME : {home}
-          LOG FILE : {logfile}
+       COHORTE BASE : {base}
+       COHORTE HOME : {home}
+           LOG FILE : {logfile}
 
-        PYTHONPATH : {pythonpath}
+         PYTHONPATH : {pythonpath}
 
   .........................................
 """.format(home=COHORTE_HOME, base=os.environ['COHORTE_BASE'],
            logfile=os.environ.get('COHORTE_LOGFILE'),
            pythonpath=os.environ.get('PYTHONPATH'))
 
-    print(msg)
+    print(msg1)
     # write to log file
     with open(str(os.environ.get('COHORTE_LOGFILE')), "w") as log_file:
         log_file.write(msg)
 
-    # starting cohorte isolate
+    # starting cohorte isolate   
     try:
-        subprocess.call(["python3", "-m", "cohorte.boot.boot"] + boot_args, 
+        p = subprocess.Popen(["python3", "-m", "cohorte.boot.boot"] + boot_args, 
             stdin=None, stdout=None, stderr=None, shell=False)
-    except KeyboardInterrupt:
-        print("Killing Top Composer... ")
-        print("Other COHORTE nodes still alive!")
-
+    except:
+        print("Stopping node... ")
+    try:
+        p.wait()
+    except:
+        print("Unsafe stopping!")
+        
     # stopping XMPP bot process
     if process:
         process.terminate()
