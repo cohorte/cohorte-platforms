@@ -75,17 +75,11 @@
 				<configuration>
 					<filesets>
 						<fileset>
-							<directory>bin/templates</directory>
-							<includes>
-								<include>**/*</include>
-							</includes>
-							<followSymlinks>false</followSymlinks>
-						</fileset>
-						<fileset>
 							<directory>repo</directory>
 							<includes>
 								<include>**/org.cohorte.*</include>
 								<include>**/org.jabsorb.*</include>
+								<include>**/org.psem2m*</include>
 								<include>**/cohorte/**</include>
 								<include>**/herald/**</include>
 								<include>**/jpype/**</include>
@@ -97,63 +91,16 @@
 								<include>**/_jpype*</include>
 							</includes>
 							<excludes>
+								<exclude>**/felix/**</exclude>	
 								<exclude>**/webadmin/**</exclude>
+								<exclude>org.eclipse.osgi_3.7.2.v20120110-1415.jar</exclude>
 								<exclude>README</exclude>
 							</excludes>
 							<followSymlinks>false</followSymlinks>
 						</fileset>
 					</filesets>
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>2.9</version>
-				<executions>
-					<execution>
-						<id>copy-dependencies</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>copy-dependencies</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>repo</outputDirectory>
-							<overWriteReleases>false</overWriteReleases>
-							<overWriteSnapshots>true</overWriteSnapshots>
-							<excludeTypes>pom</excludeTypes>
-							<includeGroupIds>
-								org.cohorte.utilities,
-								org.cohorte.jabsorb,
-								org.cohorte.remote,
-								org.cohorte.herald,
-								org.cohorte.runtime
-							</includeGroupIds>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<version>2.4.1</version>
-				<executions>
-					<execution>
-						<id>base-ssembly</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-						<configuration>
-							<finalName>${project.artifactId}-${project.version}</finalName>
-							<outputDirectory>bin/templates</outputDirectory>
-							<tarLongFileMode>gnu</tarLongFileMode>
-							<descriptors>
-								<descriptor>assemblies/base-assembly.xml</descriptor>
-							</descriptors>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
+			</plugin>			
 		</plugins>
 		<extensions>
 			<!-- Enabling the use of FTP -->
@@ -172,6 +119,33 @@
 			<build>
 				<plugins>
 					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+						<version>2.9</version>
+						<executions>
+							<execution>
+								<id>copy-dependencies</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>copy-dependencies</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>repo</outputDirectory>
+									<overWriteReleases>false</overWriteReleases>
+									<overWriteSnapshots>true</overWriteSnapshots>
+									<excludeTypes>pom</excludeTypes>
+									<includeGroupIds>
+										org.cohorte.utilities,
+										org.cohorte.jabsorb,
+										org.cohorte.remote,
+										org.cohorte.herald,
+										org.cohorte.runtime
+									</includeGroupIds>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>exec-maven-plugin</artifactId>
 						<version>1.2.1</version>
@@ -185,7 +159,7 @@
 								<configuration>
 									<executable>bash</executable>
 									<arguments>
-										<argument>scripts/prepare.sh</argument>
+										<argument>build/scripts/prepare.sh</argument>
 										<argument>macosx</argument>
 									</arguments>
 									<workingDirectory>${basedir}</workingDirectory>
@@ -209,7 +183,7 @@
 									<directoryMode>755</directoryMode>
 									<tarLongFileMode>gnu</tarLongFileMode>
 									<descriptors>
-										<descriptor>assemblies/macosx-assembly.xml</descriptor>
+										<descriptor>build/assemblies/macosx-assembly.xml</descriptor>
 									</descriptors>
 								</configuration>
 							</execution>
@@ -225,6 +199,33 @@
 			<build>
 				<plugins>
 					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+						<version>2.9</version>
+						<executions>
+							<execution>
+								<id>copy-dependencies</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>copy-dependencies</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>repo</outputDirectory>
+									<overWriteReleases>false</overWriteReleases>
+									<overWriteSnapshots>true</overWriteSnapshots>
+									<excludeTypes>pom</excludeTypes>
+									<includeGroupIds>
+										org.cohorte.utilities,
+										org.cohorte.jabsorb,
+										org.cohorte.remote,
+										org.cohorte.herald,
+										org.cohorte.runtime
+									</includeGroupIds>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>exec-maven-plugin</artifactId>
 						<version>1.2.1</version>
@@ -238,7 +239,7 @@
 								<configuration>
 									<executable>bash</executable>
 									<arguments>
-										<argument>scripts/prepare.sh</argument>
+										<argument>build/scripts/prepare.sh</argument>
 										<argument>linux</argument>
 									</arguments>
 									<workingDirectory>${basedir}</workingDirectory>
@@ -261,7 +262,7 @@
 									<outputDirectory>target/</outputDirectory>
 									<tarLongFileMode>gnu</tarLongFileMode>
 									<descriptors>
-										<descriptor>assemblies/linux-assembly.xml</descriptor>
+										<descriptor>build/assemblies/linux-assembly.xml</descriptor>
 									</descriptors>
 								</configuration>
 							</execution>
@@ -277,6 +278,33 @@
 			<build>
 				<plugins>
 					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+						<version>2.9</version>
+						<executions>
+							<execution>
+								<id>copy-dependencies</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>copy-dependencies</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>repo</outputDirectory>
+									<overWriteReleases>false</overWriteReleases>
+									<overWriteSnapshots>true</overWriteSnapshots>
+									<excludeTypes>pom</excludeTypes>
+									<includeGroupIds>
+										org.cohorte.utilities,
+										org.cohorte.jabsorb,
+										org.cohorte.remote,
+										org.cohorte.herald,
+										org.cohorte.runtime
+									</includeGroupIds>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>exec-maven-plugin</artifactId>
 						<version>1.2.1</version>
@@ -290,7 +318,7 @@
 								<configuration>
 									<executable>bash</executable>
 									<arguments>
-										<argument>scripts/prepare.sh</argument>
+										<argument>build/scripts/prepare.sh</argument>
 										<argument>win32</argument>
 									</arguments>
 									<workingDirectory>${basedir}</workingDirectory>
@@ -313,7 +341,7 @@
 									<outputDirectory>target/</outputDirectory>
 									<tarLongFileMode>gnu</tarLongFileMode>
 									<descriptors>
-										<descriptor>assemblies/windows-assembly.xml</descriptor>
+										<descriptor>build/assemblies/windows-assembly.xml</descriptor>
 									</descriptors>
 								</configuration>
 							</execution>
@@ -326,7 +354,7 @@
 			<!-- Python distribution -->
 			<id>python</id>
 			<build>
-				<plugins>
+				<plugins>	
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>exec-maven-plugin</artifactId>
@@ -341,7 +369,7 @@
 								<configuration>
 									<executable>bash</executable>
 									<arguments>
-										<argument>scripts/prepare.sh</argument>
+										<argument>build/scripts/prepare.sh</argument>
 										<argument>python</argument>
 									</arguments>
 									<workingDirectory>${basedir}</workingDirectory>
@@ -364,58 +392,7 @@
 									<outputDirectory>target/</outputDirectory>
 									<tarLongFileMode>gnu</tarLongFileMode>
 									<descriptors>
-										<descriptor>assemblies/python-assembly.xml</descriptor>
-									</descriptors>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<profile>
-			<!-- Minimal Home distribution -->
-			<id>minimal-home</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>exec-maven-plugin</artifactId>
-						<version>1.2.1</version>
-						<executions>
-							<execution>
-								<id>prepare</id>
-								<phase>generate-sources</phase>
-								<goals>
-									<goal>exec</goal>
-								</goals>
-								<configuration>
-									<executable>bash</executable>
-									<arguments>
-										<argument>scripts/prepare.sh</argument>
-										<argument>minimal</argument>
-									</arguments>
-									<workingDirectory>${basedir}</workingDirectory>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<artifactId>maven-assembly-plugin</artifactId>
-						<version>2.4.1</version>
-						<executions>
-							<execution>
-								<id>assembly</id>
-								<phase>package</phase>
-								<goals>
-									<goal>single</goal>
-								</goals>
-								<configuration>
-									<finalName>${project.artifactId}-${project.version}</finalName>
-									<outputDirectory>target/</outputDirectory>
-									<tarLongFileMode>gnu</tarLongFileMode>
-									<descriptors>
-										<descriptor>assemblies/minimal-home-assembly.xml</descriptor>
+										<descriptor>build/assemblies/python-assembly.xml</descriptor>
 									</descriptors>
 								</configuration>
 							</execution>

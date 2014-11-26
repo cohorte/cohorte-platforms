@@ -1,0 +1,16 @@
+
+COHORTE PLATFORM
+1.0.0-SNAPSHOT
+dev
+
+
+26 Nov 2014 :
+-------------
+
+BUG FIX :
+
+NEW FEATURES :
+
+ENHANCEMENT :
+ - clean-up directory structure (build artifacts are now in 'build' folder and there is no base template)
+
