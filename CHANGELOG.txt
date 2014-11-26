@@ -8,9 +8,10 @@ dev
 -------------
 
 BUG FIX :
+- Fixing problem of lost STDIN
 
 NEW FEATURES :
 
 ENHANCEMENT :
  - clean-up directory structure (build artifacts are now in 'build' folder and there is no base template)
-
+ - small COHORTE logo at startup 

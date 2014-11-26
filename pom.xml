@@ -401,6 +401,41 @@
 				</plugins>
 			</build>
 		</profile>
+		<profile>
+			<!-- Java -->
+			<id>java</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+						<version>2.9</version>
+						<executions>
+							<execution>
+								<id>copy-dependencies</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>copy-dependencies</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>repo</outputDirectory>
+									<overWriteReleases>false</overWriteReleases>
+									<overWriteSnapshots>true</overWriteSnapshots>
+									<excludeTypes>pom</excludeTypes>
+									<includeGroupIds>
+										org.cohorte.utilities,
+										org.cohorte.jabsorb,
+										org.cohorte.remote,
+										org.cohorte.herald,
+										org.cohorte.runtime
+									</includeGroupIds>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 	</profiles>
 
 	<licenses>
