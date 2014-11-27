@@ -316,10 +316,10 @@
 									<goal>exec</goal>
 								</goals>
 								<configuration>
-									<executable>bash</executable>
+									<executable>cmd</executable>
 									<arguments>
-										<argument>build/scripts/prepare.sh</argument>
-										<argument>win32</argument>
+										<argument>/c</argument>
+										<argument>build\scripts\prepare.bat</argument>
 									</arguments>
 									<workingDirectory>${basedir}</workingDirectory>
 								</configuration>
