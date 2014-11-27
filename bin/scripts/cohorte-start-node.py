@@ -520,24 +520,29 @@ C:::::C             O:::::O     O:::::O H:::::H     H:::::H O:::::O     O:::::O 
     with open(str(os.environ.get('COHORTE_LOGFILE')), "w") as log_file:
         log_file.write(msg)
 
-    # starting cohorte isolate   
+    # starting cohorte isolate
+    result_code = 0
     try:
-        p = subprocess.Popen(["python3", "-m", "cohorte.boot.boot"] + boot_args, 
+        p = subprocess.Popen(
+            [sys.executable, "-m", "cohorte.boot.boot"] + boot_args,
             stdin=None, stdout=None, stderr=None, shell=False)
-    except:
-        print("Stopping node... ")
-    try:
-        p.wait()
-    except:
-        print("Unsafe stopping!")
-        
+    except Exception as ex:
+        print("Error starting node:", ex)
+        result_code = 1
+    else:
+        try:
+            p.wait()
+        except Exception as ex:
+            print("Error waiting for the node to stop:", ex)
+            result_code = 1
+
     # stopping XMPP bot process
     if process:
         process.terminate()
         if not xmpp_log_file:
             xmpp_log_file.close()
     
-    return 0
+    return result_code
 
 if __name__ == "__main__":
     sys.exit(main())
