@@ -70,7 +70,8 @@ def get_external_config(parsed_conf_file, conf_name):
                 return parsed_conf_file["node"].get("name")
             # return parsed_conf_file["node"].get(conf_name)
 
-        if conf_name in ("top-composer", "auto-start", "composition-file", "web-admin", "shell-admin", "use-cache"):
+        if conf_name in ("top-composer", "auto-start", "composition-file", "web-admin", "shell-admin", "use-cache",
+                        "interpreter"):
             if "node" in parsed_conf_file:
                 return parsed_conf_file["node"].get(conf_name)
 
@@ -134,6 +135,10 @@ def main(args=None):
     group.add_argument("--show-config", action="store_true", default=False,
                        dest="show_config_file",
                        help="Show startup configuration file content")
+
+    group.add_argument("-i", "--interpreter", action="store", 
+                       dest="interpreter",
+                       help="Python interpreter to use (python2 or python3)")
 
     group.add_argument("-b", "--base", action="store", default=None,
                        dest="base_absolute_path",
@@ -203,6 +208,7 @@ def main(args=None):
     COMPOSITION_FILE = None
     APPLICATION_ID = None
     USE_CACHE = None
+    PYTHON_INTERPRETER = None
     XMPP_SERVER = None
     XMPP_PORT = None
     XMPP_JID = None
@@ -250,6 +256,12 @@ def main(args=None):
             args.use_cache,
             get_external_config( external_config, "use-cache"), False)
     os.environ['COHORTE_USE_CACHE'] = str(USE_CACHE)
+
+    # python interpreter
+    PYTHON_INTERPRETER = set_configuration_value(
+            args.interpreter,
+            get_external_config( external_config, "interpreter"), "python3")
+    os.environ['PYTHON_INTERPRETER'] = str(PYTHON_INTERPRETER)
 
     # export Node name
     NODE_NAME = set_configuration_value(
@@ -429,6 +441,7 @@ def main(args=None):
             configuration["node"]["composition-file"] = COMPOSITION_FILE
         configuration["node"]["web-admin"] = WEB_ADMIN_PORT
         configuration["node"]["use-cache"] = USE_CACHE
+        configuration["node"]["interpreter"] = PYTHON_INTERPRETER
         configuration["node"]["shell-admin"] = SHELL_ADMIN_PORT
         configuration["transport"] = TRANSPORT_MODES
         if "xmpp" in TRANSPORT_MODES:
@@ -522,9 +535,10 @@ C:::::C             O:::::O     O:::::O H:::::H     H:::::H O:::::O     O:::::O 
 
     # starting cohorte isolate
     result_code = 0
+    #python_interpreter = prepare_interpreter()
     try:
         p = subprocess.Popen(
-            [sys.executable, "-m", "cohorte.boot.boot"] + boot_args,
+            [PYTHON_INTERPRETER, "-m", "cohorte.boot.boot"] + boot_args,
             stdin=None, stdout=None, stderr=None, shell=False)
     except Exception as ex:
         print("Error starting node:", ex)
