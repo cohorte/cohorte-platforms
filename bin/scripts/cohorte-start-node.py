@@ -83,6 +83,10 @@ def get_external_config(parsed_conf_file, conf_name):
             if "transport-xmpp" in parsed_conf_file:
                 return parsed_conf_file["transport-xmpp"].get(conf_name)
 
+        if conf_name.startswith("http-"):
+            if "transport-http" in parsed_conf_file:
+                return parsed_conf_file["transport-http"].get(conf_name)
+
     return None
 
 
@@ -195,6 +199,8 @@ def main(args=None):
     group.add_argument("--xmpp-password", action="store",
                        dest="xmpp_password", help="XMPP Room")
 
+    group.add_argument("--http-ipv", action="store", type=int,
+                       dest="http_ipv", help="HTTP IP version to use (4 or 6)")
 
     # Parse arguments
     args, boot_args = parser.parse_known_args(args)
@@ -213,6 +219,7 @@ def main(args=None):
     XMPP_PORT = None
     XMPP_JID = None
     XMPP_PASS = None
+    HTTP_IPV = None
 
     if args.show_config_file:
         # show the content of the startup configuration file and exit.
@@ -277,12 +284,13 @@ def main(args=None):
         args.application_id,
         get_external_config(external_config, "application-id"), None)
     if not APPLICATION_ID:
-        print("[ERROR] no application ID is given!")
-        print("        You should provide a correct application ID managed "
-              "by a COHORTE Top Composer!")
-        print("        use '--app-id' option to provide the application's ID "
-              "or update your startup configuration file.")
-        return 1
+        if not args.update_config_file:
+            print("[ERROR] no application ID is given!")
+            print("        You should provide a correct application ID managed "
+                  "by a COHORTE Top Composer!")
+            print("        use '--app-id' option to provide the application's ID "
+                  "or update your startup configuration file.")
+            return 1
     else:
         common.generate_boot_common(COHORTE_BASE, APPLICATION_ID)
 
@@ -347,7 +355,15 @@ def main(args=None):
     else:        
         TRANSPORT_MODES = set_configuration_value(
             tmodes, get_external_config(external_config, "transport"), ["http"])
-    
+
+    if "http" in TRANSPORT_MODES:
+        HTTP_IPV = set_configuration_value(
+            args.http_ipv,
+            get_external_config(external_config, "http-ipv"), 6)
+        if HTTP_IPV == 4:
+            common.generate_common_http(COHORTE_BASE)
+        else:
+            common.delete_common_http(COHORTE_BASE)
     if "xmpp" in TRANSPORT_MODES:
         XMPP_SERVER = set_configuration_value(
             args.xmpp_server,
@@ -432,7 +448,8 @@ def main(args=None):
     CONFIG_FILE = args.config_file
     if not os.path.exists(CONFIG_FILE) or args.update_config_file:    
         configuration = {}
-        configuration["application-id"] = APPLICATION_ID
+        if APPLICATION_ID:
+            configuration["application-id"] = APPLICATION_ID
         configuration["node"] = {}
         configuration["node"]["name"] = NODE_NAME
         configuration["node"]["top-composer"] = IS_TOP_COMPOSER
@@ -450,6 +467,9 @@ def main(args=None):
             configuration["transport-xmpp"]["xmpp-port"] = XMPP_PORT
             configuration["transport-xmpp"]["xmpp-jid"] = XMPP_JID
             configuration["transport-xmpp"]["xmpp-password"] = XMPP_PASS
+        if "http" in TRANSPORT_MODES:
+            configuration["transport-http"] = {}
+            configuration["transport-http"]["http-ipv"] = HTTP_IPV
         common.update_startup_file(CONFIG_FILE, configuration)
         print("[INFO] config file '" + CONFIG_FILE + "' updated! ")
         if args.update_config_file:

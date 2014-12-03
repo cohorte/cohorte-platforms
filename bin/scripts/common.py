@@ -246,3 +246,38 @@ def delete_top_composer_config(node_dir):
         shutil.rmtree(os.path.join(node_dir, 'conf', 'composer'))
     except OSError:
         pass
+
+def generate_common_http(node_dir):
+    """
+    Generates conf/python-common-http.js file.
+    """
+    conf_dir = os.path.join(node_dir, 'conf')
+    if not os.path.exists(conf_dir):
+        os.makedirs(conf_dir)
+    file_name = os.path.join(conf_dir, "python-common-http.js")
+    with open(file_name, "w") as python_common_http:
+        result = """{header}
+{{
+    "import-files" : [ "python-common-http.js" ],
+    "composition" : [
+    {{
+        "name" : "pelix-http-service",
+        "properties" : {{
+            // Use the IPv4 stack
+            "pelix.http.address" : "0.0.0.0"
+        }}
+    }}
+    ]
+}}
+""".format(header=WARNING_COMMENT)
+        python_common_http.write(result)
+
+def delete_common_http(node_dir):
+    """
+    Delete conf/python-common-http.js file.
+    """
+    print("deleting conf/python-common-http.js file.")
+    try:
+        os.remove(os.path.join(node_dir, 'conf', 'python-common-http.js'))
+    except OSError:
+        pass
