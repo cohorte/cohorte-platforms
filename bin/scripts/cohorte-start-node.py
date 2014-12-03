@@ -71,7 +71,7 @@ def get_external_config(parsed_conf_file, conf_name):
             # return parsed_conf_file["node"].get(conf_name)
 
         if conf_name in ("top-composer", "auto-start", "composition-file", "web-admin", "shell-admin", "use-cache",
-                        "interpreter"):
+                        "recomposition-delay", "interpreter"):
             if "node" in parsed_conf_file:
                 return parsed_conf_file["node"].get(conf_name)
 
@@ -178,6 +178,9 @@ def main(args=None):
     group.add_argument("--use-cache", action="store",
                        dest="use_cache", help="Use cache to accelerate startup time")
 
+    group.add_argument("--recomposition-delay", action="store", type=int,
+                       dest="recomposition_delay", help="Delay in seconds between two recomposition tentatives")
+
     group = parser.add_argument_group("Transport",
                                       "Information about the transport "
                                       "protocols to use")
@@ -214,6 +217,7 @@ def main(args=None):
     COMPOSITION_FILE = None
     APPLICATION_ID = None
     USE_CACHE = None
+    RECOMPOSITION_DELAY = None
     PYTHON_INTERPRETER = None
     XMPP_SERVER = None
     XMPP_PORT = None
@@ -263,6 +267,12 @@ def main(args=None):
             args.use_cache,
             get_external_config( external_config, "use-cache"), False)
     os.environ['COHORTE_USE_CACHE'] = str(USE_CACHE)
+
+    # recomposition delay
+    RECOMPOSITION_DELAY = set_configuration_value(
+            args.recomposition_delay,
+            get_external_config( external_config, "recomposition-delay"), 15)
+    os.environ['cohorte.recomposition.delay'] = str(RECOMPOSITION_DELAY)
 
     # python interpreter
     PYTHON_INTERPRETER = set_configuration_value(
@@ -458,6 +468,7 @@ def main(args=None):
             configuration["node"]["composition-file"] = COMPOSITION_FILE
         configuration["node"]["web-admin"] = WEB_ADMIN_PORT
         configuration["node"]["use-cache"] = USE_CACHE
+        configuration["node"]["recomposition-delay"] = RECOMPOSITION_DELAY
         configuration["node"]["interpreter"] = PYTHON_INTERPRETER
         configuration["node"]["shell-admin"] = SHELL_ADMIN_PORT
         configuration["transport"] = TRANSPORT_MODES
@@ -541,9 +552,6 @@ C:::::C             O:::::O     O:::::O H:::::H     H:::::H O:::::O     O:::::O 
        COHORTE HOME : {home}
            LOG FILE : {logfile}
 
-         PYTHONPATH : {pythonpath}
-
-  .........................................
 """.format(home=COHORTE_HOME, base=os.environ['COHORTE_BASE'],
            logfile=os.environ.get('COHORTE_LOGFILE'),
            pythonpath=os.environ.get('PYTHONPATH'))
