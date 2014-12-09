@@ -253,6 +253,10 @@ def main(args=None):
                    if value is not None]
     os.environ['PYTHONPATH'] = os.pathsep.join(added_paths)
 
+    # Special case: IronPython path uses a different environment variable
+    if sys.platform == 'cli':
+        os.environ['IRONPYTHONPATH'] = os.environ['PYTHONPATH']
+
     # Change our path
     sys.path = added_paths + sys.path
 
@@ -564,12 +568,22 @@ C:::::C             O:::::O     O:::::O H:::::H     H:::::H O:::::O     O:::::O 
     # starting cohorte isolate
     result_code = 0
     #python_interpreter = prepare_interpreter()
+
+    # Interpreter arguments
+    interpreter_args = ['-m', 'cohorte.boot.boot']
+    if sys.platform == 'cli':
+        # Enable frames support in IronPython
+        interpreter_args.insert(0, '-X:Frames')
+
     try:
         p = subprocess.Popen(
-            [PYTHON_INTERPRETER, "-m", "cohorte.boot.boot"] + boot_args,
+            [PYTHON_INTERPRETER] + interpreter_args + boot_args,
             stdin=None, stdout=None, stderr=None, shell=False)
     except Exception as ex:
         print("Error starting node:", ex)
+        import logging
+        logging.exception("Error starting node: %s -- interpreter = %s",
+                          ex, PYTHON_INTERPRETER)
         result_code = 1
     else:
         try:
