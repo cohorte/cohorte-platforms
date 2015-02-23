@@ -16,10 +16,10 @@ PATH=$WORKSPACE/$VENV_NAME/bin:$PATH
 . $VENV_NAME/bin/activate
 
 # Install test and deployment tools
-pip install --upgrade --index-url=$INDEX_URL pip setuptools || return 2
-pip install --upgrade --index-url=$INDEX_URL wheel || return 2
-pip install --upgrade --index-url=$INDEX_URL nose || return 2
-pip install --upgrade --index-url=$INDEX_URL devpi-client || return 2
+pip install --force --upgrade --index-url=$INDEX_URL pip==1.5.6 setuptools #|| return 2
+pip install --upgrade --index-url=$INDEX_URL wheel #|| return 2
+pip install --upgrade --index-url=$INDEX_URL nose #|| return 2
+pip install --upgrade --index-url=$INDEX_URL devpi-client #|| return 2
 
 # install JPype
 # JPype1-py3==0.5.5.2
