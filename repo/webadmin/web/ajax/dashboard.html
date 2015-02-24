@@ -186,7 +186,7 @@
                     tmp += "<td>"; 
                     
                     tmp += '<table class="table m-table table-bordered table-condensed table-hover table-heading">';
-                    tmp += '<thead><tr><th><img src="img/isolate.png" class="img-circle" style="max-width: 16px"></img><a style="color:black" href="#" data-toggle="modal" data-target="#isolate_modal" data-name="'+data['isolates'][i]['name']+'" data-uid="'+data['isolates'][i]['uid']+'">'+data['isolates'][i]['name']+'</a></th>';
+                    tmp += '<thead><tr><th><img src="img/status_resolved.png" class="img-circle" style="max-width: 16px"></img> <img src="img/isolate.png" class="img-circle" style="max-width: 16px"></img><a style="color:black" href="#" data-toggle="modal" data-target="#isolate_modal" data-name="'+data['isolates'][i]['name']+'" data-uid="'+data['isolates'][i]['uid']+'">'+data['isolates'][i]['name']+'</a></th>';
                     tmp += '</thead><tbody>';                 
             tmp += '<tr><td class="m-ticker"><div id="isolate_components-'+data['isolates'][i]['uid']+'"></div></td></tr>';           
                     tmp += '</tbody></table>'
@@ -212,10 +212,10 @@
               // header
                 var element = 'node_isolates-'+data['nodes'][i]['uid'];
                 var node_id = data['nodes'][i]['uid'];
-              frame += '<div class="box-header" style="background: #CCC;"><div class="box-name"><img src="img/node.png" class=""></img> <span><b><a onclick="loadIsolatesOfNode(\''+element+'\',\''+node_id+'\')" href="#" data-toggle="modal" data-target="#node_modal" data-name="'+data['nodes'][i]['name']+'" data-uid="'+data['nodes'][i]['uid']+'">';
+              frame += '<div class="box-header" style="background: #CCC;"><div class="box-name"><img src="img/status_resolved.png" class="img-circle" style="max-width: 16px"></img> <img src="img/node.png" class=""></img> <span><b><a onclick="loadIsolatesOfNode(\''+element+'\',\''+node_id+'\')" href="#" data-toggle="modal" data-target="#node_modal" data-name="'+data['nodes'][i]['name']+'" data-uid="'+data['nodes'][i]['uid']+'">';
               frame += data['nodes'][i]['name'];
               frame += '</a></b></span></div>';
-              frame += '<div class="box-icons"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>';
+              frame += '<div class="box-icons"><a class="beauty-table-to-json">STOP</a><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>';
         frame += '<a class="expand-link"><i class="fa fa-expand"></i></a></div><div class="no-move"></div></div>';
         // node isolates
               frame += '<div id="node_isolates-'+data['nodes'][i]['uid']+'"/>';
