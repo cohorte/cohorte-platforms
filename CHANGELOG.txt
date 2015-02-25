@@ -4,6 +4,12 @@ COHORTE PLATFORM
 dev
 
 
+24 Fev 2015 :
+-------------
+
+ENHANCEMENTS :
+ - Update iPOPO version
+
 26 Nov 2014 :
 -------------
 
