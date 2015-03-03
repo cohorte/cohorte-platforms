@@ -225,6 +225,9 @@ def main(args=None):
     XMPP_PASS = None
     HTTP_IPV = None
 
+    # set working directory (cohorte-base)
+    os.chdir(COHORTE_BASE)
+
     if args.show_config_file:
         # show the content of the startup configuration file and exit.
         content = parse_config_file(args.config_file)
@@ -281,9 +284,8 @@ def main(args=None):
     # python interpreter
     PYTHON_INTERPRETER = set_configuration_value(
             args.interpreter,
-            get_external_config( external_config, "interpreter"), "python3")
+            get_external_config( external_config, "interpreter"), "python")
     os.environ['PYTHON_INTERPRETER'] = str(PYTHON_INTERPRETER)
-
     # export Node name
     NODE_NAME = set_configuration_value(
         args.node_name, get_external_config(external_config, "node-name"),
@@ -416,7 +418,7 @@ def main(args=None):
 
                     # 1) start bot
                     process = subprocess.Popen(
-                        ["python3", "-u", "-m", "herald.transports.xmpp.monitor",
+                        [PYTHON_INTERPRETER, "-u", "-m", "herald.transports.xmpp.monitor",
                          "--jid", XMPP_JID,
                          "--password", XMPP_PASS,
                          "-r", "cohorte",
@@ -511,38 +513,7 @@ def main(args=None):
 """.format(appid=APPLICATION_ID, node_name=os.environ.get('COHORTE_NODE_NAME'),
            transports=",".join(TRANSPORT_MODES), is_top=IS_TOP_COMPOSER,
            http_port=WEB_ADMIN_PORT, shell_port=SHELL_ADMIN_PORT)
-    msg = """
-  .........................................
-
-        CCCCCCCCCCCCC    OOOOOOOOO    HHHHHHHHH     HHHHHHHHH    OOOOOOOOO    RRRRRRRRRRRRRRRRR  TTTTTTTTTTTTTTTTTTTTTTEEEEEEEEEEEEEEEEEEEEEE
-     CCC::::::::::::C  OO:::::::::OO  H:::::::H     H:::::::H  OO:::::::::OO  R::::::::::::::::R T:::::::::::::::::::::E::::::::::::::::::::E
-   CC:::::::::::::::COO:::::::::::::OOH:::::::H     H:::::::HOO:::::::::::::OOR::::::RRRRRR:::::RT:::::::::::::::::::::E::::::::::::::::::::E
-  C:::::CCCCCCCC::::O:::::::OOO:::::::HH::::::H     H::::::HO:::::::OOO:::::::RR:::::R     R:::::T:::::TT:::::::TT:::::EE::::::EEEEEEEEE::::E
- C:::::C       CCCCCO::::::O   O::::::O H:::::H     H:::::H O::::::O   O::::::O R::::R     R:::::TTTTTT  T:::::T  TTTTTT E:::::E       EEEEEE
-C:::::C             O:::::O     O:::::O H:::::H     H:::::H O:::::O     O:::::O R::::R     R:::::R       T:::::T         E:::::E
-C:::::C             O:::::O     O:::::O H::::::HHHHH::::::H O:::::O     O:::::O R::::RRRRRR:::::R        T:::::T         E::::::EEEEEEEEEE
-C:::::C             O:::::O     O:::::O H:::::::::::::::::H O:::::O     O:::::O R:::::::::::::RR         T:::::T         E:::::::::::::::E
-C:::::C             O:::::O     O:::::O H:::::::::::::::::H O:::::O     O:::::O R::::RRRRRR:::::R        T:::::T         E:::::::::::::::E
-C:::::C             O:::::O     O:::::O H::::::HHHHH::::::H O:::::O     O:::::O R::::R     R:::::R       T:::::T         E::::::EEEEEEEEEE
-C:::::C             O:::::O     O:::::O H:::::H     H:::::H O:::::O     O:::::O R::::R     R:::::R       T:::::T         E:::::E
- C:::::C       CCCCCO::::::O   O::::::O H:::::H     H:::::H O::::::O   O::::::O R::::R     R:::::R       T:::::T         E:::::E       EEEEEE
-  C:::::CCCCCCCC::::O:::::::OOO:::::::HH::::::H     H::::::HO:::::::OOO:::::::RR:::::R     R:::::R     TT:::::::TT     EE::::::EEEEEEEE:::::E
-   CC:::::::::::::::COO:::::::::::::OOH:::::::H     H:::::::HOO:::::::::::::OOR::::::R     R:::::R     T:::::::::T     E::::::::::::::::::::E
-     CCC::::::::::::C  OO:::::::::OO  H:::::::H     H:::::::H  OO:::::::::OO  R::::::R     R:::::R     T:::::::::T     E::::::::::::::::::::E
-        CCCCCCCCCCCCC    OOOOOOOOO    HHHHHHHHH     HHHHHHHHH    OOOOOOOOO    RRRRRRRR     RRRRRRR     TTTTTTTTTTT     EEEEEEEEEEEEEEEEEEEEEE
-
- 
-     APPLICATION ID : {appid}
-          NODE NAME : {node_name}
-         TRANSPORTS : {transports}
-
-       TOP COMPOSER : {is_top}
-
-          WEB ADMIN : {http_port}
-        SHELL ADMIN : {shell_port}
-""".format(appid=APPLICATION_ID, node_name=os.environ.get('COHORTE_NODE_NAME'),
-           transports=",".join(TRANSPORT_MODES), is_top=IS_TOP_COMPOSER,
-           http_port=WEB_ADMIN_PORT, shell_port=SHELL_ADMIN_PORT)
+    
 
     if IS_TOP_COMPOSER:
         msg1 += """
@@ -563,7 +534,7 @@ C:::::C             O:::::O     O:::::O H:::::H     H:::::H O:::::O     O:::::O 
     print(msg1)
     # write to log file
     with open(str(os.environ.get('COHORTE_LOGFILE')), "w") as log_file:
-        log_file.write(msg)
+        log_file.write(msg1)
 
     # starting cohorte isolate
     result_code = 0
@@ -581,7 +552,7 @@ C:::::C             O:::::O     O:::::O H:::::H     H:::::H O:::::O     O:::::O 
             stdin=None, stdout=None, stderr=None, shell=False)
     except Exception as ex:
         print("Error starting node:", ex)
-        import logging
+        
         logging.exception("Error starting node: %s -- interpreter = %s",
                           ex, PYTHON_INTERPRETER)
         result_code = 1
