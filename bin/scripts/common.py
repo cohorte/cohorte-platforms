@@ -43,6 +43,7 @@ def generate_run(node_dir):
     Generates an executable 'run' file which launches cohorte node.
     """
     from stat import S_IRWXU
+    # generate posix run executable
     file_name = os.path.join(node_dir, "run")
     with open(file_name, "w") as run:
         os.chmod(file_name, S_IRWXU)
@@ -56,6 +57,20 @@ then
 fi
 
 bash $COHORTE_HOME/bin/cohorte-start-node --base $(pwd) $*
+"""
+        run.write(result)
+    # generate windows run executable
+    file_name = os.path.join(node_dir, "run.bat")
+    with open(file_name, "w") as run:
+        os.chmod(file_name, S_IRWXU)
+        result = """@echo off
+
+if "%COHORTE_HOME%" == "" (
+  echo [ERROR] the system environment variable COHORTE_HOME is not defined!
+  exit /b 1
+)
+
+call %COHORTE_HOME%\\bin\cohorte-start-node.bat --base %CD% %*
 """
         run.write(result)
 

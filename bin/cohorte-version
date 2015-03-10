@@ -1,6 +1,6 @@
 #!/bin/bash
-echo ""
+echo "--------------------------------------------------------------------"
 echo "COHORTE" 
-echo "   version : 1.0.0-SNAPSHOT" 
+echo "   version : 1.0.0" 
 echo "   home    : $COHORTE_HOME"
-echo "" 
+echo "--------------------------------------------------------------------" 

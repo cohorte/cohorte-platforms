@@ -56,16 +56,6 @@ def create_node(args):
     if args.app_name:
         common.generate_composition_conf(args.node_name, args.app_name)
 
-    #configuration = {}
-    #if args.app_name:
-    #    configuration["application-id"] = args.app_name
-    #configuration["node"] = {}
-    #if args.node_name:
-    #    configuration["node"]["name"] = args.node_name
-    #common.update_startup_file(os.path.join(args.node_name, 'run.js'),
-    #    configuration)
-    #common.generate_boot_common(args.node_name, args.app_name)
-
 
 def main(args=None):
     """
@@ -94,7 +84,7 @@ def main(args=None):
     if not args.node_name:
         print("[ERROR] you should provide a node name (using --name option)")
         return -1
-    # creates the node directory from the template zip file
+    # creates the node directory
     create_node(args)
 
 if __name__ == "__main__":
