@@ -27,8 +27,10 @@ if test "$1" == "macosx"; then
 python build/scripts/deps.py --package=JPype1-py3 --platform=darwin --install
 elif test "$1" == "linux"; then
 python build/scripts/deps.py --package=JPype1-py3 --platform=linux-x86_64 --install
-elif test "$1" == "win32"; then
-echo "[ERROR] windows is not yet supported for JPype binaries!"
+elif test "$1" == "windows"; then
+echo "[WARNING] copying jpype files directly to repo folder"
+cp -r build/extra/windows/* repo	
+#echo "[ERROR] windows is not yet supported for JPype binaries!"
 fi
 
 # Install dependencies
@@ -46,28 +48,21 @@ mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/sleekxmpp repo
 mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/requests repo
 ### Herald
 mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/herald repo
+
 ### JPYPE
-mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/_jpype*.so repo
-mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/jpype repo
-mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/jpypex repo
+if test "$1" != "windows"; then
+	if test "$1" != "python"; then
+		mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/_jpype*.so repo
+		mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/jpype repo
+		mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/jpypex repo
+	fi
+fi
 ### iPOPO
 mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/pelix repo
 ### Cohorte Python
 mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/cohorte repo
 ### Cohorte Webadmin
 #mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/webadmin repo
-
-# Install project
-#pip install --index-url=$INDEX_URL .
-
-# Run tests
-# nosetests tests || return 3
-
-# Deploy
-#devpi use $DEVPI_URL --index-url=$INDEX_URL
-#devpi login $devpi_user --password=$devpi_password --index-url=$INDEX_URL
-#devpi use $devpi_index --index-url=$INDEX_URL
-#devpi upload --no-vcs --formats=$devpi_formats --index-url=$INDEX_URL
 
 # Clean up
 deactivate

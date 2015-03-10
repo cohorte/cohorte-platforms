@@ -196,11 +196,11 @@ def main(args=None):
     group.add_argument("--xmpp-port", action="store", type=int,
                        dest="xmpp_port", help="XMPP server port")
 
-    group.add_argument("--xmpp-jid", action="store",
-                       dest="xmpp_jid", help="XMPP jid")
+    group.add_argument("--xmpp-user-jid", action="store",
+                       dest="xmpp_jid", help="XMPP User jid (not yet implemented - annonymous mode only)")
 
-    group.add_argument("--xmpp-password", action="store",
-                       dest="xmpp_password", help="XMPP Room")
+    group.add_argument("--xmpp-user-password", action="store",
+                       dest="xmpp_password", help="XMPP User password")
 
     group.add_argument("--http-ipv", action="store", type=int,
                        dest="http_ipv", help="HTTP IP version to use (4 or 6)")
@@ -387,70 +387,27 @@ def main(args=None):
         XMPP_PORT = set_configuration_value(
             args.xmpp_port,
             get_external_config(external_config, "xmpp-port"), 5222)
+        
         XMPP_JID = set_configuration_value(
             args.xmpp_jid,
-            get_external_config(external_config, "xmpp-jid"), "")
+            get_external_config(external_config, "xmpp-user-jid"), "")
         XMPP_PASS = set_configuration_value(
             args.xmpp_password,
-            get_external_config(external_config, "xmpp-password"), "")
-
+            get_external_config(external_config, "xmpp-user-password"), "")
+        
         if not args.update_config_file: 
             print("[INFO] XMPP server configuration :")
             print("""
     - xmpp server: {server}
     - xmpp port: {port}
-    - xmpp jid: {jid}
-    - xmpp password: *
-    - xmpp room name: {room_name}
-    - xmpp room jid: {room_jid}
-    - xmpp key: {key}
-                """.format(server=XMPP_SERVER, port=XMPP_PORT, jid=XMPP_JID,
-                           room_name="cohorte",
-                           room_jid="cohorte@conference." + XMPP_SERVER, key="42"))        
-            
-            if IS_TOP_COMPOSER == True:
-                SUCCESSED_RENDEZ_VOUS = "Bite my shiny, metal a**!"
-                FAILED_RENDZ_VOUS = "I'm so embarrassed right now. (XMPP connect failed)"
-
-                with open(os.path.join(LOG_DIR, 'xmpp_bot.log'), "w") as xmpp_log_file:
-                    # start en XMPP mode
-                    from pelix.utilities import to_str, to_bytes
-
-                    # 1) start bot
-                    process = subprocess.Popen(
-                        [PYTHON_INTERPRETER, "-u", "-m", "herald.transports.xmpp.monitor",
-                         "--jid", XMPP_JID,
-                         "--password", XMPP_PASS,
-                         "-r", "cohorte",
-                         "-p", str(XMPP_PORT),
-                         "-s", XMPP_SERVER],
-                        stdin=subprocess.PIPE,
-                        stdout=subprocess.PIPE, stderr=xmpp_log_file, bufsize=1)
-
-                    try:
-                        for line in iter(process.stdout.readline, to_bytes('')):
-                            # print(line)
-                            line = to_str(line)
-                            if SUCCESSED_RENDEZ_VOUS in line:
-                                print("[INFO] COHORTE is correctly connected to "
-                                      "the XMPP server.")
-                                break
-
-                            if FAILED_RENDZ_VOUS in line:
-                                print("[ERROR] can not connect to the XMPP server. "
-                                      "Check 'var/xmpp_bot.log' file for "
-                                      "more information")
-                                raise IOError("Error connecting XMPP bot")
-
-                    except (IOError, KeyboardInterrupt):
-                        if process:
-                            process.terminate()
-                        return 1
+    - xmpp user jid: {jid}
+    - xmpp user password: *    
+            """.format(server=XMPP_SERVER, port=XMPP_PORT, jid=XMPP_JID))        
 
         # 2) create conf/herald configs for node
         room_jid = "cohorte@conference." + XMPP_SERVER
         common.generate_herald_conf(COHORTE_BASE, TRANSPORT_MODES, XMPP_SERVER, XMPP_PORT,
-                                         XMPP_JID, room_jid, "42")
+                                         XMPP_JID, XMPP_PASS)
         # all-xmpp.js
         #
     else:
@@ -482,8 +439,8 @@ def main(args=None):
             configuration["transport-xmpp"] = {}
             configuration["transport-xmpp"]["xmpp-server"] = XMPP_SERVER
             configuration["transport-xmpp"]["xmpp-port"] = XMPP_PORT
-            configuration["transport-xmpp"]["xmpp-jid"] = XMPP_JID
-            configuration["transport-xmpp"]["xmpp-password"] = XMPP_PASS
+            configuration["transport-xmpp"]["xmpp-user-jid"] = XMPP_JID
+            configuration["transport-xmpp"]["xmpp-user-password"] = XMPP_PASS
         if "http" in TRANSPORT_MODES:
             configuration["transport-http"] = {}
             configuration["transport-http"]["http-ipv"] = HTTP_IPV

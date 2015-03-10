@@ -34,6 +34,9 @@ import os
 import json
 import shutil
 
+from stat import S_IRWXU  # Read, write, and execute by owner
+from stat import S_IRWXG  # Read, write, and execute by group
+from stat import S_IROTH  # Read by others
 WARNING_COMMENT = "/* WARNING!: do not edit, this file is generated " \
                   "automatically by COHORTE startup scripts. */"
 
@@ -42,11 +45,10 @@ def generate_run(node_dir):
     """
     Generates an executable 'run' file which launches cohorte node.
     """
-    from stat import S_IRWXU
     # generate posix run executable
     file_name = os.path.join(node_dir, "run")
     with open(file_name, "w") as run:
-        os.chmod(file_name, S_IRWXU)
+        os.chmod(file_name, S_IRWXU | S_IRWXG | S_IROTH)
         result = """#!/bin/bash
 if test -z "$COHORTE_HOME"
 then
@@ -59,10 +61,10 @@ fi
 bash $COHORTE_HOME/bin/cohorte-start-node --base $(pwd) $*
 """
         run.write(result)
+
     # generate windows run executable
-    file_name = os.path.join(node_dir, "run.bat")
-    with open(file_name, "w") as run:
-        os.chmod(file_name, S_IRWXU)
+    file_name2 = os.path.join(node_dir, "run.bat")
+    with open(file_name2, "w") as run_bat:        
         result = """@echo off
 
 if "%COHORTE_HOME%" == "" (
@@ -72,7 +74,7 @@ if "%COHORTE_HOME%" == "" (
 
 call %COHORTE_HOME%\\bin\cohorte-start-node.bat --base %CD% %*
 """
-        run.write(result)
+        run_bat.write(result)
 
 
 def generate_composition_conf(node_dir, app_name):
@@ -147,7 +149,7 @@ def generate_boot_forker(node_dir, http_port, shell_port):
         boot_forker.write(result)
 
 
-def generate_herald_conf(node_dir, transport_modes, server, port, monitor_jid, room_jid, key):
+def generate_herald_conf(node_dir, transport_modes, server, port, user, password):
     """
     Generates Herald XMPP transport configuration
     """
@@ -201,15 +203,13 @@ def generate_herald_conf(node_dir, transport_modes, server, port, monitor_jid, r
         "properties" : {{
             "xmpp.server" : "{server}",
             "xmpp.port" : "{port}",
-            "xmpp.monitor.jid" : "{monitor_jid}",
-            "xmpp.room.jid" : "{room_jid}",
-            "xmpp.monitor.key" : "{key}"
+            "xmpp.user.jid" : "{user}",
+            "xmpp.user.password" : "{password}"
         }}
     }}
     ]
 }}
-""".format(header=WARNING_COMMENT, server=server, port=port,
-           monitor_jid=monitor_jid, room_jid=room_jid, key=key)
+""".format(header=WARNING_COMMENT, server=server, port=port, user=user, password=password)
         all_xmpp.write(result)
 
 

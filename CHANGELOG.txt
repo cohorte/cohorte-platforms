@@ -1,25 +1,18 @@
+Changes form the 0.0.0 to 1.0.0
+-------------------------------
 
-COHORTE PLATFORM
-1.0.0-SNAPSHOT
-dev
+** New Feature
+	* [Project-#X] - title (MOD_BD_XXXX)
 
+** Bug
+	* [Cohorte-Runtime-#X] - title
 
-24 Fev 2015 :
--------------
+** Improvement
+	* [Cohorte-Runtime-#X] - title
 
-ENHANCEMENTS :
- - Update iPOPO version
+** Task
+	* [Cohorte-Runtime-#X] - title
 
-26 Nov 2014 :
--------------
+** Sub-task
+	* [Cohorte-Runtime-#X] - title
 
-BUG FIX :
-  - Fixing the problem of lost STDIN.
-  - Fixing the problem of the dirty stop of nodes.
-
-NEW FEATURES :
-  - adding "--use-cache" (experimental) option to the startup script "run". If set to "true", a cache file of the repository is created and used next startup time to accelerate the loading time (ATTENTION: limited support! only python nodes).
-
-ENHANCEMENT :
-  - clean-up directory structure (build artifacts are now in 'build' folder and there is no base template)
-  - small COHORTE logo at startup 
