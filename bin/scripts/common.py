@@ -291,7 +291,7 @@ def delete_common_http(node_dir):
     """
     Delete conf/python-common-http.js file.
     """
-    print("deleting conf/python-common-http.js file.")
+    #print("deleting conf/python-common-http.js file.")
     try:
         os.remove(os.path.join(node_dir, 'conf', 'python-common-http.js'))
     except OSError:

@@ -482,11 +482,12 @@ def main(args=None):
 
        COHORTE BASE : {base}
        COHORTE HOME : {home}
+ PYTHON INTERPRETER : {python}
            LOG FILE : {logfile}
 
 """.format(home=COHORTE_HOME, base=os.environ['COHORTE_BASE'],
            logfile=os.environ.get('COHORTE_LOGFILE'),
-           pythonpath=os.environ.get('PYTHONPATH'))
+           python=PYTHON_INTERPRETER)
 
     print(msg1)
     # write to log file
