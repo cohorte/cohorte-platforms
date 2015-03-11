@@ -24,13 +24,16 @@ pip install --upgrade --index-url=$INDEX_URL devpi-client #|| return 2
 # install JPype
 # JPype1-py3==0.5.5.2
 if test "$1" == "macosx"; then
-python build/scripts/deps.py --package=JPype1-py3 --platform=darwin --install
+# python build/scripts/deps.py --package=JPype1-py3 --platform=darwin --install
+echo "[WARNING] copying jpype files directly to repo folder"
+cp -r build/extra/macosx/* repo	
 elif test "$1" == "linux"; then
-python build/scripts/deps.py --package=JPype1-py3 --platform=linux-x86_64 --install
+#python build/scripts/deps.py --package=JPype1-py3 --platform=linux-x86_64 --install
+echo "[WARNING] copying jpype files directly to repo folder"
+cp -r build/extra/linux/* repo	
 elif test "$1" == "windows"; then
 echo "[WARNING] copying jpype files directly to repo folder"
 cp -r build/extra/windows/* repo	
-#echo "[ERROR] windows is not yet supported for JPype binaries!"
 fi
 
 # Install dependencies
@@ -50,13 +53,13 @@ mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/requests repo
 mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/herald repo
 
 ### JPYPE
-if test "$1" != "windows"; then
-	if test "$1" != "python"; then
-		mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/_jpype*.so repo
-		mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/jpype repo
-		mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/jpypex repo
-	fi
-fi
+#if test "$1" != "windows"; then
+#	if test "$1" != "python"; then
+#		mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/_jpype*.so repo
+#		mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/jpype repo
+#		mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/jpypex repo
+#	fi
+#fi
 ### iPOPO
 mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/pelix repo
 ### Cohorte Python
