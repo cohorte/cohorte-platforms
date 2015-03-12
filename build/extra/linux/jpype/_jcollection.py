@@ -31,7 +31,7 @@ class _WrappedIterator(object):
         return self.iterator
 
     def __next__(self):
-        return next(self.iterator)
+        return self.iterator.next()
 
     # Compatibility name
     next = __next__
@@ -262,7 +262,7 @@ def _iterCustomNext(self):
 
 def _iterIteratorNext(self):
     if self.hasNext():
-        return next(self)
+        return self.next()
     raise StopIteration
 
 
