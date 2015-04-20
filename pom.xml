@@ -19,7 +19,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.cohorte.platforms</groupId>
 	<artifactId>cohorte</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 	<packaging>pom</packaging>
 
 	<name>COHORTE Project ::: Platforms :: HOME </name>
@@ -31,7 +31,7 @@
 		<dependency>
 			<groupId>org.cohorte.utilities</groupId>
 			<artifactId>org.cohorte.utilities</artifactId>
-			<version>1.0.0.201501211743</version>
+			<version>1.0.1.20150409</version>
 			<scope>provided</scope>
 		</dependency>
 		<!-- cohorte-jabsorb -->
