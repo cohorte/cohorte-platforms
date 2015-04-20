@@ -10,7 +10,7 @@
 <h3 class="page-header">Dashboard</h3>
 <div class="row">
     <div class="col-xs-12 col-sm-6 col-md-8">
-    A global view of the COHORTE system.
+    A global view of the COHORTE system | show internal isolates <input type="checkbox" checked="false" data-size="mini" data-on-text="YES" data-off-text="NO" name="show-internal-isolates-checkbox" checked>
     </div>
     <div class="">
     <a id="killall-nodes-btn" href="#" class="btn btn-danger" style="float:right;margin-right:20px;">Stop all nodes</a>
@@ -182,16 +182,28 @@
             tmp += '<table class="table table-bordered table-condensed table-striped table-hover table-heading table-datatable" style="height: 100%">';
             tmp += "<tr >";
             for (var i in data['isolates']) {
-                if (data['isolates'][i]['type'] != "cohorte-isolate") {
-                    tmp += "<td>"; 
-                    
+                var isolate_type = data['isolates'][i]['type'];
+                
+                if (isolate_type == "app-dynamic-isolate") {
+                    tmp += "<td style='width:30%'>"; 
                     tmp += '<table class="table m-table table-bordered table-condensed table-hover table-heading">';
                     tmp += '<thead><tr><th><img src="img/status_resolved.png" class="img-circle" style="max-width: 16px"></img> <img src="img/isolate.png" class="img-circle" style="max-width: 16px"></img><a style="color:black" href="#" data-toggle="modal" data-target="#isolate_modal" data-name="'+data['isolates'][i]['name']+'" data-uid="'+data['isolates'][i]['uid']+'">'+data['isolates'][i]['name']+'</a></th>';
                     tmp += '</thead><tbody>';                 
-            tmp += '<tr><td class="m-ticker"><div id="isolate_components-'+data['isolates'][i]['uid']+'"></div></td></tr>';           
+                    tmp += '<tr><td class="m-ticker"><div id="isolate_components-'+data['isolates'][i]['uid']+'"></div></td></tr>';           
                     tmp += '</tbody></table>'
                     tmp +="</td>";
+                } else if (isolate_type == "cohorte-isolate") {                    
+                    if ( $("input[name='show-internal-isolates-checkbox']").prop('checked') == true ) {
+                      tmp += "<td style='width:30%'>"; 
+                      tmp += '<table class="table m-table table-bordered table-condensed table-hover table-heading">';
+                      tmp += '<thead><tr><th><img src="img/status_resolved.png" class="img-circle" style="max-width: 16px"></img> <img src="img/isolate.png" class="img-circle" style="max-width: 16px"></img><a style="color:black" href="#" data-toggle="modal" data-target="#isolate_modal" data-name="'+data['isolates'][i]['name']+'" data-uid="'+data['isolates'][i]['uid']+'">'+data['isolates'][i]['name']+'</a></th>';
+                      tmp += '</thead><tbody>';                 
+                      tmp += '<tr><td class="m-ticker" style="color:#CCC;">Internal components are hidden.</td></tr>';
+                      tmp += '</tbody></table>'
+                      tmp +="</td>";
+                    }                               
                 }
+                
             }
             tmp +="</tr>";
             tmp += "</table>";
@@ -256,5 +268,35 @@
             var uid = $(this).attr('data-uid');            
             killIsolate(uid)
         })
+        // see http://www.bootstrap-switch.org/
+        $("input[name='show-internal-isolates-checkbox']").bootstrapSwitch();
+        $('input[name="show-internal-isolates-checkbox"]').on('switchChange.bootstrapSwitch', function(event, state) {
+          
+          $.ajax({
+              url: "/admin/gui/options",
+              type:"GET",
+              data: {"show-internal-isolates":state},            
+              contentType:"application/json",
+              success: function(data) {
+                loadNodes();
+              }
+            });
+        });
+
+        $.ajax({
+          url: "/admin/gui/options",
+          type:"GET",
+          data: {},            
+          contentType:"application/json",
+          success: function(data) {
+            if (data["options"]["show-internal-isolates"] == "true") {
+              $('input[name="show-internal-isolates-checkbox"]').bootstrapSwitch('state', true, true);
+            } else {
+              $('input[name="show-internal-isolates-checkbox"]').bootstrapSwitch('state', false, false);
+            }                
+          }
+        });
+
+
     });
 </script>

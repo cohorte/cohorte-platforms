@@ -84,6 +84,12 @@ class WebAdmin(object):
         self._components_list_lastupdate = {}
         self._tabs_list_lastupdate = None
 
+        # Bundle context
+        self._context = None
+
+        # Gui options
+        self._show_internal_isolates = False
+
     """
     API ----------------------------------------------------------------------------------------------------------------
     """
@@ -253,9 +259,19 @@ class WebAdmin(object):
         return node
 
     def get_isolate_http_port(self, uid):
-        msg = beans.Message(SUBJECT_GET_HTTP)
-        reply = self._herald.send(uid, msg)
-        return reply.content['http.port']
+        lp = self._directory.get_local_peer()
+        if lp.uid != uid:
+            msg = beans.Message(SUBJECT_GET_HTTP)
+            reply = self._herald.send(uid, msg)
+            return reply.content['http.port']
+        else:
+            # Get the isolate HTTP port
+            port = -1
+            svc_ref = self._context.get_service_reference(
+                pelix.http.HTTP_SERVICE)
+            if svc_ref is not None:
+                port = svc_ref.get_property(pelix.http.HTTP_SERVICE_PORT)            
+            return port
 
     def get_isolate_detail(self, isolate_uid):
         """
@@ -750,6 +766,20 @@ class WebAdmin(object):
             gv["children"].append(node)
         return gv
 
+    def change_gui_options(self, request, params):
+
+        params_list = params.split("&")
+        for param in params_list:
+            options = param.split("=")
+            if (options[0] == "show-internal-isolates"):
+                self._show_internal_isolates = options[1]            
+
+        # prepare response
+        result = {"meta": {}, "options": {}}
+        result["meta"]["code"] = 200
+        result["options"]["show-internal-isolates"] = self._show_internal_isolates                                
+        return result
+
     """
     Pages --------------------------------------------------------------------------------------------------------------
     """
@@ -853,6 +883,9 @@ class WebAdmin(object):
                         if str(parts[2]).lower() == "tabs":
                             tabs = self.get_tabs()
                             self.sendJson(tabs, response)
+                        elif str(parts[2]).lower().startswith("options"):
+                            result = self.change_gui_options(request, parts[2][8:])
+                            self.sendJson(result, response)
                         else:
                             self.show_error_page(request, response)
                     elif len(parts) == 4:
@@ -891,6 +924,7 @@ class WebAdmin(object):
         will point to a valid spell checker service.
         """
         _logger.info("Webadmin validated")
+        self._context = context
 
 
     @Invalidate
@@ -899,6 +933,7 @@ class WebAdmin(object):
         Component invalidated, just print a trace to visualize the event
         """
         _logger.info("Webadmin invalidated")
+        
 
     def bound_to(self, path, params):
         """

@@ -5,7 +5,8 @@ Changes form the 1.0.0 to 1.0.1
 	* [isandlaTech/cohorte-platforms#14] Updating dependencies versions
 		- Using iPOPO 0.6.0
 		- Using Cohorte-Utilities 1.0.1
-	
+	* [isandlaTech/cohorte-runtime#14] Show the main isolate "cohorte.internals.forker"
+ 	
 	
 Changes form the 0.0.0 to 1.0.0
 -------------------------------
