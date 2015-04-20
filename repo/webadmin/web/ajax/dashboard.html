@@ -107,6 +107,11 @@
       modal.find('.modal-title').html('<img src="img/isolate.png" class="img-circle" style="max-width: 16px"></img> <b>Isolate :</b> ' + name)
       // update destroy btn isolate's uid
       modal.find('#kill-isolate-btn').attr('data-uid', uid); 
+      if (name == "cohorte.internals.forker") {
+        modal.find('#kill-isolate-btn').hide(); 
+      } else {
+        modal.find('#kill-isolate-btn').show(); 
+      }
       // update modal content
       $.getJSON( "/admin/api/v1/isolates/"+uid, function( data ) {            
             var content = '<table class="table table-condensed table-striped table-hover">'
@@ -227,7 +232,7 @@
               frame += '<div class="box-header" style="background: #CCC;"><div class="box-name"><img src="img/status_resolved.png" class="img-circle" style="max-width: 16px"></img> <img src="img/node.png" class=""></img> <span><b><a onclick="loadIsolatesOfNode(\''+element+'\',\''+node_id+'\')" href="#" data-toggle="modal" data-target="#node_modal" data-name="'+data['nodes'][i]['name']+'" data-uid="'+data['nodes'][i]['uid']+'">';
               frame += data['nodes'][i]['name'];
               frame += '</a></b></span></div>';
-              frame += '<div class="box-icons"><a class="beauty-table-to-json">STOP</a><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>';
+              frame += '<div class="box-icons"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>';
         frame += '<a class="expand-link"><i class="fa fa-expand"></i></a></div><div class="no-move"></div></div>';
         // node isolates
               frame += '<div id="node_isolates-'+data['nodes'][i]['uid']+'"/>';
