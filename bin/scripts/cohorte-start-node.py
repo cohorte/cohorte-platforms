@@ -278,7 +278,7 @@ def main(args=None):
     # recomposition delay
     RECOMPOSITION_DELAY = set_configuration_value(
             args.recomposition_delay,
-            get_external_config( external_config, "recomposition-delay"), 15)
+            get_external_config( external_config, "recomposition-delay"), 120)
     os.environ['cohorte.recomposition.delay'] = str(RECOMPOSITION_DELAY)
 
     # python interpreter
