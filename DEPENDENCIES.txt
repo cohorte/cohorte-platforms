@@ -4,7 +4,7 @@ PYTHON DEPENDENCIES
 
 - Cohorte-Python==1.0.0
 - Cohorte-Herald==0.0.3
-- iPOPO==0.6.0
+- iPOPO==0.6.1
 - jsonrpclib-pelix==0.2.5
 - sleekxmpp>=1.3.1
 - requests>=2.3.0
