@@ -80,6 +80,7 @@ class WebAdmin(object):
 
         # pooling related states
         self._nodes_list_lastupdate = None
+        self._platform_activities_list_lastupdate = None
         self._isolates_list_lastupdate = {}
         self._components_list_lastupdate = {}
         self._tabs_list_lastupdate = None
@@ -90,13 +91,89 @@ class WebAdmin(object):
         # Gui options
         self._show_internal_isolates = False
 
+        # List of platform activities
+        self._platform_activities = []
+        self._platform_activities_index = 0
+
+        self._lock = threading.Lock()
+
     """
     API ----------------------------------------------------------------------------------------------------------------
     """
+    def get_platform(self):
+        """
+        Gets informations about the running platform
+        Return example:
+        {
+            "meta" : {
+                "code": 200,
+                "lastupdate" : "1411979225.65"
+            },
+            "platform": {
+                "app-id": "led-isandlatech-demo",
+                "cohorte-version": "1.0.1"
+            }
+        }
+        """
+        platform = {"meta": {}, "platform": {}}
+        platform["meta"]["code"] = 200
+        platform["meta"]["lastupdate"] = time.time()
+        platform["platform"]["app-id"] = "led-isandlatech-demo"
+        platform["platform"]["cohorte-version"] = "1.0.1"
+        return platform
+
+    def get_platform_activities(self):
+        """
+        Gets the list of platform activities (events)
+        Return example:
+         {
+            "meta" : {                
+                "code": 200,
+                "count": 1,
+                "lastupdate" : "1411979225.65"                
+            },
+            "activities": [
+                {
+                    "order": "1",
+                    "node" : "led-gateway",
+                    "timestamp": "20150421-145700",
+                    "kind" : "Node Discovered",
+                    "info" : "Node UUID 1234-5678-9010-3546"
+                }
+            ]            
+        }
+        """
+        activities = {"meta": {}, "activities": []}
+        activities["meta"]["code"] = 200
+        activities["meta"]["count"] = 1
+        if self._platform_activities_list_lastupdate is None:
+            self._platform_activities_list_lastupdate = time.time()
+        activities["meta"]["lastupdate"] = self._platform_activities_list_lastupdate
+
+        for activity in self._platform_activities:
+            activities["activities"].append(activity)
+        """                        
+        activities["activities"].append({
+                    "order": "1",
+                    "node" : "led-gateway",
+                    "timestamp": "20150421-145700",
+                    "kind" : "Node Discovered",
+                    "info" : "Node UUID 1234-5678-9010-3546"
+                })
+
+        activities["activities"].append({
+                    "order": "2",
+                    "node" : "led-gateway",
+                    "timestamp": "20150421-145713",
+                    "kind" : "Isolate Created",
+                    "info" : "Isolate UUID 4734-9878-7410-3577"
+                })
+        """
+        return activities
 
     def get_nodes(self):
         """
-        Get the list of nodes of all the system.
+        Gets the list of nodes of all the system.
         Return example:
         {
             "meta" : {
@@ -616,21 +693,56 @@ class WebAdmin(object):
     Polling-------------------------------------------------------------------------------------------------------------
     """
 
+    def get_platform_activities_lastupdate(self):
+        nodes = {"meta": {}}
+        nodes["meta"]["list"] = "platform_activities"
+        nodes["meta"]["code"] = 200
+        if self._platform_activities_list_lastupdate is None:
+            self._platform_activities_list_lastupdate = time.time()
+        nodes["meta"]["lastupdate"] = self._platform_activities_list_lastupdate
+        return nodes
+
     def get_nodes_lastupdate(self):
         nodes = {"meta": {}}
         nodes["meta"]["list"] = "nodes"
         nodes["meta"]["code"] = 200
+        if self._nodes_list_lastupdate is None:
+            self._nodes_list_lastupdate = time.time()
         nodes["meta"]["lastupdate"] = self._nodes_list_lastupdate
         return nodes
 
     def peer_registered(self, peer):
-        self._nodes_list_lastupdate = time.time()
+        self._nodes_list_lastupdate = time.time()     
+        with self._lock:
+            inow = time.time()
+            now = time.ctime(int(inow))
+            self._platform_activities_index += 1
+            self._platform_activities.append({
+                    "order": self._platform_activities_index,
+                    "node" : peer.node_name,
+                    "timestamp": str(now),
+                    "kind" : "Isolate Created",
+                    "info" : peer.name + " (" + peer.uid + ")"
+                })
+            self._platform_activities_list_lastupdate = inow
 
     def peer_updated(self, peer, access_id, data, previous):
         self._nodes_list_lastupdate = time.time()
 
-    def peer_unregistered(self, peer):
+    def peer_unregistered(self, peer):        
         self._nodes_list_lastupdate = time.time()
+        with self._lock:         
+            inow = time.time()
+            now = time.ctime(int(inow))
+            self._platform_activities_index += 1
+            self._platform_activities.append({
+                    "order": self._platform_activities_index,
+                    "node" : peer.node_name,
+                    "timestamp": str(now),
+                    "kind" : "Isolate Lost",
+                    "info" : peer.name + " (" + peer.uid + ")"
+                })
+            self._platform_activities_list_lastupdate = inow
 
 
     """
@@ -690,7 +802,7 @@ class WebAdmin(object):
         tabs = {"meta": {}, "tabs": []}
         tabs["tabs"].append({"name": "Dashboard", "icon": "fa-dashboard", "page": "ajax/dashboard.html"})
         tabs["tabs"].append({"name": "Global view", "icon": "fa-sitemap", "page": "ajax/globalview.html"})
-        #tabs["tabs"].append({"name": "Log", "icon": "fa-desktop", "page": "ajax/log.html"})
+        tabs["tabs"].append({"name": "Activity Log", "icon": "fa-desktop", "page": "ajax/activitylog.html"})
         #tabs["tabs"].append({"name": "Timeline", "icon": "fa-sort-amount-asc", "page": "ajax/timeline.html"})
         tabs["meta"]["code"] = 200
         tabs["meta"]["lastupdate"] = self._nodes_list_lastupdate
@@ -830,6 +942,10 @@ class WebAdmin(object):
                     if len(parts) == 3:
                         self.show_api_welcome_page(request, response)
                     if len(parts) == 4:
+                        if str(parts[3]).lower() == "platform":
+                            platform = self.get_platform()
+                            self.sendJson(platform, response)
+
                         if str(parts[3]).lower() == "nodes":
                             nodes = self.get_nodes()
                             self.sendJson(nodes, response)
@@ -843,6 +959,10 @@ class WebAdmin(object):
                             self.sendJson(components, response)
 
                     if len(parts) == 5:
+                        if str(parts[3]).lower() == "platform":
+                            if str(parts[4]).lower() == "activities":
+                                activities = self.get_platform_activities()
+                                self.sendJson(activities, response)
                         if str(parts[3]).lower() == "nodes":
                             if str(parts[4]).lower() == "killall":
                                 result = self.killall_nodes()
@@ -863,7 +983,12 @@ class WebAdmin(object):
                             self.sendJson(isolate, response)
 
                     if len(parts) == 6:
-                        if str(parts[3]).lower() == "nodes":                            
+                        if str(parts[3]).lower() == "platform":
+                            if str(parts[4]).lower() == "activities":
+                                if str(parts[5]).lower() == "lastupdate":
+                                    lastupdate = self.get_platform_activities_lastupdate()
+                                    self.sendJson(lastupdate, response)
+                        if str(parts[3]).lower() == "nodes":
                             if str(parts[5]).lower() == "isolates":
                                 isolates = self.get_node_isolates(str(parts[4]))
                                 self.sendJson(isolates, response)
