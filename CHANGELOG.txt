@@ -1,30 +1,18 @@
 Changes form the 1.0.0 to 1.0.1
 -------------------------------
 
+** New Feature
+	* Having high level Activity Log on Webadmin [isandlaTech/cohorte-platforms#21]
+
 ** Improvements 
 	* Updating dependencies versions [isandlaTech/cohorte-platforms#14] 
 		- Using iPOPO 0.6.0
 		- Using Cohorte-Utilities 1.0.1
 	* Show the main isolate "cohorte.internals.forker" [isandlaTech/cohorte-runtime#14] 
  	* Set the default recomposition delay to 120 [isandlaTech/cohorte-platforms#15]
- 	
- 	
-	
-Changes form the 0.0.0 to 1.0.0
--------------------------------
-
-** New Feature
-	* [Organisation/Project#X] - title
 
 ** Bug
-	* [Organisation/Project#X] - title
-
-** Improvement
-	* [Organisation/Project#X] - title
-
-** Task
-	* [Organisation/Project#X] - title
-
-** Sub-task
-	* [Organisation/Project#X] - title
+	* Isolate is duplicated when another node is stopped [isandlaTech/cohorte-platforms#16] 
+ 	
+	
 
