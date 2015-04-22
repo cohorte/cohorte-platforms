@@ -715,7 +715,7 @@ class WebAdmin(object):
         self._nodes_list_lastupdate = time.time()     
         with self._lock:
             inow = time.time()
-            now = time.ctime(int(inow))
+            now = time.strftime("%Y-%m-%d %H:%M:%S")
             self._platform_activities_index += 1
             self._platform_activities.append({
                     "order": self._platform_activities_index,
@@ -733,7 +733,7 @@ class WebAdmin(object):
         self._nodes_list_lastupdate = time.time()
         with self._lock:         
             inow = time.time()
-            now = time.ctime(int(inow))
+            now = time.strftime("%Y-%m-%d %H:%M:%S")
             self._platform_activities_index += 1
             self._platform_activities.append({
                     "order": self._platform_activities_index,
