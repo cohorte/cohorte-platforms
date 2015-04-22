@@ -135,10 +135,12 @@ class WebAdmin(object):
             "activities": [
                 {
                     "order": "1",
-                    "node" : "led-gateway",
                     "timestamp": "20150421-145700",
-                    "kind" : "Node Discovered",
-                    "info" : "Node UUID 1234-5678-9010-3546"
+                    "event" : "Node Discovered",
+                    "object": "Node",
+                    "name" : "led-gateway",
+                    "UUID" : "UUID 1234-5678-9010-3546",                                        
+                    "info" : "some usefull info"
                 }
             ]            
         }
@@ -717,12 +719,15 @@ class WebAdmin(object):
             inow = time.time()
             now = time.strftime("%Y-%m-%d %H:%M:%S")
             self._platform_activities_index += 1
-            self._platform_activities.append({
+            self._platform_activities.append({                
                     "order": self._platform_activities_index,
-                    "node" : peer.node_name,
                     "timestamp": str(now),
-                    "kind" : "Isolate Created",
-                    "info" : peer.name + " (" + peer.uid + ")"
+                    "event" : "Isolate Created",
+                    "object": "Isolate",
+                    "name" : peer.name,
+                    "uuid" : peer.uid,  
+                    "node" : peer.node_name,                           
+                    "info" : ""
                 })
             self._platform_activities_list_lastupdate = inow
 
@@ -737,10 +742,13 @@ class WebAdmin(object):
             self._platform_activities_index += 1
             self._platform_activities.append({
                     "order": self._platform_activities_index,
-                    "node" : peer.node_name,
                     "timestamp": str(now),
-                    "kind" : "Isolate Lost",
-                    "info" : peer.name + " (" + peer.uid + ")"
+                    "event" : "Isolate Lost",
+                    "object": "Isolate",
+                    "name" : peer.name,
+                    "uuid" : peer.uid,  
+                    "node" : peer.node_name,                           
+                    "info" : ""                    
                 })
             self._platform_activities_list_lastupdate = inow
 

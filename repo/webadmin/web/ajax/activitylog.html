@@ -32,10 +32,13 @@
         <table class="table table-bordered table-striped table-hover table-heading table-datatable" id="datatable-2">
           <thead>
             <tr>
-              <th><label>Order number</label></th>
+              <th><label>N°</label></th>
               <th><label>Timestamp</label></th>
-              <th><label>Node</label></th>              
-              <th><label>Kind</label></th>
+              <th><label>Event</label></th>              
+              <th><label>Object</label></th>
+              <th><label>Name</label></th>
+              <th><label>UUID</label></th>
+              <th><label>Node</label></th>
               <th><label>Info</label></th>
             </tr>
           </thead>
@@ -76,21 +79,30 @@ function loadActivities() {
         frame = "";
         for (var i in data['activities']) {
 
+          
           var order = data['activities'][i]['order'];
-          var node = data['activities'][i]['node'];
           var timestamp = data['activities'][i]['timestamp'];
-          var kind = data['activities'][i]['kind'];
+          var oevent = data['activities'][i]['event'];
+          var oobject = data['activities'][i]['object'];
+          var name = data['activities'][i]['name'];
+          var uuid = data['activities'][i]['uuid'];
+          var node = data['activities'][i]['node'];
           var info = data['activities'][i]['info'];
-          if (kind == "Isolate Created") 
+          
+          if (oevent == "Isolate Created") 
             frame += "<tr style='color:green'>";
-          else if (kind == "Isolate Lost")
+          else if (oevent == "Isolate Lost")
             frame += "<tr style='color:red'>";
           else 
             frame += "<tr>";
+
           frame += "    <td>"+order+"</td>";          
           frame += "    <td>"+timestamp+"</td>";
+          frame += "    <td>"+oevent+"</td>";
+          frame += "    <td>"+oobject+"</td>";
+          frame += "    <td>"+name+"</td>";
+          frame += "    <td>"+uuid+"</td>";
           frame += "    <td>"+node+"</td>";
-          frame += "    <td>"+kind+"</td>";
           frame += "    <td>"+info+"</td>";
           frame += "</tr>";
           
