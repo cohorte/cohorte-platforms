@@ -30,6 +30,7 @@ import urllib
 import json
 import tarfile
 import shutil
+import argparse
 
 # cohorte scripts
 import common 
@@ -335,8 +336,14 @@ def roll_back():
 def main(args=None):
     """
     main script
-    """
-    import argparse
+    """    
+    
+    # Test if the COHORTE_HOME environment variable is set. If not exit
+    COHORTE_HOME = os.environ.get('COHORTE_HOME')
+    if not COHORTE_HOME:
+        print("[ERROR] environment variable COHORTE_HOME not set")
+        return 1
+    
     if not args:
         args = sys.argv[1:]
  
@@ -356,7 +363,7 @@ def main(args=None):
     
     # get installed version    
     installed = {}
-    installed = common.get_installed_dist_info()    
+    installed = common.get_installed_dist_info(COHORTE_HOME)    
     common.show_installed_dist_info(installed)
         
     # get latest versions 

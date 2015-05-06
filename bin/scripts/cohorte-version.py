@@ -24,6 +24,7 @@ __docformat__ = "restructuredtext en"
 __version__ = "1.0.0"
  
 import sys
+import os
 
 # cohorte scripts
 import common 
@@ -32,8 +33,13 @@ def main(args=None):
     """
     main script
     """
+    # Test if the COHORTE_HOME environment variable is set. If not exit
+    COHORTE_HOME = os.environ.get('COHORTE_HOME')
+    if not COHORTE_HOME:
+        print("[ERROR] environment variable COHORTE_HOME not set")
+        return 1
     # Show actual version
-    actual = common.get_installed_dist_info()    
+    actual = common.get_installed_dist_info(COHORTE_HOME)    
     common.show_installed_dist_info(actual)
     return 0    
  

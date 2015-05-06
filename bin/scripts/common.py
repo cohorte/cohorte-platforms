@@ -297,7 +297,7 @@ def delete_common_http(node_dir):
     except OSError:
         pass
         
-def parse_version_file(version_file="conf/version.js"):
+def parse_version_file(version_file):
     """
     Parses the version file (conf/version.js).
     """
@@ -307,11 +307,11 @@ def parse_version_file(version_file="conf/version.js"):
             data = json.load(json_data)    
     return data 
  
-def get_installed_dist_info():
+def get_installed_dist_info(cohorte_home):
     """
     Gets the installed distribution's version information.
     """
-    actual = parse_version_file()        
+    actual = parse_version_file(os.path.join(cohorte_home, "conf", "version.js"))        
     return actual
  
 def show_installed_dist_info(dist):
