@@ -7,6 +7,39 @@ if test "$1" == "minimal"; then
 exit;
 fi
 
+# generate conf/version.js file
+timestamp=$(date +"%Y%m%d-%H%M%S")
+dist=$1
+version_full=$2
+version_num=$(echo $2 | cut -d\- -f 1)
+version_stage=$(echo $2 | cut -d\- -f 2)
+stage=release
+if test "$version_stage" == "SNAPSHOT"; then
+	stage="dev"
+fi
+echo "{"      													> conf/version.js 
+echo "	\"distribution\" : \"cohorte-${dist}-distribution\","	>> conf/version.js
+echo "	\"stage\" : \"${stage}\","								>> conf/version.js
+echo "	\"version\" : \"${version_num}\","						>> conf/version.js
+echo "	\"timestamp\" : \"${timestamp}\""						>> conf/version.js
+echo "}"														>> conf/version.js
+
+# install JPype
+# JPype1-py3==0.5.5.2
+if test "$1" == "macosx"; then
+# python build/scripts/deps.py --package=JPype1-py3 --platform=darwin --install
+echo "[WARNING] copying jpype files directly to repo folder"
+cp -r build/extra/macosx/* repo	
+elif test "$1" == "linux"; then
+#python build/scripts/deps.py --package=JPype1-py3 --platform=linux-x86_64 --install
+echo "[WARNING] copying jpype files directly to repo folder"
+cp -r build/extra/linux/* repo	
+elif test "$1" == "windows"; then
+echo "[WARNING] copying jpype files directly to repo folder"
+cp -r build/extra/windows/* repo	
+fi
+
+
 # Set up the virtual environment
 VENV_NAME=tmp_venv
 INDEX_URL=http://forge.isandlatech.com:3080/devpi/jenkins/cohorte/+simple/

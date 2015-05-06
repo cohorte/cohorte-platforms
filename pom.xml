@@ -100,7 +100,7 @@
 						</fileset>
 					</filesets>
 				</configuration>
-			</plugin>			
+			</plugin>						
 		</plugins>
 		<extensions>
 			<!-- Enabling the use of FTP -->
@@ -161,12 +161,13 @@
 									<arguments>
 										<argument>build/scripts/prepare.sh</argument>
 										<argument>macosx</argument>
+										<argument>${project.version}</argument>
 									</arguments>
 									<workingDirectory>${basedir}</workingDirectory>
 								</configuration>
 							</execution>
 						</executions>
-					</plugin>
+					</plugin>					
 					<plugin>
 						<artifactId>maven-assembly-plugin</artifactId>
 						<version>2.4.1</version>
@@ -186,6 +187,34 @@
 										<descriptor>build/assemblies/macosx-assembly.xml</descriptor>
 									</descriptors>
 								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>build-helper-maven-plugin</artifactId>
+						<version>1.8</version>
+						<executions>
+							<execution>
+							<id>attach-artifacts</id>
+							<phase>package</phase>
+							<goals>
+								<goal>attach-artifact</goal>
+							</goals>
+							<configuration>
+								<artifacts>
+									<artifact>
+										<file>conf/version.js</file>
+										<type>js</type>
+										<classifier>macosx-distribution-version</classifier>
+									</artifact>
+									<artifact>
+										<file>CHANGELOG.txt</file>
+										<type>txt</type>
+										<classifier>changelog</classifier>
+									</artifact>
+								</artifacts>
+							</configuration>
 							</execution>
 						</executions>
 					</plugin>
@@ -241,6 +270,7 @@
 									<arguments>
 										<argument>build/scripts/prepare.sh</argument>
 										<argument>linux</argument>
+										<argument>${project.version}</argument>
 									</arguments>
 									<workingDirectory>${basedir}</workingDirectory>
 								</configuration>
@@ -265,6 +295,34 @@
 										<descriptor>build/assemblies/linux-assembly.xml</descriptor>
 									</descriptors>
 								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>build-helper-maven-plugin</artifactId>
+						<version>1.8</version>
+						<executions>
+							<execution>
+							<id>attach-artifacts</id>
+							<phase>package</phase>
+							<goals>
+								<goal>attach-artifact</goal>
+							</goals>
+							<configuration>
+								<artifacts>
+									<artifact>
+										<file>conf/version.js</file>
+										<type>js</type>
+										<classifier>linux-distribution-version</classifier>
+									</artifact>
+									<artifact>
+										<file>CHANGELOG.txt</file>
+										<type>txt</type>
+										<classifier>changelog</classifier>
+									</artifact>
+								</artifacts>
+							</configuration>
 							</execution>
 						</executions>
 					</plugin>
@@ -320,6 +378,7 @@
 									<arguments>
 										<argument>build/scripts/prepare.sh</argument>
 										<argument>windows</argument>
+										<argument>${project.version}</argument>
 									</arguments>
 									<workingDirectory>${basedir}</workingDirectory>
 								</configuration>
@@ -371,6 +430,34 @@
 							</execution>
 						</executions>
 					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>build-helper-maven-plugin</artifactId>
+						<version>1.8</version>
+						<executions>
+							<execution>
+							<id>attach-artifacts</id>
+							<phase>package</phase>
+							<goals>
+								<goal>attach-artifact</goal>
+							</goals>
+							<configuration>
+								<artifacts>
+									<artifact>
+										<file>conf/version.js</file>
+										<type>js</type>
+										<classifier>windows-distribution-version</classifier>
+									</artifact>
+									<artifact>
+										<file>CHANGELOG.txt</file>
+										<type>txt</type>
+										<classifier>changelog</classifier>
+									</artifact>
+								</artifacts>
+							</configuration>
+							</execution>
+						</executions>
+					</plugin>
 				</plugins>
 			</build>
 		</profile>
@@ -395,6 +482,7 @@
 									<arguments>
 										<argument>build/scripts/prepare.sh</argument>
 										<argument>python</argument>
+										<argument>${project.version}</argument>
 									</arguments>
 									<workingDirectory>${basedir}</workingDirectory>
 								</configuration>
@@ -419,6 +507,34 @@
 										<descriptor>build/assemblies/python-assembly.xml</descriptor>
 									</descriptors>
 								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>build-helper-maven-plugin</artifactId>
+						<version>1.8</version>
+						<executions>
+							<execution>
+							<id>attach-artifacts</id>
+							<phase>package</phase>
+							<goals>
+								<goal>attach-artifact</goal>
+							</goals>
+							<configuration>
+								<artifacts>
+									<artifact>
+										<file>conf/version.js</file>
+										<type>js</type>
+										<classifier>python-distribution-version</classifier>
+									</artifact>
+									<artifact>
+										<file>CHANGELOG.txt</file>
+										<type>txt</type>
+										<classifier>changelog</classifier>
+									</artifact>
+								</artifacts>
+							</configuration>
 							</execution>
 						</executions>
 					</plugin>

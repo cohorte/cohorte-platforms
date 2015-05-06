@@ -296,3 +296,36 @@ def delete_common_http(node_dir):
         os.remove(os.path.join(node_dir, 'conf', 'python-common-http.js'))
     except OSError:
         pass
+        
+def parse_version_file(version_file="conf/version.js"):
+    """
+    Parses the version file (conf/version.js).
+    """
+    data = None
+    if os.path.isfile(version_file):
+        with open(version_file) as json_data:
+            data = json.load(json_data)    
+    return data 
+ 
+def get_installed_dist_info():
+    """
+    Gets the installed distribution's version information.
+    """
+    actual = parse_version_file()        
+    return actual
+ 
+def show_installed_dist_info(dist):
+    """
+    Shows the installed distribution's version information.
+    """
+    print("")
+    print("-----------------[ Installed COHORTE distribution ]--------------------")
+    print("")
+    print("    - distribution : " + dist["distribution"])
+    print("    - version      : " + dist["version"])
+    print("    - stage        : " + dist["stage"])
+    print("    - timestamp    : " + dist["timestamp"])
+    print("    - location     : " + os.environ.get('COHORTE_HOME'))
+    print("")
+    print("-----------------------------------------------------------------------")
+    print("")
