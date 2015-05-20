@@ -1,4 +1,3 @@
 #!/bin/bash
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-python $DIR/scripts/cohorte-update.py $*
+python $COHORTE_HOME/scripts/cohorte-update.py $*
