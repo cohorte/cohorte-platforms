@@ -21,9 +21,9 @@
 		"name" : "cohorte.forker.state"
 	}, {
 		"name" : "cohorte.forker.state_updater"
-	}, {
+	}, /*{
 		"name" : "pelix.shell.console"
-	}, {
+	}, */{
 		"name" : "cohorte.shell.forker"
 	}, {
 		"name" : "cohorte.forker.watchers"
