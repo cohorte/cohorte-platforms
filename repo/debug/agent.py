@@ -92,7 +92,7 @@ class DebugAgent(object):
         """
         # Bundle context
         self._context = None
-    	# iPOPO
+        # iPOPO
         self._ipopo = None
         # Herald
         self._herald = None
@@ -145,7 +145,7 @@ class DebugAgent(object):
 
         if subject == SUBJECT_GET_INSTANCES:
             reply = self.get_instances()        
-    	elif subject == SUBJECT_GET_INSTANCE_DETAIL:
+        elif subject == SUBJECT_GET_INSTANCE_DETAIL:
             instance_name = message.content
             reply = self.get_instance_detail(instance_name)            
         if reply is not None:
