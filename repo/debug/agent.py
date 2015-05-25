@@ -124,7 +124,8 @@ class DebugAgent(object):
                                                            "optional": details["dependencies"][dep]["optional"],
                                                            "aggregate": details["dependencies"][dep]["aggregate"],
                                                            "handler": details["dependencies"][dep]["handler"],
-                                                           "filter": "not showed here!"
+                                                           "filter": "not showed here!",
+                                                           "bindings": [ str(binding) for binding in details["dependencies"][dep]["bindings"] ]
                                                          } 
                                                   } for dep in details["dependencies"] 
                                                 ],
