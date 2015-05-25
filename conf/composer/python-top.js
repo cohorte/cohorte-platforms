@@ -33,12 +33,19 @@
 	{
 		"name" : "cohorte.shell.composer_top"
 	},
-
+	/* admin REST API */
+	/*{
+		"name" : "admin.admin"	
+	},*/
+	/* debug REST API */
+	{
+		"name" : "debug.api"	
+	},
 	/* web admin */
 	{
-		"name" : "webadmin.webadmin"
-	
-	} ] ,
+		"name" : "webadmin.webadmin"	
+	} 
+	] ,
 
 	"composition" : [ {
 		"factory" : "cohorte-composer-top-factory",

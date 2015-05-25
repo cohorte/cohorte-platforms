@@ -32,6 +32,8 @@
 		"name" : "cohorte.remote.signals_discovery"
 	}, */ {
 		"name" : "cohorte.debug.servlet"
+	}, {
+		"name" : "debug.agent"
 	} ],
 
 	/*
@@ -46,7 +48,11 @@
 			"pelix.http.path" : "/cohorte-debug"
 		}
 	} 
-	
+	,
+	{
+		"factory" : "cohorte-debug-agent-factory",
+		"name": "cohorte-debug-agent"
+	}
 	/* Signals components */
 	/*
 	{
