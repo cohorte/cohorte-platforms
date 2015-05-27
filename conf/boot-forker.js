@@ -61,7 +61,15 @@
 		"name" : "cohorte.repositories.python.modules"
 	}, {
 		"name" : "cohorte.repositories.python.ipopo"
-	} ],
+	},
+		
+	/*
+	 * HTTP Service Proxy 
+	 */
+	{
+		"name" : "proxy.proxy"	
+	} 
+	],
 
 	/*
 	 * Components
