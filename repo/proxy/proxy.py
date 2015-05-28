@@ -10,23 +10,18 @@ COHORTE Node Composer HTTP Service Proxy
 
 # iPOPO decorators
 from pelix.ipopo.decorators import ComponentFactory, Provides, Property, Instantiate, \
-    Validate, Invalidate, Requires, RequiresMap, Bind, BindField, UnbindField
+    Validate, Invalidate, Requires
 import pelix.remote
 
 # Herald
 import herald
 import herald.beans as beans
 
-# Cohorte 
-import cohorte.composer
-import cohorte.monitor
-
 # Standard library
 import logging
 import threading
-import json, time, os
 
-# 
+# handles http staff (already bundled with cohorte)
 import requests
 
 try:
@@ -44,10 +39,6 @@ SUBJECT_GET_HTTP = "cohorte/shell/agent/get_http"
 
 # PROXY SUB PATH
 PROXY_SUB_PATH = "/p/"
-
-"""
-	TODO: should have a local cache of all information.
-"""
 
 
 @ComponentFactory("cohorte-http-service-proxy-factory")
@@ -72,7 +63,7 @@ class HTTPServiceProxy(object):
         self._herald = None        
         
         # list of local isolates
-        # peer.uid -> {p_ref, port}
+        # peer.name -> {p_ref, peer.uid, http.port}
         self._local_isolates = {}
 
         
@@ -80,28 +71,48 @@ class HTTPServiceProxy(object):
     Listeners --------------------------------------------------------------------------------------------------------
     """
 
-    def peer_registered(self, peer):                         
+    def peer_registered(self, peer):
+        """
+        Called when an isolate is up
+        """                         
         if peer.name != "cohorte.internals.forker":
+            # avoid adding the forker's isolate (cohorte internal isolate on each node)
             self._add_peer(peer)
             
 
     def peer_updated(self, peer, access_id, data, previous):
         pass
 
-    def peer_unregistered(self, peer):               
+    def peer_unregistered(self, peer):
+        """
+        Called when an isolate is gone
+        """         
         if peer.name in self._local_isolates:
             with self._lock:
                 del self._local_isolates[peer.name]
+    
+    """
+    Utils -------------------------------------------------------------------------------------------------------------
+    """
         
-    def load_local_isolates(self):                              
+    def load_local_isolates(self):
+        """
+        Loads the initial list of node isolates
+        """                           
         for p in self._directory.get_peers():                                                    
             self._add_peer(p)
                 
     def _add_peer(self, p):
+        """
+        Adds an isolate to the local list of Node's isolates
+        """
         local_isolate = self._directory.get_local_peer()
         if p.node_uid == local_isolate.node_uid:  
             with self._lock:
                 if p.name not in self._local_isolates:    
+                    # to avoid synchronization problems, port is initialized to -1.
+                    # when the first time is requested, we find its concrate value
+                    # using get_isolate_http_port.
                     self._local_isolates[p.name] = { 
                                             "p_ref": p, 
                                             "uid" : p.uid,
@@ -109,6 +120,9 @@ class HTTPServiceProxy(object):
                                            }
         
     def get_isolate_http_port(self, uid):
+        """
+        Retrieves the http port of the given isolate
+        """
         lp = self._directory.get_local_peer()
         if lp.uid != uid:
             msg = beans.Message(SUBJECT_GET_HTTP)
@@ -122,8 +136,27 @@ class HTTPServiceProxy(object):
             if svc_ref is not None:
                 port = svc_ref.get_property(pelix.http.HTTP_SERVICE_PORT)            
             return port
+            
+    def get_path(self, myurl):
+        """
+        Gets the path part of an url.
+        
+        It returns :
+            * 1: a string containing the path. E.g; "/listeners/1234/state"
+            * 2: a list of the parts of the path.  e.g., ("listeners", "1234", "state")
+        """
+        o = urlparse.urlparse(myurl)
+        path = o.path        
+        # prepare query path: remove first and last '/' if exists
+        while len(path) > 0 and path[0] == '/':
+            path = path[1:]
+        while len(path) > 0 and path[-1] == '/':
+            path = path[:-1]
+        parts = str(path).split('/')               
+        return (path, parts)
+        
     """
-    Servlet (url mapping to rest api) ================================================================
+    Servlet =========================================================================================
     """
 
     def do_GET(self, request, response):
@@ -137,7 +170,11 @@ class HTTPServiceProxy(object):
             # request contain a referer of the parent page.
             path, parts = self.get_path(referer)             
             isolate = parts[1]
-            intern_isolate_port = self._local_isolates[isolate]["port"]
+            try:
+                intern_isolate_port = self._local_isolates[isolate]["port"]
+            except:
+                response.send_content(501, "Internal error")
+                return    
             if intern_isolate_port == -1 :
                 intern_isolate_port = self.get_isolate_http_port(self._local_isolates[isolate]["uid"])
                 self._local_isolates[isolate]["port"] = intern_isolate_port            
@@ -173,9 +210,11 @@ class HTTPServiceProxy(object):
                     response.send_content(200, http_content)
                 elif number == 1:
                     # redirect automatically to first one
-                    to_url = PROXY_SUB_PATH + str(self._local_isolates.keys()[0]) + "/"
-                    http_content = "<html><head><meta http-equiv='refresh' content='0; URL=" + to_url + "'/></head><body></body></html>"                                         
-                    response.send_content(200, http_content)
+                    for isolate in self._local_isolates:        
+                        # one loop                
+                        to_url = PROXY_SUB_PATH + isolate + "/"
+                        http_content = "<html><head><meta http-equiv='refresh' content='0; URL=" + to_url + "'/></head><body></body></html>"                                         
+                        response.send_content(200, http_content)                        
                 else:    
                     http_content = "<h3>HTTP Services Proxy</h3><ul>"                
                     for isolate in self._local_isolates:
@@ -186,20 +225,16 @@ class HTTPServiceProxy(object):
 
     def do_delete(self, request, response):
         """
-		Handle Delete actions
+		Handle Delete actions : not yet IMPLEMENTED!
 		"""
         pass
+        
+    def do_post(self, request, response):
+        """
+        Not yet Implemented!
+        """
+        pass        
 
-    def get_path(self, myurl):        
-        o = urlparse.urlparse(myurl)
-        path = o.path        
-        # prepare query path: remove first and last '/' if exists
-        while path[0] == '/':
-            path = path[1:]
-        while path[-1] == '/':
-            path = path[:-1]
-        parts = str(path).split('/')               
-        return (path, parts)
 
     """
 	iPOPO STUFF --------------------------------------------------------------------------------------------------------
