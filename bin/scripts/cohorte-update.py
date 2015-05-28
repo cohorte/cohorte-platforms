@@ -45,9 +45,12 @@ UPTODATE = 4
 DOWNLOAD_FOLDER = ".download"
 ARCHIVE_FOLDER = ".archive"
 
+UPDATE_RELEASE_URL = "http://cohorte.github.io/latests/distributions_release.json"
+UPDATE_DEV_URL = "http://cohorte.github.io/latests/distributions_dev.json"
+
 def get_latest_dist_info(dist):
     print("[INFO] getting latest " + dist + " info (from internet)...")    
-    url = "http://cohorte.github.io/snapshots/distributions.json"
+    url = UPDATE_DEV_URL
     response = urllib.urlopen(url)
     data = json.loads(response.read())    
     latest_dev = {}
@@ -58,7 +61,7 @@ def get_latest_dist_info(dist):
     latest_dev["changelog"] = data[dist]["changelog"]
     latest_dev["file"] = data[dist]["files"]["tar.gz"]
     
-    url = "http://cohorte.github.io/releases/distributions.json"
+    url = UPDATE_RELEASE_URL
     response = urllib.urlopen(url)
     data = json.loads(response.read())    
     latest_release = {}
@@ -152,7 +155,8 @@ def update(dist):
         elif choice.lower() == "no":
             break
         elif choice.lower() == "log":
-            print("Showing changelog is not yet implemented!")
+            #print("Showing changelog is not yet implemented!")
+            show_log(dist)
             attemps = 0
         else:
             print("We didn't understand your choice!")
@@ -161,6 +165,18 @@ def update(dist):
     print("Bye!")
     print("")
     return 0
+
+def show_log(dist):
+    print("----------------------------------------------------------------------------")
+    print("")
+    changelog_file_url = dist["changelog"] 
+    if changelog_file_url is not None:        
+        log = ""
+        for line in urllib2.urlopen(changelog_file_url):
+            log += line
+        print(log)
+    print("")
+    print("----------------------------------------------------------------------------")
 
 def update_experimental(dist):
     return update(dist)
