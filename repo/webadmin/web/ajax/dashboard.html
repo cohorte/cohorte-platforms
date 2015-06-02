@@ -150,11 +150,11 @@
     function get_isolate_info(uid) {
         console.log("get_isolate_info("+uid+")");
         $('#isolate_modal_ajax-content').html('<img src="img/devoops_getdata.gif"  alt="preloader"/>');
-        $.getJSON( "/webadmin/api/v1/isolates/"+uid, function( data ) {            
+        $.getJSON( "/debug/api/v1/isolates/"+uid, function( data ) {            
               var content = '<table class="table table-condensed table-striped table-hover">'
-              content += '<tr><td>ISOLATE UID</td><td>' + uid + '</td></tr>'
-              content += '<tr><td>ISOLATE NAME</td><td>' + name + '</td></tr>'
-              content += '<tr><td>HTTP SERVICE PORT</td><td><a href="http://' + data['isolate']['http_access'] + ':' + data['isolate']['http_port'] + '" target="_blanc">' + data['isolate']['http_port'] + '</a></td></tr>'            
+              content += '<tr><td>ISOLATE UID</td><td>' + data["isolate"]["cohorte.isolate.uid"] + '</td></tr>'
+              content += '<tr><td>ISOLATE NAME</td><td>' + data["isolate"]["cohorte.isolate.name"] + '</td></tr>'
+              content += '<tr><td>HTTP SERVICE PORT</td><td>'+data["isolate"]["cohorte.isolate.http.port"]+'</td></tr>'            
               //content += '<tr><td>REMOTE SHELL PORT</td><td>' + data['isolate']['shell_port'] + '</td></tr>'
               content += '</table>'
               $('#isolate_modal_ajax-content').html(content);

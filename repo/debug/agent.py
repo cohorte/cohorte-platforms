@@ -141,6 +141,13 @@ class DebugAgent(object):
                 key = getattr(cohorte, prop_var)
                 value = self._context.get_property(key)
                 result[key] = value
+        # add http port
+        port = -1
+        svc_ref = self._context.get_service_reference(
+            pelix.http.HTTP_SERVICE)
+        if svc_ref is not None:
+            port = svc_ref.get_property(pelix.http.HTTP_SERVICE_PORT)            
+        result["cohorte.isolate.http.port"] = port        
         return result
 
     def get_bundles(self):
