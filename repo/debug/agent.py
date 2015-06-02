@@ -43,6 +43,7 @@ import pelix.http
 import pelix.ipopo.constants
 import pelix.shell
 from pelix.shell.ipopo import ipopo_state_to_str
+from pelix.shell.core import ShellUtils
 
 # Herald
 import herald
@@ -53,6 +54,8 @@ import logging
 import sys
 import threading
 import traceback
+import os
+import time
 
 # cohorte plutform debug agent and api
 import debug
@@ -69,12 +72,38 @@ _SUBJECT_PREFIX = "cohorte/debug/agent"
 _SUBJECT_MATCH_ALL = "{0}/*".format(_SUBJECT_PREFIX)
 """ Filter to match agent signals """
 
+SUBJECT_GET_ISOLATE_DETAIL = "{0}/get_isolate_detail".format(_SUBJECT_PREFIX)
+""" Signal to request the detail of the local isolate """
+
+SUBJECT_GET_BUNDLES = "{0}/get_bundles".format(_SUBJECT_PREFIX)
+""" Signal to request the bundles of the isolate """
+
+SUBJECT_GET_BUNDLE_DETAIL = "{0}/get_bundle_detail".format(_SUBJECT_PREFIX)
+""" Signal to request the bundle details """
+
+SUBJECT_GET_FACTORIES = "{0}/get_factories".format(_SUBJECT_PREFIX)
+""" Signal to request the component factories of the isolate """
+
+SUBJECT_GET_FACTORY_DETAIL = "{0}/get_factory_detail".format(_SUBJECT_PREFIX)
+""" Signal to request the component factory details """
+
 SUBJECT_GET_INSTANCES = "{0}/get_instances".format(_SUBJECT_PREFIX)
 """ Signal to request the instances of the isolate """
 
 SUBJECT_GET_INSTANCE_DETAIL = "{0}/get_instance_detail".format(_SUBJECT_PREFIX)
 """ Signal to request the detail of one instance """
 
+SUBJECT_GET_SERVICES = "{0}/get_services".format(_SUBJECT_PREFIX)
+""" Signal to request the services of the isolate """
+
+SUBJECT_GET_THREADS = "{0}/get_threads".format(_SUBJECT_PREFIX)
+""" Signal to request the current threads of the isolate """
+
+SUBJECT_GET_ISOLATE_LOGS = "{0}/get_isolate_logs".format(_SUBJECT_PREFIX)
+""" Signal to request the list of isolate logs """
+
+SUBJECT_GET_ISOLATE_LOG = "{0}/get_isolate_log".format(_SUBJECT_PREFIX)
+""" Signal to request the request logs """
 
 @ComponentFactory('cohorte-debug-agent-factory')
 @Requires("_ipopo", pelix.ipopo.constants.SERVICE_IPOPO)
@@ -84,7 +113,8 @@ SUBJECT_GET_INSTANCE_DETAIL = "{0}/get_instance_detail".format(_SUBJECT_PREFIX)
 @Property('_reject', pelix.remote.PROP_EXPORT_REJECT, [debug.SERVICE_DEBUG])
 class DebugAgent(object):
     """
-    COHORTE Debug Agent
+    COHORTE Debug Agent.
+    This component is instantiated on each Isolate (see: conf/boot-common-py.js)
     """
     def __init__(self):
         """
@@ -98,21 +128,181 @@ class DebugAgent(object):
         self._herald = None
         # Herald filter property
         self._filters = None
+        
+        
 
+    def get_isolate_detail(self):
+        """
+        Returns details about the local isolate
+        """
+        result = {}        
+        for prop_var in sorted(dir(cohorte)):
+            if prop_var.startswith('PROP'):
+                key = getattr(cohorte, prop_var)
+                value = self._context.get_property(key)
+                result[key] = value
+        return result
+
+    def get_bundles(self):
+        """
+        Returns the list of isolate bundles
+        """
+        bundles = self._context.get_bundles()
+        bundles.insert(0, self._context.get_bundle(0))
+        
+        return [
+            { 
+              "id" : bundle.get_bundle_id(),
+              "name" : bundle.get_symbolic_name(),
+              "state" : ShellUtils.bundlestate_to_str(
+                                    bundle.get_state()),
+              "version" : bundle.get_version()
+            } for bundle in bundles              
+        ]
+
+    def get_bundle_detail(self, bundle_number):
+        """
+        Returns details about the identified instance
+        """
+        details = {}        
+        try:
+            bundle_id = int(bundle_number)            
+        except ValueError as ex:
+            return {"error" : str(ex)}
+        else:
+            # Integer ID
+            try:
+                bundle = self._context.get_bundle(bundle_id)
+            except:
+                return {}
+        if bundle is None:
+            return {}
+        else:
+            details = {
+                "id": bundle.get_bundle_id(),
+                "name" : bundle.get_symbolic_name(),
+                "version" : bundle.get_version(),
+                "state" : ShellUtils.bundlestate_to_str(
+                                    bundle.get_state()),
+                "location" : bundle.get_location(),
+                "published-services" : [],
+                "used-services" : [],
+            }                   
+            try:
+                services = bundle.get_registered_services()
+                if services:
+                    details["published-services"] = [ str(svc_ref) for svc_ref in services ]                    
+                else:
+                    pass
+            except pelix.constants.BundleException as ex:
+                # Bundle in a invalid state
+                pass
+            try:
+                services = bundle.get_services_in_use()
+                if services:
+                    details["used-services"] = [ str(svc_ref) for svc_ref in services ]                         
+                else:
+                    pass
+            except pelix.constants.BundleException as ex:
+                # Bundle in a invalid state
+                pass
+            
+            return details
+
+    def get_factories(self):
+        """
+        Returns the list of isolate factories
+        """
+        ipopo_factories = self._ipopo.get_factories()
+        return [
+            { 
+              "name" : name,
+              "bundle" : { 
+                        "id": self._ipopo.get_factory_bundle(name).get_bundle_id(), 
+                        "name": self._ipopo.get_factory_bundle(name).get_symbolic_name()
+              } 
+            } for name in ipopo_factories              
+        ]
+        
+    def get_factory_detail(self, factory_name):
+        """
+        Returns the details of one factory
+        """
+        details = None
+        try:
+            details = self._ipopo.get_factory_details(factory_name)
+        except ValueError as ex:
+            return {"error" : str(ex)}
+        if details is not None:
+            factory_detail = {
+                "name" : details["name"],
+                "bundle" : { 
+                    "id" : details["bundle"].get_bundle_id(), 
+                    "name": details["bundle"].get_symbolic_name()  
+                },
+                "properties" : { },
+                "provided-services" : [],
+                "requirements" : [],
+                "handlers": []
+            }
+            # factory properties
+            properties = details.get('properties', None)
+            if properties:    
+                for key, value in properties.items():
+                    factory_detail["properties"][key] = value                            
+    	    # factory provided services
+            services = details.get('services', None)
+            if services:                
+                for spec in services:
+                    factory_detail["provided-services"].append(spec)
+            # requirements
+            requirements = details.get('requirements', None)
+            if requirements: 
+                for item in requirements:
+                    req = {
+                        "id": item['id'],
+                        "specification": item['specification'],
+                        "filter": item['filter'],
+                        "aggregate": item['aggregate'],
+                        "optional": item['optional']
+                    }
+                    factory_detail["requirements"].append(req)                                               
+            # handlers
+            handlers = details.get('handlers', None)
+            if handlers:                
+                handlers_headers = ('ID', 'Configuration')
+                for key in sorted(handlers):
+                    handler = {
+                        "id": key,
+                        "configuration": handlers[key]
+                    }
+                    factory_detail["handlers"].append(handler)
+                                                                
+            return factory_detail
+        else:
+            return {}
+           
     def get_instances(self):
+        """
+        Returns the list of iPOPO instances in the local isolate
+        """
         ipopo_instances = self._ipopo.get_instances()
         return [
-            {"instance-name" : name, 
-             "instance-factory": factory, 
-             "instance-state": ipopo_state_to_str(state)}
+            {"name" : name, 
+             "factory": factory, 
+             "state": ipopo_state_to_str(state)}
             for name, factory, state in ipopo_instances]
 
+
     def get_instance_detail(self, instance_name):
+        """
+        Returns details about the identified instance
+        """
         details = None
         try:
             details = self._ipopo.get_instance_details(instance_name)
         except ValueError as ex:
-            return "No value!"
+            return {"error" : str(ex)}
         # basic info
         if details is not None:
             instance_detail = { "name": details["name"],
@@ -135,8 +325,113 @@ class DebugAgent(object):
             # instance properties
             return instance_detail
         else:
-            return "No value!"
+            return {}
 
+    def get_services(self):
+        """
+        Returns the list of services in the local isolate
+        """
+        result = []
+        for svc_ref in self._context.get_all_service_references(None, None):
+            s_id = svc_ref.get_property(pelix.constants.SERVICE_ID)
+            s_ranking = svc_ref.get_property(pelix.constants.SERVICE_RANKING)
+            s_specs = svc_ref.get_property(pelix.constants.OBJECTCLASS)
+            bundle = svc_ref.get_bundle()
+            s_bundle_id = bundle.get_bundle_id()
+            s_bundle_name = bundle.get_symbolic_name()            
+            result.append(
+                {
+                    "id" : s_id, 
+                     "ranking": s_ranking, 
+                     "specifications": s_specs,
+                     "bundle": {
+                         "id" : s_bundle_id,
+                         "name" : s_bundle_name
+                     }       
+                }
+            )            
+            """
+            for key, value in svc_ref.get_properties().items():
+                lines.append('<dt>{0}</dt>\n<dd>{1}</dd>'.format(key, value))
+            lines.append('</dl></td>')
+            """
+        return result                    
+        
+    def get_threads(self):
+        """
+        Returns the list of current threads of the isolate
+        """
+        result = []
+        current_id = threading.current_thread().ident
+        for thread_id, stack in sys._current_frames().items():
+            if thread_id == current_id:
+                current = True
+            else:
+                current = False   
+            th = {
+                    "id" : thread_id,                    
+                    "stack": {},
+                    "current": current
+                 }
+            index = 1
+            for filename, lineno, name, line in traceback.extract_stack(stack):
+                th["stack"][str(index)] = {}
+                th["stack"][str(index)]["filename"] = filename
+                th["stack"][str(index)]["lineno"] = lineno
+                th["stack"][str(index)]["name"] = name
+                th["stack"][str(index)]["line"] = line
+                index += 1
+            result.append(th)
+        return result
+        
+    def get_isolate_logs(self):
+        isolate = self.get_isolate_detail()
+        if isolate is not None:            
+            cohorte_base = isolate["cohorte.base"]
+            if isolate["cohorte.isolate.kind"] == "forker":
+                # this is a forker. returns only "000" which references var/forker.log file                
+                path = os.path.join(cohorte_base, "var", "forker.log")
+                if os.path.exists(path):
+                    ct = time.ctime(os.path.getctime(path))
+                    ct_parser = time.strptime(ct)                 
+                    return [{"000": time.strftime("%Y%m%d-%H%M%S", ct_parser)}]
+                else:
+                    return []
+            else:
+                isolate_uid = isolate["cohorte.isolate.uid"]
+                isolate_name = isolate["cohorte.isolate.name"]
+                path = os.path.join(cohorte_base, "var", isolate_name)
+                result = []
+                if os.path.exists(path):
+                    # lists the sub-directories and returens 3 first letters of their names
+                    log_dirs = os.listdir(path)
+                    for idx, ldir in enumerate(log_dirs):                        
+                        path2 = os.path.join(path, str(ldir))                        
+                        if os.path.isdir(path2):     
+                            toadd =  ldir[0:3]  
+                            ct = time.ctime(os.path.getctime(path))
+                            ct_parser = time.strptime(ct)          
+                            result.append({toadd: time.strftime("%Y%m%d-%H%M%S", ct_parser)})                                     
+                return result                
+    
+    def get_isolate_log(self, log_id):
+        isolate = self.get_isolate_detail()
+        if isolate is not None:            
+            cohorte_base = isolate["cohorte.base"]
+            if isolate["cohorte.isolate.kind"] == "forker":                
+                path = os.path.join(cohorte_base, "var", "forker.log")                
+            else:
+                isolate_uid = isolate["cohorte.isolate.uid"]
+                isolate_name = isolate["cohorte.isolate.name"]
+                path = os.path.join(cohorte_base, "var", isolate_name, 
+                                 log_id + "-" + isolate_uid, "log_" + isolate_name + ".log")
+            with open (path, "r") as forker_log:
+                log=forker_log.read()
+                return log
+                                 
+        return ""
+    
+    
     def herald_message(self, herald_svc, message):
         """
         Called by Herald when a message is received
@@ -144,11 +439,33 @@ class DebugAgent(object):
         subject = message.subject
         reply = None
 
-        if subject == SUBJECT_GET_INSTANCES:
+        if subject == SUBJECT_GET_ISOLATE_DETAIL:
+            reply = self.get_isolate_detail()
+        elif subject == SUBJECT_GET_BUNDLES:
+            reply = self.get_bundles()
+        elif subject == SUBJECT_GET_BUNDLE_DETAIL:
+            bundle_number = message.content
+            reply = self.get_bundle_detail(bundle_number)    
+        elif subject == SUBJECT_GET_FACTORIES:
+            reply = self.get_factories()
+        elif subject == SUBJECT_GET_FACTORY_DETAIL:
+            factory_name = message.content
+            reply = self.get_factory_detail(factory_name)
+        elif subject == SUBJECT_GET_INSTANCES:
             reply = self.get_instances()        
         elif subject == SUBJECT_GET_INSTANCE_DETAIL:
             instance_name = message.content
             reply = self.get_instance_detail(instance_name)            
+        elif subject == SUBJECT_GET_SERVICES:
+            reply = self.get_services()
+        elif subject == SUBJECT_GET_THREADS:
+            reply = self.get_threads()
+        elif subject == SUBJECT_GET_ISOLATE_LOGS:
+            reply = self.get_isolate_logs()
+        elif subject == SUBJECT_GET_ISOLATE_LOG:
+            log_id = message.content
+            reply = self.get_isolate_log(log_id)
+        
         if reply is not None:
             herald_svc.reply(message, reply)
         else:
