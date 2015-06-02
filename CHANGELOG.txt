@@ -9,6 +9,7 @@ Changes form the 1.0.0 to 1.0.1.dev
 	* New "Composition" tab on Webadmin that shows the application's composition specification [isandlaTech/cohorte-platforms#21]
 
 ** Improvements
+    * Webadmin is now accessible from /webadmin path and uses "debug" REST API to show detailed information about isolates
 	* Start cohorte node without console activated if --console is given [cohorte-platforms#31]	
 	* Updating dependencies versions [isandlaTech/cohorte-platforms#14]
 		- Cohorte-Python 1.0.1.dev 
