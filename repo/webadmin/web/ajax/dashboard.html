@@ -466,13 +466,15 @@
       }  
       
       // clean tabs
+      /*
       $('#isolate_modal_ajax-content').html('<img src="img/devoops_getdata.gif"  alt="preloader"/>');
       $('#isolate_modal_ajax-content_bundles').html('<img src="img/devoops_getdata.gif"  alt="preloader"/>');  
       $('#isolate_modal_ajax-content_factories').html('<img src="img/devoops_getdata.gif"  alt="preloader"/>');  
       $('#isolate_modal_ajax-content_instances').html('<img src="img/devoops_getdata.gif"  alt="preloader"/>');  
       $('#isolate_modal_ajax-content_services').html('<img src="img/devoops_getdata.gif"  alt="preloader"/>');  
       $('#isolate_modal_ajax-content_threads').html('<img src="img/devoops_getdata.gif"  alt="preloader"/>');
-      $('#isolate_modal_ajax-content_logs').html('<img src="img/devoops_getdata.gif"  alt="preloader"/>');            
+      $('#isolate_modal_ajax-content_logs').html('<img src="img/devoops_getdata.gif"  alt="preloader"/>');
+      */            
       //$('#isolate_modal_ajax-content_actions').html('<img src="img/devoops_getdata.gif"  alt="preloader"/>');  
       
       // remove/update on listeners of tabs to update uid
@@ -506,6 +508,7 @@
         get_logs(uid);        
       });       
       /* activate first tab */
+      activateTab("actions");   // to ensure changing tab to activate the next one (infos)
       activateTab("infos");
     })
     
