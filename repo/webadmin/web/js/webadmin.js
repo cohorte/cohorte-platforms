@@ -158,7 +158,7 @@ function CloseModalBox(){
 //////////////////////////////////////////////////////
 //////////////////////////////////////////////////////
 function loadTabs() {
-        $.getJSON( "/admin/gui/tabs", function( data ) {            
+        $.getJSON( "/webadmin/gui/tabs", function( data ) {            
             var frame = "";
             frame += '<ul class="nav main-menu">';
             for (var i in data['tabs']) {	            

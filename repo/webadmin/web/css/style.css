@@ -2,7 +2,6 @@ body {
   color: #525252;
   background: #6AA6D6 url(../img/devoops_pattern_b10.png) 0 0 repeat;
 }
-
 .body-expanded, .modal-open {
   overflow-y:hidden;
   margin-right: 15px;
@@ -94,6 +93,23 @@ a.show-sidebar:hover {
   padding: 0;
   margin: 0;
 }
+
+/* modals */
+
+@media screen and (min-width: 768px) {  
+  #isolate_modal .modal-dialog  {width:75%;}
+  #component_modal .modal-dialog  {width:75%;}
+}
+
+pre {
+  font-size: 10px
+}
+
+dt {
+  font-weight: normal;
+}
+
+
 .nav.main-menu, .nav.msg-menu {
   margin:0 -15px;
 }

@@ -75,7 +75,7 @@
 var activities_lastupdate = 0.00;
 
 function loadActivities() {
-    $.getJSON( "/admin/api/v1/platform/activities", function( data ) {            
+    $.getJSON( "/webadmin/api/v1/platform/activities", function( data ) {            
         frame = "";
         for (var i in data['activities']) {
 
@@ -114,7 +114,7 @@ function loadActivities() {
 
 function refresh() {
   setTimeout(refresh, 2000);
-  $.getJSON("/admin/api/v1/platform/activities/lastupdate", function(data) {
+  $.getJSON("/webadmin/api/v1/platform/activities/lastupdate", function(data) {
     var result = data['meta']['lastupdate'];
       if (result > activities_lastupdate) {
         activities_lastupdate = result;

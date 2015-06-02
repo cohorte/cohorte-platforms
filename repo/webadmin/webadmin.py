@@ -47,7 +47,7 @@ SUBJECT_GET_HTTP = "cohorte/shell/agent/get_http"
 # Name the component factory
 @ComponentFactory("cohorte-webadmin-factory")
 @Provides(['pelix.http.servlet', herald.SERVICE_DIRECTORY_LISTENER])
-@Property('_path', 'pelix.http.path', "/admin")
+@Property('_path', 'pelix.http.path', "/webadmin")
 # Consume a single Herald Directory service
 @Requires("_directory", herald.SERVICE_DIRECTORY)
 @Requires('_herald', herald.SERVICE_HERALD)
@@ -59,7 +59,7 @@ SUBJECT_GET_HTTP = "cohorte/shell/agent/get_http"
 @Requires("_isolates", cohorte.composer.SERVICE_COMPOSER_ISOLATE, aggregate=True, optional=True)
 # Reject the export the servlet specification
 @Property('_reject', pelix.remote.PROP_EXPORT_REJECT, ['pelix.http.servlet', herald.SERVICE_DIRECTORY_LISTENER])
-@Instantiate('webadmin')
+@Instantiate('WebAdmin')
 class WebAdmin(object):
     """
     A component that provides a web interface for check spelling words.
@@ -226,7 +226,7 @@ class WebAdmin(object):
             "isolates": [
                 {
                     "uid": "6c4cd65b-b501-41db-ab40-d4cf612b2ffe",
-                    "name": "webadmin-isolate",
+                    "name": "WebAdmin-isolate",
                     "node_uid": "41110b1d-b510-4e51-9945-a752da04a16d",
                     "node_name": "central"
                 },
@@ -500,7 +500,7 @@ class WebAdmin(object):
             "isolates": [
                 {
                     "uid": "6c4cd65b-b501-41db-ab40-d4cf612b2ffe",
-                    "name": "webadmin-isolate",
+                    "name": "WebAdmin-isolate",
                     "type": "app-dynamic-isolate"
                 },
                 {
@@ -811,6 +811,7 @@ class WebAdmin(object):
         tabs["tabs"].append({"name": "Dashboard", "icon": "fa-dashboard", "page": "ajax/dashboard.html"})
         tabs["tabs"].append({"name": "Global view", "icon": "fa-sitemap", "page": "ajax/globalview.html"})
         tabs["tabs"].append({"name": "Activity Log", "icon": "fa-desktop", "page": "ajax/activitylog.html"})
+        #tabs["tabs"].append({"name": "Composition", "icon": "fa-book", "page": "ajax/composition.html"})
         #tabs["tabs"].append({"name": "Timeline", "icon": "fa-sort-amount-asc", "page": "ajax/timeline.html"})
         tabs["meta"]["code"] = 200
         tabs["meta"]["lastupdate"] = self._nodes_list_lastupdate
@@ -904,7 +905,7 @@ class WebAdmin(object):
     Pages --------------------------------------------------------------------------------------------------------------
     """
 
-    def show_admin_page(self, request, response):
+    def show_webadmin_page(self, request, response):
         content = "<html><head><meta http-equiv='refresh' content='0; URL=" + self._path 
         content += "/static/web/index.html'/></head><body></body></html>"
         response.send_content(200, content)
@@ -937,9 +938,9 @@ class WebAdmin(object):
         parts = str(query).split('/')
 
 
-        if str(parts[0]) == "admin":
+        if str(parts[0]) == "webadmin":
             if len(parts) == 1:
-                self.show_admin_page(request, response)
+                self.show_webadmin_page(request, response)
             elif len(parts) > 1:
                 if str(parts[1]) == "static":
                     if len(parts) > 2:

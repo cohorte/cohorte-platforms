@@ -105,7 +105,7 @@ function hierarchicalLayout() {
     .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  d3.json("/admin/gui/tabs/globalview", function(root) {
+  d3.json("/webadmin/gui/tabs/globalview", function(root) {
     var nodes = tree.nodes(root),
         links = tree.links(nodes);
 
@@ -155,8 +155,8 @@ function circularLayout() {
     .append("g")
       .attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
 
-  //d3.json("/admin/static/web/ajax/flare.json", function(error, root) {
-    d3.json("/admin/gui/tabs/globalview", function(error, root) {
+  //d3.json("/webadmin/static/web/ajax/flare.json", function(error, root) {
+    d3.json("/webadmin/gui/tabs/globalview", function(error, root) {
     if (error) return console.error(error);
 
     var focus = root,
@@ -217,7 +217,7 @@ var nodes_lastupdate = 0.00;
 function refresh() {        
     // make Ajax call here, inside the callback call:
     setTimeout(refresh, 2000);
-    $.getJSON( "/admin/api/v1/nodes/lastupdate", function( data ) {
+    $.getJSON( "/webadmin/api/v1/nodes/lastupdate", function( data ) {
         var result = data['meta']['lastupdate'];
         if (result > nodes_lastupdate) {
             nodes_lastupdate = result;
