@@ -61,7 +61,7 @@
 		<dependency>
 			<groupId>org.cohorte.herald</groupId>
 			<artifactId>cohorte-herald-package</artifactId>
-			<version>0.0.3</version>
+			<version>0.0.4-SNAPSHOT</version>
 			<type>pom</type>
 			<scope>provided</scope>
 		</dependency>

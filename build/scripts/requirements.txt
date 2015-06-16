@@ -1,5 +1,5 @@
 Cohorte-Python==1.0.1.dev
-Cohorte-Herald==0.0.3
+Cohorte-Herald==0.0.4.dev
 iPOPO==0.6.1
 jsonrpclib-pelix==0.2.5
 sleekxmpp>=1.3.1
