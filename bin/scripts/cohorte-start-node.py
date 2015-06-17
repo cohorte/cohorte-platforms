@@ -517,6 +517,9 @@ def main(args=None):
     else:
         try:
             p.wait()
+        except KeyboardInterrupt as ex1:
+            print("Node stopped by user!")
+            result_code = 0
         except Exception as ex:
             print("Error waiting for the node to stop:", ex)
             result_code = 1
