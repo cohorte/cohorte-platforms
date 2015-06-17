@@ -543,11 +543,12 @@ def main(args=None):
             result_code = 1
 
     # stopping XMPP bot process
-    if process:
-        process.terminate()
+    if p:
+        print("Terminate the process...");
+        p.terminate()
         if not xmpp_log_file:
             xmpp_log_file.close()
-    
+        print("Ok. Bye!");
     return result_code
 
 if __name__ == "__main__":

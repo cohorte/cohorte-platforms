@@ -24,7 +24,7 @@ Note: if you upgrade from 1.0.0 you should read REAME.md file to update your alr
 	* Set the default recomposition delay to 120 [#15]
 
 ** Bug Fix
-    * Fixing some exit errors [#35] (3) 
+    * Fixing some stopping errors [#35] (3) (4) 
 	* Fixing synchronisation problem: XMPP transport blocked on disconnected [isandlaTech/cohorte-herald/issues#14]
 	* Isolate is duplicated when another node is stopped [#16] 
 
