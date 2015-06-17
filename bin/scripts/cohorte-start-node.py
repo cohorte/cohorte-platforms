@@ -71,7 +71,7 @@ def get_external_config(parsed_conf_file, conf_name):
             # return parsed_conf_file["node"].get(conf_name)
 
         if conf_name in ("top-composer", "auto-start", "composition-file", "http-port", "shell-port", "use-cache",
-                        "recomposition-delay", "interpreter"):
+                        "recomposition-delay", "interpreter", "console"):
             if "node" in parsed_conf_file:
                 return parsed_conf_file["node"].get(conf_name)
 
@@ -126,10 +126,10 @@ def main(args=None):
     group = parser.add_argument_group("Config",
                                       "Startup configuration options")
 
-    group.add_argument("--use-config", action="store", default="run.js",
+    group.add_argument("--use-config", action="store", default="conf/run.js",
                        dest="config_file",
                        help="Configuration file to use for starting cohorte "
-                       "node. By default the run.js file is used if available")
+                       "node. By default the conf/run.js file is used if available")
 
     group.add_argument("--update-config", action="store_true", default=False,
                        dest="update_config_file",
@@ -184,7 +184,11 @@ def main(args=None):
     group = parser.add_argument_group("Transport",
                                       "Information about the transport "
                                       "protocols to use")
-
+    
+    parser.add_argument("--console", action="store_true",
+                        dest="install_shell_console", default=False,
+                        help="If True, the shell console will be started")
+                        
     group.add_argument("--transport", action="store",
                        dest="transport_modes",
                        help="Transport mode (http and/or xmpp - "
@@ -218,6 +222,7 @@ def main(args=None):
     APPLICATION_ID = None
     USE_CACHE = None
     RECOMPOSITION_DELAY = None
+    INSTALL_SHELL_CONSOLE = False
     PYTHON_INTERPRETER = None
     XMPP_SERVER = None
     XMPP_PORT = None
@@ -357,7 +362,16 @@ def main(args=None):
                                             AUTO_START)
     else:
         common.delete_top_composer_config(COHORTE_BASE)
-
+    
+    # show console (or not)
+    if args.install_shell_console:
+        INSTALL_SHELL_CONSOLE = True
+    else:
+        INSTALL_SHELL_CONSOLE = set_configuration_value(
+            None,
+            get_external_config(external_config, "console"), False)
+    if INSTALL_SHELL_CONSOLE == True:
+        boot_args.append("--console")             
     # transport mode
     process = None
     xmpp_log_file = None
@@ -433,10 +447,11 @@ def main(args=None):
             configuration["node"]["auto-start"] = AUTO_START
             configuration["node"]["composition-file"] = COMPOSITION_FILE
         configuration["node"]["http-port"] = HTTP_PORT
+        configuration["node"]["shell-port"] = SHELL_PORT
         configuration["node"]["use-cache"] = USE_CACHE
         configuration["node"]["recomposition-delay"] = RECOMPOSITION_DELAY
         configuration["node"]["interpreter"] = PYTHON_INTERPRETER
-        configuration["node"]["shell-port"] = SHELL_PORT
+        configuration["node"]["console"] = INSTALL_SHELL_CONSOLE
         configuration["transport"] = TRANSPORT_MODES
         if "xmpp" in TRANSPORT_MODES:
             configuration["transport-xmpp"] = {}

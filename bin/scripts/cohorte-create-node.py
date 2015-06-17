@@ -71,6 +71,7 @@ def create_node(args):
     configuration["node"]["http-port"] = 0
     configuration["node"]["shell-port"] = 0
     configuration["node"]["top-composer"] = False
+    configuration["node"]["console"] = True
     if 'PYTHON_INTERPRETER' in os.environ:
         python_interpreter = os.environ['PYTHON_INTERPRETER']
         if python_interpreter:
