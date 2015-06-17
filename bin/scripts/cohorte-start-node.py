@@ -421,6 +421,9 @@ def main(args=None):
     CONFIG_FILE = args.config_file
     if not os.path.exists(CONFIG_FILE) or args.update_config_file:    
         configuration = {}
+        actual_dist = common.get_installed_dist_info(COHORTE_HOME)
+        COHORTE_VERSION = actual_dist["version"]
+        configuration["cohorte-version"] = COHORTE_VERSION
         if APPLICATION_ID:
             configuration["app-id"] = APPLICATION_ID
         configuration["node"] = {}
