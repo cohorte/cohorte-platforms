@@ -5,27 +5,28 @@ Note: if you upgrade from 1.0.0 you should read REAME.md file to update your alr
 
 ** New Feature	
 	* New "proxy" HTTP Service interface for each Node Composer [#34]
-	* New "debug" REST API [cohorte-platforms#33] 
-	* New "cohorte-update" shell command [isandlaTech/cohorte-platforms#29]
-	* New "Activity log" tab on Webadmin that tracks Cohorte's isolates activity [isandlaTech/cohorte-platforms#21]
-	* New "Composition" tab on Webadmin that shows the application's composition specification [isandlaTech/cohorte-platforms#21]
+	* New "debug" REST API [#33] 
+	* New "cohorte-update" shell command [#29]
+	* New "Activity log" tab on Webadmin that tracks Cohorte's isolates activity [#21]
+	* New "Composition" tab on Webadmin that shows the application's composition specification [#21]
 
 ** Improvements
+    * Enhance 'cohorte-create-node' options [#39]
     * Changing names of some of Node run configurations [#36]
     * Changing Herald Messages format to include meta-data in content when transporting the message [cohorte-herald/issues#15]
     * Webadmin is now accessible from /webadmin path and uses "debug" REST API to show detailed information about isolates
-	* Start cohorte node with console if and only if --console argument is given [cohorte-platforms#31]
-	* Updating dependencies versions [isandlaTech/cohorte-platforms#14]
+	* Start cohorte node with console if and only if --console argument is given [#31]
+	* Updating dependencies versions [#14]
 		- Cohorte-Python 1.0.1.dev 
 		- Using iPOPO 0.6.1
 		- Using Cohorte-Utilities 1.0.1
 	* Show the main isolate "cohorte.internals.forker" on webadmin [isandlaTech/cohorte-runtime#14] 
-	* Set the default recomposition delay to 120 [isandlaTech/cohorte-platforms#15]
+	* Set the default recomposition delay to 120 [#15]
 
 ** Bug Fix
-    * Fixing some exit errors [isandlaTech/cohorte-platforms/issues#35] (3) 
-	* Fixing synchronisation problem: XMPP transport blocked on disconnected [isandlaTech/cohorte-herald/issues/14]
-	* Isolate is duplicated when another node is stopped [isandlaTech/cohorte-platforms#16] 
+    * Fixing some exit errors [#35] (3) 
+	* Fixing synchronisation problem: XMPP transport blocked on disconnected [isandlaTech/cohorte-herald/issues#14]
+	* Isolate is duplicated when another node is stopped [#16] 
 
 	
 	

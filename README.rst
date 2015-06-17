@@ -3,8 +3,16 @@ What are the changes to consider when you upgrade from 1.0.x to 1.1.x ?
 
 When upgrading from Cohorte 1.0.x you should take in consideration these changes :
 
-Startup script (run)
---------------------
+
+Node Creation script (cohorte-create-node)
+------------------------------------------
+
+* ``--app-name`` => ``--composition-name`` (``-a`` => ``-c``) : Application's composition name
+* new ``--app-id`` (``-a``) : application's ID
+
+
+Startup script (cohorte-start-node)
+-----------------------------------
 
 From Cohorte 1.1, the following arguments where changed (and also their corresponding run.js entries):
 
