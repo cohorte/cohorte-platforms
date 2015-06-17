@@ -60,9 +60,9 @@ def get_external_config(parsed_conf_file, conf_name):
     """
     if parsed_conf_file is not None and conf_name is not None:
         
-        if conf_name == "application-id":
-            if "application-id" in parsed_conf_file:
-                return parsed_conf_file["application-id"]
+        if conf_name == "app-id":
+            if "app-id" in parsed_conf_file:
+                return parsed_conf_file["app-id"]
 
         if conf_name == "node-name":
             if "node" in parsed_conf_file:                       
@@ -70,7 +70,7 @@ def get_external_config(parsed_conf_file, conf_name):
                 return parsed_conf_file["node"].get("name")
             # return parsed_conf_file["node"].get(conf_name)
 
-        if conf_name in ("top-composer", "auto-start", "composition-file", "web-admin", "shell-admin", "use-cache",
+        if conf_name in ("top-composer", "auto-start", "composition-file", "http-port", "shell-port", "use-cache",
                         "recomposition-delay", "interpreter"):
             if "node" in parsed_conf_file:
                 return parsed_conf_file["node"].get(conf_name)
@@ -169,11 +169,11 @@ def main(args=None):
                        help="Auto-start the composition if this node is a "
                             "Top Composer")
 
-    group.add_argument("--web-admin", action="store", type=int,
-                       dest="web_admin_port", help="Node web admin port")
+    group.add_argument("--http-port", action="store", type=int,
+                       dest="http_port", help="Node HTTP port")
 
-    group.add_argument("--shell-admin", action="store", type=int,
-                       dest="shell_admin_port", help="Node remote shell port")
+    group.add_argument("--shell-port", action="store", type=int,
+                       dest="shell_port", help="Node Remote Shell port")
 
     group.add_argument("--use-cache", action="store",
                        dest="use_cache", help="Use cache to accelerate startup time")
@@ -210,8 +210,8 @@ def main(args=None):
     COHORTE_BASE = args.base_absolute_path
     NODE_NAME = "node"
     TRANSPORT_MODES = []
-    WEB_ADMIN_PORT = 0
-    SHELL_ADMIN_PORT = 0
+    HTTP_PORT = 0
+    SHELL_PORT = 0
     IS_TOP_COMPOSER = None
     AUTO_START = None
     COMPOSITION_FILE = None
@@ -298,7 +298,7 @@ def main(args=None):
     # configure application id
     APPLICATION_ID = set_configuration_value(
         args.application_id,
-        get_external_config(external_config, "application-id"), None)
+        get_external_config(external_config, "app-id"), None)
     if not APPLICATION_ID:
         if not args.update_config_file:
             print("[ERROR] no application ID is given!")
@@ -314,15 +314,15 @@ def main(args=None):
     LOG_DIR = os.path.join(COHORTE_BASE, 'var')
     os.environ['COHORTE_LOGFILE'] = os.path.join(LOG_DIR, 'forker.log')
 
-    WEB_ADMIN_PORT = set_configuration_value(
-        args.web_admin_port,
-        get_external_config(external_config, "web-admin"), 0)
-    SHELL_ADMIN_PORT = set_configuration_value(
-        args.shell_admin_port,
-        get_external_config(external_config, "shell-admin"), 0)
+    HTTP_PORT = set_configuration_value(
+        args.http_port,
+        get_external_config(external_config, "http-port"), 0)
+    SHELL_PORT = set_configuration_value(
+        args.shell_port,
+        get_external_config(external_config, "shell-port"), 0)
     # Generate webadmin and shell configs of the cohorte (main) isolate
     # of this node
-    common.generate_boot_forker(COHORTE_BASE, WEB_ADMIN_PORT, SHELL_ADMIN_PORT)
+    common.generate_boot_forker(COHORTE_BASE, HTTP_PORT, SHELL_PORT)
 
     # Log
     try:
@@ -422,18 +422,18 @@ def main(args=None):
     if not os.path.exists(CONFIG_FILE) or args.update_config_file:    
         configuration = {}
         if APPLICATION_ID:
-            configuration["application-id"] = APPLICATION_ID
+            configuration["app-id"] = APPLICATION_ID
         configuration["node"] = {}
         configuration["node"]["name"] = NODE_NAME
         configuration["node"]["top-composer"] = IS_TOP_COMPOSER
         if IS_TOP_COMPOSER:
             configuration["node"]["auto-start"] = AUTO_START
             configuration["node"]["composition-file"] = COMPOSITION_FILE
-        configuration["node"]["web-admin"] = WEB_ADMIN_PORT
+        configuration["node"]["http-port"] = HTTP_PORT
         configuration["node"]["use-cache"] = USE_CACHE
         configuration["node"]["recomposition-delay"] = RECOMPOSITION_DELAY
         configuration["node"]["interpreter"] = PYTHON_INTERPRETER
-        configuration["node"]["shell-admin"] = SHELL_ADMIN_PORT
+        configuration["node"]["shell-port"] = SHELL_PORT
         configuration["transport"] = TRANSPORT_MODES
         if "xmpp" in TRANSPORT_MODES:
             configuration["transport-xmpp"] = {}
@@ -469,7 +469,7 @@ def main(args=None):
         SHELL ADMIN : {shell_port}
 """.format(appid=APPLICATION_ID, node_name=os.environ.get('COHORTE_NODE_NAME'),
            transports=",".join(TRANSPORT_MODES), is_top=IS_TOP_COMPOSER,
-           http_port=WEB_ADMIN_PORT, shell_port=SHELL_ADMIN_PORT)
+           http_port=HTTP_PORT, shell_port=SHELL_PORT)
     
 
     if IS_TOP_COMPOSER:

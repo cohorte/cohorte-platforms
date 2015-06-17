@@ -1,14 +1,17 @@
 Changes form the 1.0.0 to 1.0.1.dev
 -----------------------------------
 
+Note: if you upgrade from 1.0.0 you should read REAME.md file to update your already created Cohorte Nodes (run configurations). 
+
 ** New Feature	
-	* New "proxy" HTTP Service interface for each Node Composer #34
+	* New "proxy" HTTP Service interface for each Node Composer [#34]
 	* New "debug" REST API [cohorte-platforms#33] 
 	* New "cohorte-update" shell command [isandlaTech/cohorte-platforms#29]
 	* New "Activity log" tab on Webadmin that tracks Cohorte's isolates activity [isandlaTech/cohorte-platforms#21]
 	* New "Composition" tab on Webadmin that shows the application's composition specification [isandlaTech/cohorte-platforms#21]
 
 ** Improvements
+    * Changing names of some of Node run configurations [#36]
     * Changing Herald Messages format to include meta-data in content when transporting the message [cohorte-herald/issues#15]
     * Webadmin is now accessible from /webadmin path and uses "debug" REST API to show detailed information about isolates
 	* Start cohorte node with console if and only if --console argument is given [cohorte-platforms#31]
@@ -20,6 +23,7 @@ Changes form the 1.0.0 to 1.0.1.dev
 	* Set the default recomposition delay to 120 [isandlaTech/cohorte-platforms#15]
 
 ** Bug Fix
+    * Fixing some exit errors [isandlaTech/cohorte-platforms/issues#35] (3) 
 	* Fixing synchronisation problem: XMPP transport blocked on disconnected [isandlaTech/cohorte-herald/issues/14]
 	* Isolate is duplicated when another node is stopped [isandlaTech/cohorte-platforms#16] 
 
