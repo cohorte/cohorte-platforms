@@ -465,8 +465,8 @@ def main(args=None):
 
        TOP COMPOSER : {is_top}
 
-          WEB ADMIN : {http_port}
-        SHELL ADMIN : {shell_port}
+          HTTP PORT : {http_port}
+         SHELL PORT : {shell_port}
 """.format(appid=APPLICATION_ID, node_name=os.environ.get('COHORTE_NODE_NAME'),
            transports=",".join(TRANSPORT_MODES), is_top=IS_TOP_COMPOSER,
            http_port=HTTP_PORT, shell_port=SHELL_PORT)
