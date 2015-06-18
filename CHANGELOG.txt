@@ -11,6 +11,7 @@ Note: if you upgrade from 1.0.0 you should read REAME.md file to update your alr
 	* New "Composition" tab on Webadmin that shows the application's composition specification [#21]
 
 ** Improvements
+    * Move 'run.js' of a Cohorte Node to 'conf/run.js' [#11]
     * Enhance 'cohorte-create-node' options [#39]
     * Changing names of some of Node run configurations [#36]
     * Changing Herald Messages format to include meta-data in content when transporting the message [cohorte-herald/issues#15]
