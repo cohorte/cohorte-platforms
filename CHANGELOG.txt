@@ -1,5 +1,5 @@
-Changes form the 1.0.0 to 1.0.1.dev
------------------------------------
+Changes form the 1.0.0 to 1.1.0.pre1
+------------------------------------
 
 Note: if you upgrade from 1.0.0 you should read REAME.md file to update your already created Cohorte Nodes (run configurations). 
 
@@ -11,21 +11,21 @@ Note: if you upgrade from 1.0.0 you should read REAME.md file to update your alr
 	* New "Composition" tab on Webadmin that shows the application's composition specification [#21]
 
 ** Improvements
-    * Move 'run.js' of a Cohorte Node to 'conf/run.js' [#11]
-    * Enhance 'cohorte-create-node' options [#39]
-    * Changing names of some of Node run configurations [#36]
-    * Changing Herald Messages format to include meta-data in content when transporting the message [cohorte-herald/issues#15]
-    * Webadmin is now accessible from /webadmin path and uses "debug" REST API to show detailed information about isolates
+	* Move 'run.js' of a Cohorte Node to 'conf/run.js' [#11]
+	* Enhance 'cohorte-create-node' options [#39]
+	* Changing names of some of Node run configurations [#36]
+	* Changing Herald Messages format to include meta-data in content when transporting the message [cohorte-herald/issues#15]
+	* Webadmin is now accessible from /webadmin path and uses "debug" REST API to show detailed information about isolates
 	* Start cohorte node with console if and only if --console argument is given [#31]
 	* Updating dependencies versions [#14]
 		- Cohorte-Python 1.0.1.dev 
-		- Using iPOPO 0.6.1
+		- Using iPOPO 0.6.2
 		- Using Cohorte-Utilities 1.0.1
 	* Show the main isolate "cohorte.internals.forker" on webadmin [isandlaTech/cohorte-runtime#14] 
 	* Set the default recomposition delay to 120 [#15]
 
 ** Bug Fix
-    * Fixing some stopping errors [#35] (3) (4) 
+	* Fixing some stopping errors [#35] (3) (4) 
 	* Fixing synchronisation problem: XMPP transport blocked on disconnected [isandlaTech/cohorte-herald/issues#14]
 	* Isolate is duplicated when another node is stopped [#16] 
 

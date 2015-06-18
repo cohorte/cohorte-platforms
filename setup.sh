@@ -38,9 +38,12 @@ if test -e "$HOME/.bash_profile"; then
     if grep "#COHORTE" $HOME/.bash_profile &> /dev/null; then
         echo
     else
-        echo "source $HOME/.bashrc #COHORTE" >> $HOME/.bash_profile
+        echo "source $HOME/.bashrc #COHORTE" >> $HOME/.bash_profile        
     fi
 fi
+
+# source .bashrc
+source $HOME/.bashrc
 
 # Get back where we were
 cd -

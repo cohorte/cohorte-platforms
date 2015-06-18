@@ -42,6 +42,9 @@ echo "source $HOME/.bashrc #COHORTE" >> $HOME/.bash_profile
 fi
 fi
 
+# source .bashrc
+source $HOME/.bashrc
+
 # Get back where we were
 cd -
 
