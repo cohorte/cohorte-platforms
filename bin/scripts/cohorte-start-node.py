@@ -81,6 +81,8 @@ def get_external_config(parsed_conf_file, conf_name):
                         return parsed_conf_file["node"].get("web-admin")    #
                     if conf_name in ("shell-port"):                         #
                         return parsed_conf_file["node"].get("shell-admin")  #
+                else:
+                    return conf_value
 
         if conf_name == "transport":
             if "transport" in parsed_conf_file:            
@@ -128,7 +130,7 @@ def main(args=None):
     group = parser.add_argument_group("Mandatory arguments")
 
     group.add_argument("-a", "--app-id", action="store",
-                       dest="application_id", help="Application's ID")
+                       dest="app_id", help="Application's ID")
 
     group = parser.add_argument_group("Config",
                                       "Startup configuration options")
@@ -149,7 +151,7 @@ def main(args=None):
 
     group.add_argument("-i", "--interpreter", action="store", 
                        dest="interpreter",
-                       help="Python interpreter to use (python2 or python3)")
+                       help="Path to Python interpreter to use (python2 or python3)")
 
     group.add_argument("-b", "--base", action="store", default=None,
                        dest="base_absolute_path",
@@ -183,7 +185,7 @@ def main(args=None):
                        dest="shell_port", help="Node Remote Shell port")
 
     group.add_argument("--use-cache", action="store",
-                       dest="use_cache", help="Use cache to accelerate startup time")
+                       dest="use_cache", help="Use cache to accelerate startup time (experimental)")
 
     group.add_argument("--recomposition-delay", action="store", type=int,
                        dest="recomposition_delay", help="Delay in seconds between two recomposition tentatives")
@@ -312,7 +314,7 @@ def main(args=None):
 
     # configure application id
     APPLICATION_ID = set_configuration_value(
-        args.application_id,
+        args.app_id,
         get_external_config(external_config, "app-id"), None)
     if not APPLICATION_ID:
         if not args.update_config_file:
