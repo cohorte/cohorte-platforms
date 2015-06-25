@@ -63,6 +63,8 @@ def get_external_config(parsed_conf_file, conf_name):
         if conf_name == "app-id":
             if "app-id" in parsed_conf_file:
                 return parsed_conf_file["app-id"]
+            elif "application-id" in parsed_conf_file:     # compatibility with cohorte 1.0.0
+                return parsed_conf_file["application-id"]  #        
 
         if conf_name == "node-name":
             if "node" in parsed_conf_file:                       
@@ -73,7 +75,12 @@ def get_external_config(parsed_conf_file, conf_name):
         if conf_name in ("top-composer", "auto-start", "composition-file", "http-port", "shell-port", "use-cache",
                         "recomposition-delay", "interpreter", "console"):
             if "node" in parsed_conf_file:
-                return parsed_conf_file["node"].get(conf_name)
+                conf_value = parsed_conf_file["node"].get(conf_name)
+                if conf_value is None:                                      #
+                    if conf_name in ("http-port"):                          # compatibility with cohorte 1.0.0
+                        return parsed_conf_file["node"].get("web-admin")    #
+                    if conf_name in ("shell-port"):                         #
+                        return parsed_conf_file["node"].get("shell-admin")  #
 
         if conf_name == "transport":
             if "transport" in parsed_conf_file:            
@@ -208,7 +215,7 @@ def main(args=None):
 
     group.add_argument("--http-ipv", action="store", type=int,
                        dest="http_ipv", help="HTTP IP version to use (4 or 6)")
-
+                
     # Parse arguments
     args, boot_args = parser.parse_known_args(args)
     COHORTE_BASE = args.base_absolute_path
@@ -233,14 +240,19 @@ def main(args=None):
     # set working directory (cohorte-base)
     os.chdir(COHORTE_BASE)
 
+    # startup config file
+    config_file = args.config_file    
+    if not os.path.isfile(config_file):                             # compatibility with cohorte 1.0.0
+        config_file = "run.js"                                      #
+
     if args.show_config_file:
-        # show the content of the startup configuration file and exit.
-        content = parse_config_file(args.config_file)
+        # show the content of the startup configuration file and exit.        
+        content = parse_config_file(config_file)
         if content:
             content = json.dumps(content, sort_keys=False,
                                  indent=4, separators=(',', ': '))
             print(content)
-        else:
+        else:            
             print("[INFO] there is no startup configuration file! "
                   "Use '--use-config' option to refer to your config file")
         return 0
@@ -269,10 +281,8 @@ def main(args=None):
     sys.path = added_paths + sys.path
 
     external_config = None
-
-    # Parse config file
-    if args.config_file:
-        external_config = parse_config_file(args.config_file)
+    
+    external_config = parse_config_file(config_file)        
  
     # useing cache
     USE_CACHE = set_configuration_value(
@@ -432,7 +442,7 @@ def main(args=None):
             pass
 
     # update configuration if not exists
-    CONFIG_FILE = args.config_file
+    CONFIG_FILE = config_file
     if not os.path.exists(CONFIG_FILE) or args.update_config_file:    
         configuration = {}
         actual_dist = common.get_installed_dist_info(COHORTE_HOME)
