@@ -16,3 +16,4 @@ JAVA DEPENDENCIES
 - org.cohorte.remote:cohorte-remote-services:1.2.0
 - org.cohorte.herald:cohorte-herald:0.0.4-SNAPSHOT
 - org.cohorte.runtime:cohorte-runtime:1.0.0    
+- ipojo 1.12.1

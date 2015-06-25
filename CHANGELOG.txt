@@ -21,6 +21,7 @@ Note: if you upgrade from 1.0.0 you should read REAME.md file to update your alr
 		- Cohorte-Python 1.0.1.dev 
 		- Using iPOPO 0.6.2
 		- Using Cohorte-Utilities 1.0.1
+		- Using iPOJO 1.12.1
 	* Show the main isolate "cohorte.internals.forker" on webadmin [isandlaTech/cohorte-runtime#14] 
 	* Set the default recomposition delay to 120 [#15]
 
