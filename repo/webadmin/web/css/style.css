@@ -521,7 +521,7 @@ table.no-border-bottom tr:last-child td {
   font-weight: 400;
 }
 .table-datatable tbody td {
-  vertical-align: middle !important;
+  vertical-align: top !important;
 }
 .table-datatable img {
   margin-right: 10px;
