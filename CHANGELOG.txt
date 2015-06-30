@@ -18,7 +18,7 @@ Note: if you upgrade from 1.0.0 you should read REAME.md file to update your alr
 	* Webadmin is now accessible from /webadmin path and uses "debug" REST API to show detailed information about isolates
 	* Start cohorte node with console if and only if --console argument is given [#31]
 	* Updating dependencies versions [#14]
-		- Cohorte-Python 1.0.1.dev 
+		- Cohorte-Runtime 1.0.1.dev 
 		- Using iPOPO 0.6.2
 		- Using Cohorte-Utilities 1.0.1
 		- Using iPOJO 1.12.1
