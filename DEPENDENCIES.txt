@@ -11,7 +11,7 @@ PYTHON DEPENDENCIES
 
 JAVA DEPENDENCIES
 
-- org.cohorte.utilities:org.cohorte.utilities:1.0.2.20150618
+- org.cohorte.utilities:org.cohorte.utilities:1.0.3
 - org.cohorte.jabsorb:org.cohorte.jabsorb:1.1.0
 - org.cohorte.remote:cohorte-remote-services:1.2.0
 - org.cohorte.herald:cohorte-herald:0.0.4-SNAPSHOT
