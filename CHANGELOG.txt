@@ -1,11 +1,9 @@
-Changes form the 1.0.0 to 1.1.0.pre1
-------------------------------------
-
-Note: if you upgrade from 1.0.0 you should read REAME.md file to update your already created Cohorte Nodes (run configurations). 
+Changes form the 1.0.0 to 1.1.0
+-------------------------------
 
 ** New Feature	
 	* New "proxy" HTTP Service interface for each Node Composer [#34]
-	* New "debug" REST API [#33] 
+	* New "debug" REST API [#33] (Java is not yet supported) 
 	* New "cohorte-update" shell command [#29]
 	* New "Activity log" tab on Webadmin that tracks Cohorte's isolates activity [#21]
 	* New "Composition" tab on Webadmin that shows the application's composition specification [#21]

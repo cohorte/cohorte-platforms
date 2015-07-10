@@ -49,7 +49,7 @@ DEBUG_REST_API_PATH = "debug/api/v1"
 DEBUG_REST_API_VERSION = "v1"
 
 # VERSION
-COHORTE_VERSION = "1.0.1.dev"
+COHORTE_VERSION = "1.0.1"
 
 
 @ComponentFactory("cohorte-debug-api-factory")

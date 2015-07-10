@@ -43,7 +43,7 @@ SUBJECT_GET_HTTP = "cohorte/shell/agent/get_http"
 ADMIN_REST_API_PATH = "admin/api/v2"
 
 # VERSION
-COHORTE_VERSION = "1.0.1.dev"
+COHORTE_VERSION = "1.0.1"
 
 """
 	TODO: should have a local cache of all information.

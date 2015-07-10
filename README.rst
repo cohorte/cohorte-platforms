@@ -1,31 +1,6 @@
-What are the changes to consider when you upgrade from 1.0.x to 1.1.x ?
-=======================================================================
+Cohorte Platform Distributions
+==============================
 
-When upgrading from Cohorte 1.0.x you should take in consideration these changes :
+This repository contains scripts allowing the generation of the different Cohorte distributions (runtime).
 
-
-Node Creation script (cohorte-create-node)
-------------------------------------------
-
-* ``--app-name`` => ``--composition-name`` (``-a`` => ``-c``) : Application's composition name
-* new ``--app-id`` (``-a``) : application's ID
-
-
-Startup script (cohorte-start-node)
------------------------------------
-
-From Cohorte 1.1, the following arguments where changed (and also their corresponding run.js entries):
-
-* ``--web-admin`` => ``--http-port``
-* ``--shell-admin`` => ``--shell-port``
-  
-By default the node starts without the console activated. To activate it on startup, you should add this argument:
-
-* ``--console``
-
-Run configuration files (e.g., run.js) also updates its content :
-
-* ``application-id`` => ``app-id``
-* ``web-admin`` => ``http-port``
-* ``shell-admin`` => ``shell-port``
 
