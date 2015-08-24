@@ -406,13 +406,13 @@
             });
         });     
     }
-    
+
     function get_log(isolate_uuid, log_id) {
         $('#isolate_modal_ajax-content_logs').html('<img src="img/devoops_getdata.gif"  alt="preloader"/>');   
         $.getJSON( "/debug/api/v1/isolates/"+isolate_uuid+"/logs/"+log_id, function( data ) { 
             var content = "<p><br/><a class='btn btn-default' id='link_get_logs' href='#' data-uuid='"+isolate_uuid+"'>&lt; Logs list</a> ";
             content += " <a href='/debug/api/v1/isolates/"+isolate_uuid+"/logs/"+log_id+"?raw' target='_blanc' class='btn btn-default'>Open in a seperate window</a></p>";
-            content += "<pre>" + data["log"] + "</pre>";                                           
+            content += "<pre>" + escapeHTML(data["log"]) + "</pre>";
             $('#isolate_modal_ajax-content_logs').html(content);
             $("#link_get_logs").click(function(event) {
                 console.log("link_get_logs clicked!");
