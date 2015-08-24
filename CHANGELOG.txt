@@ -1,7 +1,10 @@
 Changes form the 1.1.0 to 1.1.1-SNAPSHOT
 ----------------------------------------
 
-** 
+** Bug Fix
+    * Cohorte cannot find required artifacts and stops starting the isolate [#59]
+    * Corrected top composer status [#53]
+	* HeraldRPCExporter between two Java components sends infinitly error messages [#49]
 
 Changes form the 1.0.0 to 1.1.0
 -------------------------------
