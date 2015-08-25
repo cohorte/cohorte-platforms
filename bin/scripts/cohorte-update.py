@@ -48,6 +48,8 @@ ARCHIVE_FOLDER = ".archive"
 UPDATE_RELEASE_URL = "http://cohorte.github.io/latests/distributions_release.json"
 UPDATE_DEV_URL = "http://cohorte.github.io/latests/distributions_dev.json"
 
+COHORTE_HOME = ""
+
 def get_latest_dist_info(dist):
     print("[INFO] getting latest " + dist + " info (from internet)...")    
     url = UPDATE_DEV_URL
@@ -220,8 +222,8 @@ def user_choise():
     return "yes"
  
 def download_chunks(url):
-    baseFile = os.path.basename(url)
-    cohorte_dir = os.environ.get('COHORTE_HOME')
+    baseFile = os.path.basename(url)    
+    cohorte_dir = COHORTE_HOME
     #move the file to a more uniq path
     #os.umask(0002)
  
@@ -282,8 +284,8 @@ def exclude_archive_function(filename):
  
 def archive_actual_dist():
     print("")
-    print("[INFO] archiving actual distribution ...")
-    cohorte_dir = os.environ.get('COHORTE_HOME')
+    print("[INFO] archiving actual distribution ...")    
+    cohorte_dir = COHORTE_HOME
     archive_dir = os.path.join(cohorte_dir, ARCHIVE_FOLDER)
     if not os.path.exists(archive_dir):
         os.makedirs(archive_dir)
@@ -296,8 +298,8 @@ def archive_actual_dist():
  
 def remove_actual_dist():
     print("")
-    print("[INFO] deleting actual distribution ...")
-    cohorte_dir = os.environ.get('COHORTE_HOME')
+    print("[INFO] deleting actual distribution ...")    
+    cohorte_dir = COHORTE_HOME
     for root, dirs, files in os.walk(cohorte_dir, topdown=False):
         for name in files:
             if ARCHIVE_FOLDER not in root and DOWNLOAD_FOLDER not in root:
@@ -316,7 +318,7 @@ def install_new_dist(new_dist_file, update):
     print("")
     print("[INFO] installing new distribution " + update["distribution"] + "-" + update["version"]
           + "-" + update["timestamp"] + " (" + update["stage"] + ") ...")
-    cohorte_dir = os.environ.get('COHORTE_HOME')
+    cohorte_dir = COHORTE_HOME
     tmp_dir = os.path.join(cohorte_dir, DOWNLOAD_FOLDER)
     if not os.path.exists(tmp_dir):
         print("non existing .download directory!")
@@ -335,7 +337,7 @@ def install_new_dist(new_dist_file, update):
 def install_archived_dist():    
     print("")
     print("[INFO] installing archived distribution ...")
-    cohorte_dir = os.environ.get('COHORTE_HOME')
+    cohorte_dir = COHORTE_HOME
     tmp_dir = os.path.join(cohorte_dir, ARCHIVE_FOLDER)
     if not os.path.exists(tmp_dir):
         print("non existing .archive directory!")
@@ -354,7 +356,7 @@ def install_archived_dist():
 def roll_back():
     print("")
     print("[INFO] Rolling back to previous installed distribution...")
-    cohorte_dir = os.environ.get('COHORTE_HOME')
+    cohorte_dir = COHORTE_HOME
     tmp_dir = os.path.join(cohorte_dir, ARCHIVE_FOLDER, "archived_distribution.tar.gz")
     if not os.path.exists(tmp_dir):
         print("     | non existing archive copy!")
@@ -370,13 +372,13 @@ def main(args=None):
     """    
     
     # Test if the COHORTE_HOME environment variable is set. If not exit
-    COHORTE_HOME = os.environ.get('COHORTE_HOME')
-    if not COHORTE_HOME:
+    cohorte_home = os.environ.get('COHORTE_HOME')
+    if not cohorte_home:
         print("[ERROR] environment variable COHORTE_HOME not set")
         return 1
     
     # get real path (not symbolic files) # MOD_BD_20150825 #37
-    COHORTE_HOME = os.path.realpath(COHORTE_HOME)
+    global COHORTE_HOME = os.path.realpath(cohorte_home)
     
     if not args:
         args = sys.argv[1:]
