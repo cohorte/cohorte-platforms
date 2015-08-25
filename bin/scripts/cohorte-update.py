@@ -379,9 +379,9 @@ def main(args=None):
         args = sys.argv[1:]
  
     # Define arguments
-    parser = argparse.ArgumentParser(description="Create COHORTE node (base)")
+    parser = argparse.ArgumentParser(description="Cohorte Update Utility")
  
-    group = parser.add_argument_group("Create node options")
+    group = parser.add_argument_group("Rollback options")
  
     group.add_argument("-r", "--roll-back", action="store_true",
                        dest="roll_back", help="Rollback the last update/upgrade")
