@@ -118,10 +118,24 @@ def analyse_versions(installed, latest_dev, latest_release):
     if inst_v < lrel_v:        
         return UPGRADE
     elif inst_v == lrel_v:
-        if inst_s < lrel_s:
-            return UPGRADE
-        else:
-            return UPTODATE
+        # MOD_BD_20150825 #48
+        if inst_v < ldev_v:
+            if inst_s == 10:
+                return UPDATE_EXPERIMENTAL
+            else:
+                return UPDATE
+        elif inst_v == ldev_v:
+            if inst_t >= ldev_t:
+                return UPTODATE
+            elif inst_t < ldev_t:
+                if inst_s == 10:
+                    return UPDATE_EXPERIMENTAL
+                else:
+                    return UPDATE        
+        #if inst_s < lrel_s:  
+        #    return UPGRADE
+        #else:
+        #    return UPTODATE
     elif inst_v > lrel_v:
         if inst_v < ldev_v:
             if inst_s == 10:
