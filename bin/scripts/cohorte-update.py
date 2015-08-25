@@ -375,6 +375,9 @@ def main(args=None):
         print("[ERROR] environment variable COHORTE_HOME not set")
         return 1
     
+    # get real path (not symbolic files) # MOD_BD_20150825 #37
+    COHORTE_HOME = os.path.realpath(COHORTE_HOME)
+    
     if not args:
         args = sys.argv[1:]
  
