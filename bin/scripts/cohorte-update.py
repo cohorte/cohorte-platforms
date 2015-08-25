@@ -324,8 +324,8 @@ def install_new_dist(new_dist_file, update):
         print("non existing .download directory!")
     else:
         new_dist = os.path.join(tmp_dir, new_dist_file)
-        with tarfile.open(new_dist, "r:gz") as tar:
-            tar.extractall('.')
+        with tarfile.open(new_dist, "r:gz") as t:
+            t.extractall(cohorte_dir)
         for x in os.listdir(cohorte_dir):
             if x.startswith('cohorte'):
                 for f in os.listdir(os.path.join(cohorte_dir, x)):
@@ -343,8 +343,8 @@ def install_archived_dist():
         print("non existing .archive directory!")
     else:
         new_dist = os.path.join(tmp_dir, "archived_distribution.tar.gz")
-        with tarfile.open(new_dist, "r:gz") as tar:
-            tar.extractall('.')
+        with tarfile.open(new_dist, "r:gz") as t:
+            t.extractall(cohorte_dir)
         for x in os.listdir(cohorte_dir):
             if x.startswith('cohorte'):
                 for f in os.listdir(os.path.join(cohorte_dir, x)):
