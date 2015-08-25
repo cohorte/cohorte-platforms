@@ -378,7 +378,8 @@ def main(args=None):
         return 1
     
     # get real path (not symbolic files) # MOD_BD_20150825 #37
-    global COHORTE_HOME = os.path.realpath(cohorte_home)
+    global COHORTE_HOME 
+    COHORTE_HOME = os.path.realpath(cohorte_home)
     
     if not args:
         args = sys.argv[1:]
