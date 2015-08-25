@@ -31,7 +31,7 @@ import json
 import tarfile
 import shutil
 import argparse
-
+import shutil
 # cohorte scripts
 import common 
 
@@ -209,7 +209,7 @@ def download_chunks(url):
     baseFile = os.path.basename(url)
     cohorte_dir = os.environ.get('COHORTE_HOME')
     #move the file to a more uniq path
-    os.umask(0002)
+    #os.umask(0002)
  
     temp_path = os.path.join(cohorte_dir, DOWNLOAD_FOLDER)
     if os.path.exists(temp_path):
@@ -292,8 +292,9 @@ def remove_actual_dist():
                 #print(root)
                 pass
         for name in dirs:
-            if name not in (ARCHIVE_FOLDER, DOWNLOAD_FOLDER):
-                os.rmdir(os.path.join(root, name))
+            if name not in (ARCHIVE_FOLDER, DOWNLOAD_FOLDER):                
+                #os.rmdir(os.path.join(root, name)) # MOD_BD_20150825 #52
+                shutil.rmtree(os.path.join(root, name))
     print("     | Done.")
  
  
