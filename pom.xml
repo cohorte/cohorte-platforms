@@ -31,7 +31,7 @@
 		<dependency>
 			<groupId>org.cohorte.utilities</groupId>
 			<artifactId>org.cohorte.utilities</artifactId>
-			<version>1.0.3</version>
+			<version>1.0.4</version>
 			<scope>provided</scope>
 		</dependency>
 		<!-- cohorte-jabsorb -->
@@ -100,7 +100,34 @@
 						</fileset>
 					</filesets>
 				</configuration>
-			</plugin>						
+			</plugin>	
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.10</version>
+				<executions>
+				<execution>
+					<id>src-dependencies</id>
+					<phase>package</phase>
+					<goals>
+					<!-- use copy-dependencies instead if you don't want to explode the sources -->
+					<goal>unpack-dependencies</goal>
+					</goals>
+					<configuration>
+						<classifier>sources</classifier>
+						<failOnMissingClassifierArtifact>false</failOnMissingClassifierArtifact>
+						<outputDirectory>${project.build.directory}/sources</outputDirectory>
+						<includeGroupIds>
+							org.cohorte.utilities,
+							org.cohorte.jabsorb,
+							org.cohorte.remote,
+							org.cohorte.herald,
+							org.cohorte.runtime
+						</includeGroupIds>
+					</configuration>
+				</execution>
+				</executions>
+			</plugin>					
 		</plugins>
 		<extensions>
 			<!-- Enabling the use of FTP -->
