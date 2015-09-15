@@ -26,6 +26,11 @@
 
 	<url>https://github.com/isandlaTech/cohorte-platforms</url>
 
+	<properties>
+		<timestamp>${maven.build.timestamp}</timestamp>
+        <maven.build.timestamp.format>yyyyMMdd-HHmmss</maven.build.timestamp.format>
+	</properties>
+
 	<dependencies>
 		<!-- cohorte-utilities -->
 		<dependency>

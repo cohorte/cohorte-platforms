@@ -27,7 +27,15 @@
             <exclude>**/*.DS_Store</exclude>
             <exclude>**/.git</exclude>
             <exclude>**/.gitignore</exclude>
+            <exclude>CHANGELOG.txt</exclude>
          </excludes>
       </fileSet>
    </fileSets>
+   <files>
+    <file>
+      <source>CHANGELOG.txt</source>
+      <outputDirectory>/</outputDirectory>
+      <filtered>true</filtered>
+    </file>
+  </files>
 </assembly>

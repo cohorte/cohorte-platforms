@@ -1,5 +1,5 @@
-Changes form the 1.1.0 to 1.1.1-SNAPSHOT
-----------------------------------------
+Changes form the 1.1.0 to 1.1.1 build: ${timestamp}
+------------------------------------------------------
 
 ** Improvements
 	* Several README.ms documentation file were added to cohorte-runtime packages
