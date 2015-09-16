@@ -73,7 +73,7 @@ def get_external_config(parsed_conf_file, conf_name):
             # return parsed_conf_file["node"].get(conf_name)
 
         if conf_name in ("top-composer", "auto-start", "composition-file", "http-port", "shell-port", "use-cache",
-                        "recomposition-delay", "interpreter", "console"):
+                        "recomposition-delay", "interpreter", "console", "data-dir"):
             if "node" in parsed_conf_file:
                 conf_value = parsed_conf_file["node"].get(conf_name)
                 if conf_value is None:                                      #
@@ -163,6 +163,9 @@ def main(args=None):
     group.add_argument("-n", "--node", action="store",
                        dest="node_name", help="Node name")
 
+    group.add_argument("--data-dir", action="store",
+                       dest="node_data_dir", help="Node Data Dir")
+
     group.add_argument("--top-composer", action="store",
                        dest="is_top_composer",
                        help="Flag indicating that this node is a Top Composer")
@@ -222,6 +225,7 @@ def main(args=None):
     args, boot_args = parser.parse_known_args(args)
     COHORTE_BASE = args.base_absolute_path
     NODE_NAME = "node"
+    NODE_DATA_DIR = ""
     TRANSPORT_MODES = []
     HTTP_PORT = 0
     SHELL_PORT = 0
@@ -266,7 +270,7 @@ def main(args=None):
         return 1
     else:
         os.environ["COHORTE_BASE"] = COHORTE_BASE
-
+    
     # export python path
     added_paths = [value
                    for value in (os.environ.get('PYTHONPATH'),
@@ -285,7 +289,7 @@ def main(args=None):
     external_config = None
     
     external_config = parse_config_file(config_file)        
- 
+     
     # useing cache
     USE_CACHE = set_configuration_value(
             args.use_cache,
@@ -312,10 +316,16 @@ def main(args=None):
     # export Cohorte Root
     os.environ['COHORTE_ROOT'] = os.environ.get('COHORTE_HOME')
 
+    # Data dir
+    NODE_DATA_DIR = set_configuration_value(
+            args.node_data_dir, 
+            get_external_config( external_config, "data-dir"), os.path.join(COHORTE_BASE, "data"))
+    
     # configure application id
     APPLICATION_ID = set_configuration_value(
         args.app_id,
         get_external_config(external_config, "app-id"), None)
+    
     if not APPLICATION_ID:
         if not args.update_config_file:
             print("[ERROR] no application ID is given!")
@@ -323,9 +333,10 @@ def main(args=None):
                   "by a COHORTE Top Composer!")
             print("        use '--app-id' option to provide the application's ID "
                   "or update your startup configuration file.")
-            return 1
-    else:
-        common.generate_boot_common(COHORTE_BASE, APPLICATION_ID)
+            return 1    
+    
+    # generate boot config file
+    common.generate_boot_common(COHORTE_BASE, APPLICATION_ID, NODE_DATA_DIR)
 
     # Node log file
     LOG_DIR = os.path.join(COHORTE_BASE, 'var')
@@ -464,6 +475,7 @@ def main(args=None):
         configuration["node"]["recomposition-delay"] = RECOMPOSITION_DELAY
         configuration["node"]["interpreter"] = PYTHON_INTERPRETER
         configuration["node"]["console"] = INSTALL_SHELL_CONSOLE
+        configuration["node"]["data-dir"] = NODE_DATA_DIR
         configuration["transport"] = TRANSPORT_MODES
         if "xmpp" in TRANSPORT_MODES:
             configuration["transport-xmpp"] = {}
@@ -510,12 +522,14 @@ def main(args=None):
 
     msg1 += """
 
-       COHORTE BASE : {base}
        COHORTE HOME : {home}
+       COHORTE BASE : {base}       
+       COHORTE DATA : {data}
  PYTHON INTERPRETER : {python}
            LOG FILE : {logfile}
 
 """.format(home=COHORTE_HOME, base=os.environ['COHORTE_BASE'],
+           data=NODE_DATA_DIR,
            logfile=os.environ.get('COHORTE_LOGFILE'),
            python=PYTHON_INTERPRETER)
 

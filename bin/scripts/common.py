@@ -99,7 +99,7 @@ def generate_composition_conf(node_dir, app_name):
 """.format(app_name=app_name, app=app)
         composition.write(result)
 
-def generate_boot_common(node_dir, app_name):
+def generate_boot_common(node_dir, app_name, data_dir):
     """
     Generates boot-common.js file which defines the application's id on which the node will be connected.
     """
@@ -107,15 +107,25 @@ def generate_boot_common(node_dir, app_name):
     if not os.path.exists(conf_dir):
         os.makedirs(conf_dir)
     file_name = os.path.join(conf_dir, "boot-common.js")
+    if app_name is not None:
+        content = """
+    "herald.application.id" : "{app_name}",
+    "cohorte.node.data.dir" : "{data_dir}"    
+""".format(app_name=app_name, data_dir=data_dir)
+    else:
+        content = """    
+    "cohorte.node.data.dir" : "{data_dir}"    
+""".format(data_dir=data_dir)
+
     with open(file_name, "w") as boot_common:
         result = """{header}
 {{
     "import-files" : [ "boot-common.js" ],
     "properties" : {{
-        "herald.application.id" : "{app_name}"
+        {content}        
     }}
 }}
-""".format(header=WARNING_COMMENT, app_name=app_name)
+""".format(header=WARNING_COMMENT, content=content)
         boot_common.write(result)
 
 
