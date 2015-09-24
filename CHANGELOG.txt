@@ -7,8 +7,10 @@ Changes form the 1.1.0 to 1.1.1 build: ${timestamp}
 	
 ** Improvements
 	* Several README.ms documentation file were added to cohorte-runtime packages
+	* Added the "shells" and "pids" shell commands in Java isolates
 
 ** Bug Fix
+	* Concurrent modification in iPOJO Agent, causing the IsolateComposer to stop [isandlaTech/cohorte-runtime#31]
     * Relative imports in Python [isandlaTech/cohorte-runtime#25]
     * Correct several bugs on cohorte-update utility [#37][#48][#52][#62]
     * Cohorte cannot find required artifacts and stops starting the isolate [#59]
@@ -19,9 +21,9 @@ Changes form the 1.1.0 to 1.1.1 build: ${timestamp}
 Changes form the 1.0.0 to 1.1.0
 -------------------------------
 
-** New Feature	
+** New Feature
 	* New "proxy" HTTP Service interface for each Node Composer [#34]
-	* New "debug" REST API [#33] (Java is not yet supported) 
+	* New "debug" REST API [#33] (Java is not yet supported)
 	* New "cohorte-update" shell command [#29]
 	* New "Activity log" tab on Webadmin that tracks Cohorte's isolates activity [#21]
 	* New "Composition" tab on Webadmin that shows the application's composition specification [#21]
@@ -34,18 +36,14 @@ Changes form the 1.0.0 to 1.1.0
 	* Webadmin is now accessible from /webadmin path and uses "debug" REST API to show detailed information about isolates
 	* Start cohorte node with console if and only if --console argument is given [#31]
 	* Updating dependencies versions [#14]
-		- Cohorte-Runtime 1.0.1 
+		- Cohorte-Runtime 1.0.1
 		- Using iPOPO 0.6.2
 		- Using Cohorte-Utilities 1.0.3
 		- Using iPOJO 1.12.1
-	* Show the main isolate "cohorte.internals.forker" on webadmin [isandlaTech/cohorte-runtime#14] 
+	* Show the main isolate "cohorte.internals.forker" on webadmin [isandlaTech/cohorte-runtime#14]
 	* Set the default recomposition delay to 120 [#15]
 
 ** Bug Fix
-	* Fixing some stopping errors [#35] (3) (4) 
+	* Fixing some stopping errors [#35] (3) (4)
 	* Fixing synchronisation problem: XMPP transport blocked on disconnected [isandlaTech/cohorte-herald/issues#14]
-	* Isolate is duplicated when another node is stopped [#16] 
-
-	
-	
-
+	* Isolate is duplicated when another node is stopped [#16]
