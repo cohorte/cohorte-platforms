@@ -4,7 +4,7 @@ Changes form the 1.1.0 to 1.1.1 build: ${timestamp}
 ** New Feature
 	* Allow the user to choose a directory where components can write persistent data [#67]
 	* Choosing to which group the service is exported [#68]
-	
+
 ** Improvements
 	* Several README.ms documentation file were added to cohorte-runtime packages
 	* Added the "shells" and "pids" shell commands in Java isolates
@@ -16,6 +16,7 @@ Changes form the 1.1.0 to 1.1.1 build: ${timestamp}
     * Cohorte cannot find required artifacts and stops starting the isolate [#59]
     * Corrected top composer status [#53]
 	* HeraldRPCExporter between two Java components sends infinitly error messages [#49]
+	* Corrected the behaviour of PYTHONPATH on Windows [#70]
 
 
 Changes form the 1.0.0 to 1.1.0
