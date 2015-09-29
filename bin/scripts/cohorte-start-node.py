@@ -25,14 +25,9 @@ Script for starting COHORTE node.
 
 from __future__ import print_function
 
-# Documentation strings format
-__docformat__ = "restructuredtext en"
-
-# Script module version
-__version__ = "1.0.0"
-
 # Standard Library
 import argparse
+import logging
 import os
 import sys
 import shutil
@@ -42,6 +37,12 @@ import subprocess
 # cohorte scripts
 import common
 
+# Documentation strings format
+__docformat__ = "restructuredtext en"
+
+# Script module version
+__version__ = "1.0.0"
+
 
 def parse_config_file(config_file):
     """
@@ -50,7 +51,7 @@ def parse_config_file(config_file):
     data = None
     if os.path.isfile(config_file):
         with open(config_file) as json_data:
-            data = json.load(json_data)    
+            data = json.load(json_data)
     return data
 
 
@@ -59,33 +60,34 @@ def get_external_config(parsed_conf_file, conf_name):
     Returns the value of the wanted startup configuration.
     """
     if parsed_conf_file is not None and conf_name is not None:
-        
         if conf_name == "app-id":
             if "app-id" in parsed_conf_file:
                 return parsed_conf_file["app-id"]
             elif "application-id" in parsed_conf_file:     # compatibility with cohorte 1.0.0
-                return parsed_conf_file["application-id"]  #        
+                return parsed_conf_file["application-id"]  #
 
         if conf_name == "node-name":
-            if "node" in parsed_conf_file:                       
+            if "node" in parsed_conf_file:
                 # Different key name
                 return parsed_conf_file["node"].get("name")
             # return parsed_conf_file["node"].get(conf_name)
 
-        if conf_name in ("top-composer", "auto-start", "composition-file", "http-port", "shell-port", "use-cache",
-                        "recomposition-delay", "interpreter", "console", "data-dir"):
+        if conf_name in ("top-composer", "auto-start", "composition-file",
+                         "http-port", "shell-port", "use-cache",
+                         "recomposition-delay", "interpreter", "console",
+                         "data-dir"):
             if "node" in parsed_conf_file:
                 conf_value = parsed_conf_file["node"].get(conf_name)
                 if conf_value is None:                                      #
-                    if conf_name in ("http-port"):                          # compatibility with cohorte 1.0.0
+                    if conf_name in "http-port":                            # compatibility with cohorte 1.0.0
                         return parsed_conf_file["node"].get("web-admin")    #
-                    if conf_name in ("shell-port"):                         #
+                    if conf_name in "shell-port":                           #
                         return parsed_conf_file["node"].get("shell-admin")  #
                 else:
                     return conf_value
 
         if conf_name == "transport":
-            if "transport" in parsed_conf_file:            
+            if "transport" in parsed_conf_file:
                 return parsed_conf_file["transport"]
 
         if conf_name.startswith("xmpp-"):
@@ -138,7 +140,8 @@ def main(args=None):
     group.add_argument("--use-config", action="store", default="conf/run.js",
                        dest="config_file",
                        help="Configuration file to use for starting cohorte "
-                       "node. By default the conf/run.js file is used if available")
+                            "node. By default the conf/run.js file is used if "
+                            "available")
 
     group.add_argument("--update-config", action="store_true", default=False,
                        dest="update_config_file",
@@ -149,9 +152,10 @@ def main(args=None):
                        dest="show_config_file",
                        help="Show startup configuration file content")
 
-    group.add_argument("-i", "--interpreter", action="store", 
+    group.add_argument("-i", "--interpreter", action="store",
                        dest="interpreter",
-                       help="Path to Python interpreter to use (python2 or python3)")
+                       help="Path to Python interpreter to use "
+                            "(python2 or python3)")
 
     group.add_argument("-b", "--base", action="store", default=None,
                        dest="base_absolute_path",
@@ -173,8 +177,8 @@ def main(args=None):
     group.add_argument("--composition-file", action="store",
                        dest="composition_file",
                        help="Composition file (by default 'composition.js'). "
-                       "All composition files should be placed on 'conf' "
-                       "directory")
+                            "All composition files should be placed on 'conf' "
+                            "directory")
 
     group.add_argument("--auto-start", action="store",
                        dest="auto_start",
@@ -187,20 +191,18 @@ def main(args=None):
     group.add_argument("--shell-port", action="store", type=int,
                        dest="shell_port", help="Node Remote Shell port")
 
-    group.add_argument("--use-cache", action="store",
-                       dest="use_cache", help="Use cache to accelerate startup time (experimental)")
+    group.add_argument("--use-cache", action="store", dest="use_cache",
+                       help="Use cache to accelerate startup time "
+                            "(experimental)")
 
     group.add_argument("--recomposition-delay", action="store", type=int,
-                       dest="recomposition_delay", help="Delay in seconds between two recomposition tentatives")
+                       dest="recomposition_delay",
+                       help="Delay in seconds between two recomposition "
+                            "tentatives")
 
-    group = parser.add_argument_group("Transport",
-                                      "Information about the transport "
-                                      "protocols to use")
-    
-    parser.add_argument("--console", action="store_true",
-                        dest="install_shell_console", default=False,
-                        help="If True, the shell console will be started")
-                        
+    group = parser.add_argument_group(
+        "Transport", "Information about the transport protocols to use")
+
     group.add_argument("--transport", action="store",
                        dest="transport_modes",
                        help="Transport mode (http and/or xmpp - "
@@ -212,15 +214,19 @@ def main(args=None):
     group.add_argument("--xmpp-port", action="store", type=int,
                        dest="xmpp_port", help="XMPP server port")
 
-    group.add_argument("--xmpp-user-jid", action="store",
-                       dest="xmpp_jid", help="XMPP User jid (not yet implemented - annonymous mode only)")
+    group.add_argument("--xmpp-user-jid", action="store", dest="xmpp_jid",
+                       help="XMPP User JID")
 
     group.add_argument("--xmpp-user-password", action="store",
                        dest="xmpp_password", help="XMPP User password")
 
-    group.add_argument("--http-ipv", action="store", type=int,
-                       dest="http_ipv", help="HTTP IP version to use (4 or 6)")
-                
+    group.add_argument("--http-ipv", action="store", type=int, dest="http_ipv",
+                       help="HTTP IP version to use (4 or 6)")
+
+    parser.add_argument("--console", action="store_true",
+                    dest="install_shell_console", default=False,
+                    help="If True, the shell console will be started")
+
     # Parse arguments
     args, boot_args = parser.parse_known_args(args)
     COHORTE_BASE = args.base_absolute_path
@@ -247,18 +253,18 @@ def main(args=None):
     os.chdir(COHORTE_BASE)
 
     # startup config file
-    config_file = args.config_file    
-    if not os.path.isfile(config_file):                             # compatibility with cohorte 1.0.0
-        config_file = "run.js"                                      #
+    config_file = args.config_file
+    if not os.path.isfile(config_file):      # compatibility with cohorte 1.0.0
+        config_file = "run.js"               #
 
     if args.show_config_file:
-        # show the content of the startup configuration file and exit.        
+        # show the content of the startup configuration file and exit.
         content = parse_config_file(config_file)
         if content:
             content = json.dumps(content, sort_keys=False,
                                  indent=4, separators=(',', ': '))
             print(content)
-        else:            
+        else:
             print("[INFO] there is no startup configuration file! "
                   "Use '--use-config' option to refer to your config file")
         return 0
@@ -270,7 +276,7 @@ def main(args=None):
         return 1
     else:
         os.environ["COHORTE_BASE"] = COHORTE_BASE
-    
+
     # export python path
     added_paths = [value
                    for value in (os.environ.get('PYTHONPATH'),
@@ -286,10 +292,8 @@ def main(args=None):
     # Change our path
     sys.path = added_paths + sys.path
 
-    external_config = None
-    
-    external_config = parse_config_file(config_file)        
-     
+    external_config = parse_config_file(config_file)
+
     # useing cache
     USE_CACHE = set_configuration_value(
             args.use_cache,
@@ -318,23 +322,23 @@ def main(args=None):
 
     # Data dir
     NODE_DATA_DIR = set_configuration_value(
-            args.node_data_dir, 
-            get_external_config( external_config, "data-dir"), os.path.join(COHORTE_BASE, "data"))
-    
+        args.node_data_dir,
+        get_external_config(external_config, "data-dir"),
+        os.path.join(COHORTE_BASE, "data"))
+
     # configure application id
     APPLICATION_ID = set_configuration_value(
         args.app_id,
         get_external_config(external_config, "app-id"), None)
-    
-    if not APPLICATION_ID:
-        if not args.update_config_file:
-            print("[ERROR] no application ID is given!")
-            print("        You should provide a correct application ID managed "
-                  "by a COHORTE Top Composer!")
-            print("        use '--app-id' option to provide the application's ID "
-                  "or update your startup configuration file.")
-            return 1    
-    
+
+    if not APPLICATION_ID and not args.update_config_file:
+        print("[ERROR] no application ID is given!")
+        print("        You should provide a correct application ID managed "
+              "by a COHORTE Top Composer!")
+        print("        use '--app-id' option to provide the application's ID "
+              "or update your startup configuration file.")
+        return 1
+
     # generate boot config file
     common.generate_boot_common(COHORTE_BASE, APPLICATION_ID, NODE_DATA_DIR)
 
@@ -385,7 +389,7 @@ def main(args=None):
                                             AUTO_START)
     else:
         common.delete_top_composer_config(COHORTE_BASE)
-    
+
     # show console (or not)
     if args.install_shell_console:
         INSTALL_SHELL_CONSOLE = True
@@ -394,18 +398,16 @@ def main(args=None):
             None,
             get_external_config(external_config, "console"), False)
     if INSTALL_SHELL_CONSOLE == True:
-        boot_args.append("--console")             
+        boot_args.append("--console")
     # transport mode
-    process = None
-    xmpp_log_file = None
 
     tmodes = None
     if args.transport_modes:
         tmodes = str(args.transport_modes).split(',')
-    if not tmodes:        
+    if not tmodes:
         TRANSPORT_MODES = set_configuration_value(
-            None, get_external_config(external_config, "transport"), ["http"])       
-    else:        
+            None, get_external_config(external_config, "transport"), ["http"])
+    else:
         TRANSPORT_MODES = set_configuration_value(
             tmodes, get_external_config(external_config, "transport"), ["http"])
 
@@ -417,6 +419,7 @@ def main(args=None):
             common.generate_common_http(COHORTE_BASE)
         else:
             common.delete_common_http(COHORTE_BASE)
+
     if "xmpp" in TRANSPORT_MODES:
         XMPP_SERVER = set_configuration_value(
             args.xmpp_server,
@@ -424,27 +427,27 @@ def main(args=None):
         XMPP_PORT = set_configuration_value(
             args.xmpp_port,
             get_external_config(external_config, "xmpp-port"), 5222)
-        
+
         XMPP_JID = set_configuration_value(
             args.xmpp_jid,
             get_external_config(external_config, "xmpp-user-jid"), "")
         XMPP_PASS = set_configuration_value(
             args.xmpp_password,
             get_external_config(external_config, "xmpp-user-password"), "")
-        
-        if not args.update_config_file: 
+
+        if not args.update_config_file:
             print("[INFO] XMPP server configuration :")
             print("""
     - xmpp server: {server}
     - xmpp port: {port}
     - xmpp user jid: {jid}
-    - xmpp user password: *    
-            """.format(server=XMPP_SERVER, port=XMPP_PORT, jid=XMPP_JID))        
+    - xmpp user password: *
+            """.format(server=XMPP_SERVER, port=XMPP_PORT, jid=XMPP_JID))
 
         # 2) create conf/herald configs for node
-        room_jid = "cohorte@conference." + XMPP_SERVER
-        common.generate_herald_conf(COHORTE_BASE, TRANSPORT_MODES, XMPP_SERVER, XMPP_PORT,
-                                         XMPP_JID, XMPP_PASS)
+        common.generate_herald_conf(COHORTE_BASE, TRANSPORT_MODES,
+                                    XMPP_SERVER, XMPP_PORT,
+                                    XMPP_JID, XMPP_PASS)
         # all-xmpp.js
         #
     else:
@@ -456,36 +459,40 @@ def main(args=None):
 
     # update configuration if not exists
     CONFIG_FILE = config_file
-    if not os.path.exists(CONFIG_FILE) or args.update_config_file:    
+    if not os.path.exists(CONFIG_FILE) or args.update_config_file:
         configuration = {}
         actual_dist = common.get_installed_dist_info(COHORTE_HOME)
         COHORTE_VERSION = actual_dist["version"]
         configuration["cohorte-version"] = COHORTE_VERSION
         if APPLICATION_ID:
             configuration["app-id"] = APPLICATION_ID
-        configuration["node"] = {}
-        configuration["node"]["name"] = NODE_NAME
-        configuration["node"]["top-composer"] = IS_TOP_COMPOSER
+
+        configuration["node"] = {
+            "name": NODE_NAME,
+            "top-composer": IS_TOP_COMPOSER,
+            "http-port": HTTP_PORT,
+            "shell-port": SHELL_PORT,
+            "use-cache": USE_CACHE,
+            "recomposition-delay": RECOMPOSITION_DELAY,
+            "interpreter": PYTHON_INTERPRETER,
+            "console": INSTALL_SHELL_CONSOLE,
+            "data-dir": NODE_DATA_DIR}
+
         if IS_TOP_COMPOSER:
             configuration["node"]["auto-start"] = AUTO_START
             configuration["node"]["composition-file"] = COMPOSITION_FILE
-        configuration["node"]["http-port"] = HTTP_PORT
-        configuration["node"]["shell-port"] = SHELL_PORT
-        configuration["node"]["use-cache"] = USE_CACHE
-        configuration["node"]["recomposition-delay"] = RECOMPOSITION_DELAY
-        configuration["node"]["interpreter"] = PYTHON_INTERPRETER
-        configuration["node"]["console"] = INSTALL_SHELL_CONSOLE
-        configuration["node"]["data-dir"] = NODE_DATA_DIR
+
         configuration["transport"] = TRANSPORT_MODES
         if "xmpp" in TRANSPORT_MODES:
-            configuration["transport-xmpp"] = {}
-            configuration["transport-xmpp"]["xmpp-server"] = XMPP_SERVER
-            configuration["transport-xmpp"]["xmpp-port"] = XMPP_PORT
-            configuration["transport-xmpp"]["xmpp-user-jid"] = XMPP_JID
-            configuration["transport-xmpp"]["xmpp-user-password"] = XMPP_PASS
+            configuration["transport-xmpp"] = {
+                "xmpp-server": XMPP_SERVER,
+                "xmpp-port": XMPP_PORT,
+                "xmpp-user-jid": XMPP_JID,
+                "xmpp-user-password": XMPP_PASS
+            }
         if "http" in TRANSPORT_MODES:
-            configuration["transport-http"] = {}
-            configuration["transport-http"]["http-ipv"] = HTTP_IPV
+            configuration["transport-http"] = {"http-ipv": HTTP_IPV}
+
         common.update_startup_file(CONFIG_FILE, configuration)
         print("[INFO] config file '" + CONFIG_FILE + "' updated! ")
         if args.update_config_file:
@@ -493,13 +500,13 @@ def main(args=None):
 
     # show some useful information
     msg1 = """
-   _____ ____  _    _  ____  _____ _______ ______ 
+   _____ ____  _    _  ____  _____ _______ ______
   / ____/ __ \| |  | |/ __ \|  __ \__   __|  ____|
- | |   | |  | | |__| | |  | | |__) | | |  | |__   
- | |   | |  | |  __  | |  | |  _  /  | |  |  __|  
- | |___| |__| | |  | | |__| | | \ \  | |  | |____ 
+ | |   | |  | | |__| | |  | | |__) | | |  | |__
+ | |   | |  | |  __  | |  | |  _  /  | |  |  __|
+ | |___| |__| | |  | | |__| | | \ \  | |  | |____
   \_____\____/|_|  |_|\____/|_|  \_\ |_|  |______|
-    
+
 
      APPLICATION ID : {appid}
           NODE NAME : {node_name}
@@ -512,7 +519,6 @@ def main(args=None):
 """.format(appid=APPLICATION_ID, node_name=os.environ.get('COHORTE_NODE_NAME'),
            transports=",".join(TRANSPORT_MODES), is_top=IS_TOP_COMPOSER,
            http_port=HTTP_PORT, shell_port=SHELL_PORT)
-    
 
     if IS_TOP_COMPOSER:
         msg1 += """
@@ -523,7 +529,7 @@ def main(args=None):
     msg1 += """
 
        COHORTE HOME : {home}
-       COHORTE BASE : {base}       
+       COHORTE BASE : {base}
        COHORTE DATA : {data}
  PYTHON INTERPRETER : {python}
            LOG FILE : {logfile}
@@ -540,7 +546,7 @@ def main(args=None):
 
     # starting cohorte isolate
     result_code = 0
-    #python_interpreter = prepare_interpreter()
+    # python_interpreter = prepare_interpreter()
 
     # Interpreter arguments
     interpreter_args = ['-m', 'cohorte.boot.boot']
@@ -554,7 +560,6 @@ def main(args=None):
             stdin=None, stdout=None, stderr=None, shell=False)
     except Exception as ex:
         print("Error starting node:", ex)
-        
         logging.exception("Error starting node: %s -- interpreter = %s",
                           ex, PYTHON_INTERPRETER)
         result_code = 1
@@ -568,15 +573,15 @@ def main(args=None):
             print("Error waiting for the node to stop:", ex)
             result_code = 1
 
-    # stopping XMPP bot process
-    if p:
-        try:
-            p.terminate()            
-            xmpp_log_file.close()
-        except:
-            pass
-                            
+        # stopping XMPP bot process
+        if p:
+            try:
+                p.terminate()
+            except OSError:
+                pass
+
     return result_code
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.WARNING)
     sys.exit(main())
