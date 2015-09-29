@@ -8,6 +8,7 @@ Changes form the 1.1.0 to 1.1.1 build: ${timestamp}
 ** Improvements
 	* Several README.ms documentation file were added to cohorte-runtime packages
 	* Added the "shells" and "pids" shell commands in Java isolates
+	* Better conformance to PEP-8 for the node management scripts
 
 ** Bug Fix
 	* Concurrent modification in iPOJO Agent, causing the IsolateComposer to stop [isandlaTech/cohorte-runtime#31]
@@ -17,6 +18,7 @@ Changes form the 1.1.0 to 1.1.1 build: ${timestamp}
     * Corrected top composer status [#53]
 	* HeraldRPCExporter between two Java components sends infinitly error messages [#49]
 	* Corrected the behaviour of PYTHONPATH on Windows [#70]
+	* Corrected the value of "cohorte.node.data.dir" in "boot-common.js" on Windows [#72]
 
 
 Changes form the 1.0.0 to 1.1.0
