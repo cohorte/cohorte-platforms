@@ -116,16 +116,17 @@ def generate_boot_common(node_dir, app_name, data_dir):
     file_name = os.path.join(conf_dir, "boot-common.js")
 
     # Protect data directory format
+    # (no need for '"' afterwards)
     data_dir = json.dumps(data_dir)
 
     if app_name is not None:
         content = """
     "herald.application.id" : "{app_name}",
-    "cohorte.node.data.dir" : "{data_dir}"
+    "cohorte.node.data.dir" : {data_dir}
 """.format(app_name=app_name, data_dir=data_dir)
     else:
         content = """
-    "cohorte.node.data.dir" : "{data_dir}"
+    "cohorte.node.data.dir" : {data_dir}
 """.format(data_dir=data_dir)
 
     result = """{header}
