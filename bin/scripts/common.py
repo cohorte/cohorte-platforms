@@ -64,7 +64,7 @@ bash $COHORTE_HOME/bin/cohorte-start-node --base $(pwd) $*
 
     # generate windows run executable
     file_name2 = os.path.join(node_dir, "run.bat")
-    with open(file_name2, "w") as run_bat:        
+    with open(file_name2, "w") as run_bat:
         result = """@echo off
 
 if "%COHORTE_HOME%" == "" (
@@ -107,14 +107,18 @@ def generate_boot_common(node_dir, app_name, data_dir):
     if not os.path.exists(conf_dir):
         os.makedirs(conf_dir)
     file_name = os.path.join(conf_dir, "boot-common.js")
+
+    # Protect data directory format
+    data_dir = json.dumps(data_dir)
+
     if app_name is not None:
         content = """
     "herald.application.id" : "{app_name}",
-    "cohorte.node.data.dir" : "{data_dir}"    
+    "cohorte.node.data.dir" : "{data_dir}"
 """.format(app_name=app_name, data_dir=data_dir)
     else:
-        content = """    
-    "cohorte.node.data.dir" : "{data_dir}"    
+        content = """
+    "cohorte.node.data.dir" : "{data_dir}"
 """.format(data_dir=data_dir)
 
     with open(file_name, "w") as boot_common:
@@ -122,7 +126,7 @@ def generate_boot_common(node_dir, app_name, data_dir):
 {{
     "import-files" : [ "boot-common.js" ],
     "properties" : {{
-        {content}        
+        {content}
     }}
 }}
 """.format(header=WARNING_COMMENT, content=content)
@@ -171,7 +175,7 @@ def generate_herald_conf(node_dir, transport_modes, server, port, user, password
         os.makedirs(herald_dir)
 
     tfiles = ['"java-xmpp.js"', '"java-http.js"', '"python-xmpp.js"', '"python-http.js"']
-    
+
     transport_files1 = []
     if "http" in transport_modes:
         transport_files1.append(tfiles[1])
@@ -179,7 +183,7 @@ def generate_herald_conf(node_dir, transport_modes, server, port, user, password
         transport_files1.append(tfiles[0])
 
     file_name = os.path.join(herald_dir, 'java-transport.js')
-    with open(file_name, "w") as java_transport:        
+    with open(file_name, "w") as java_transport:
         result = """{header}
 {{
     "import-files" : [ {files} ]
@@ -192,7 +196,7 @@ def generate_herald_conf(node_dir, transport_modes, server, port, user, password
         transport_files2.append(tfiles[3])
     if "xmpp" in transport_modes:
         transport_files2.append(tfiles[2])
-    
+
     file_name = os.path.join(herald_dir, 'python-transport.js')
     with open(file_name, "w") as python_transport:
         result = """{header}
@@ -306,7 +310,7 @@ def delete_common_http(node_dir):
         os.remove(os.path.join(node_dir, 'conf', 'python-common-http.js'))
     except OSError:
         pass
-        
+
 def parse_version_file(version_file):
     """
     Parses the version file (conf/version.js).
@@ -314,16 +318,16 @@ def parse_version_file(version_file):
     data = None
     if os.path.isfile(version_file):
         with open(version_file) as json_data:
-            data = json.load(json_data)    
-    return data 
- 
+            data = json.load(json_data)
+    return data
+
 def get_installed_dist_info(cohorte_home):
     """
     Gets the installed distribution's version information.
     """
-    actual = parse_version_file(os.path.join(cohorte_home, "conf", "version.js"))        
+    actual = parse_version_file(os.path.join(cohorte_home, "conf", "version.js"))
     return actual
- 
+
 def show_installed_dist_info(dist):
     """
     Shows the installed distribution's version information.
