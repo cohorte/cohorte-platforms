@@ -16,19 +16,20 @@ Shows installed Cohorte distribution's version.
     See the License for the specific language governing permissions and
     limitations under the License.
 """
- 
-# Documentation strings format
-__docformat__ = "restructuredtext en"
- 
-# module version
-__version__ = "1.0.0"
- 
+
 import sys
 import os
 
 # cohorte scripts
-import common 
- 
+import common
+
+# Documentation strings format
+__docformat__ = "restructuredtext en"
+
+# module version
+__version__ = "1.0.0"
+
+
 def main(args=None):
     """
     main script
@@ -39,9 +40,9 @@ def main(args=None):
         print("[ERROR] environment variable COHORTE_HOME not set")
         return 1
     # Show actual version
-    actual = common.get_installed_dist_info(COHORTE_HOME)    
+    actual = common.get_installed_dist_info(COHORTE_HOME)
     common.show_installed_dist_info(actual)
-    return 0    
- 
+    return 0
+
 if __name__ == "__main__":
     sys.exit(main())

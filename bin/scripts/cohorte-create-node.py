@@ -23,16 +23,15 @@ Create COHORTE node (base) script.
     limitations under the License.
 """
 
+import os
+import sys
+import common
+
 # Documentation strings format
 __docformat__ = "restructuredtext en"
 
 # Boot module version
 __version__ = "1.0.0"
-
-
-import os
-import sys
-import common
 
 
 def create_node(args):
@@ -52,33 +51,35 @@ def create_node(args):
     os.makedirs(os.path.join(node_dir, 'conf'))
     # generate run script
     common.generate_run(args.node_name)
-    
+
     # generate composition file
     if args.composition_name:
         common.generate_composition_conf(args.node_name, args.composition_name)
-    
-    # generate run configuration file    
-    CONFIG_FILE = os.path.join(node_dir, 'conf', 'run.js')            
+
+    # generate run configuration file
+    CONFIG_FILE = os.path.join(node_dir, 'conf', 'run.js')
     configuration = {}
     COHORTE_HOME = os.environ.get('COHORTE_HOME')
     actual_dist = common.get_installed_dist_info(COHORTE_HOME)
     COHORTE_VERSION = actual_dist["version"]
+
     configuration["cohorte-version"] = COHORTE_VERSION
     if args.app_id:
         configuration["app-id"] = args.app_id
-    configuration["node"] = {}    
-    configuration["node"]["name"] = args.node_name
-    configuration["node"]["http-port"] = 0
-    configuration["node"]["shell-port"] = 0
-    configuration["node"]["top-composer"] = False
-    configuration["node"]["console"] = True
+    configuration["node"] = {
+        "name": args.node_name,
+        "http-port": 0,
+        "shell-port": 0,
+        "top-composer": False,
+        "console": True}
+
     if 'PYTHON_INTERPRETER' in os.environ:
         python_interpreter = os.environ['PYTHON_INTERPRETER']
         if python_interpreter:
-            configuration["node"]["interpreter"] = python_interpreter    
-    configuration["transport"] = ['http']    
-    configuration["transport-http"] = {}
-    configuration["transport-http"]["http-ipv"] = 6
+            configuration["node"]["interpreter"] = python_interpreter
+
+    configuration["transport"] = ['http']
+    configuration["transport-http"] = {"http-ipv": 6}
     common.update_startup_file(CONFIG_FILE, configuration)
 
 
@@ -100,19 +101,20 @@ def main(args=None):
                        dest="node_name", help="Name of the node")
 
     # Application configuration
-    group.add_argument("-c", "--composition-name", action="store",                       
-                       dest="composition_name", help="application's composition name")
-                       
-    group.add_argument("-a", "--app-id", action="store",                       
+    group.add_argument("-c", "--composition-name", action="store",
+                       dest="composition_name",
+                       help="application's composition name")
+
+    group.add_argument("-a", "--app-id", action="store",
                        dest="app_id", help="application's ID")
 
     # Parse arguments
     args = parser.parse_args(args)
-        
+
     if not os.environ.get('COHORTE_HOME'):
         print("[ERROR] environment variable COHORTE_HOME not set")
         return 1
-        
+
     if not args.node_name:
         print("[ERROR] you should provide a node name (using --name option)")
         return -1
