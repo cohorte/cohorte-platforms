@@ -23,12 +23,6 @@ Startup scripts common file.
     limitations under the License.
 """
 
-# Documentation strings format
-__docformat__ = "restructuredtext en"
-
-# Boot module version
-__version__ = "1.0.0"
-
 # Standard Library
 import os
 import json
@@ -37,6 +31,13 @@ import shutil
 from stat import S_IRWXU  # Read, write, and execute by owner
 from stat import S_IRWXG  # Read, write, and execute by group
 from stat import S_IROTH  # Read by others
+
+# Documentation strings format
+__docformat__ = "restructuredtext en"
+
+# Boot module version
+__version__ = "1.0.0"
+
 WARNING_COMMENT = "/* WARNING!: do not edit, this file is generated " \
                   "automatically by COHORTE startup scripts. */"
 
@@ -46,10 +47,7 @@ def generate_run(node_dir):
     Generates an executable 'run' file which launches cohorte node.
     """
     # generate posix run executable
-    file_name = os.path.join(node_dir, "run")
-    with open(file_name, "w") as run:
-        os.chmod(file_name, S_IRWXU | S_IRWXG | S_IROTH)
-        result = """#!/bin/bash
+    result = """#!/bin/bash
 if test -z "$COHORTE_HOME"
 then
   echo
@@ -60,12 +58,14 @@ fi
 
 bash $COHORTE_HOME/bin/cohorte-start-node --base $(pwd) $*
 """
+
+    file_name = os.path.join(node_dir, "run")
+    with open(file_name, "w") as run:
+        os.chmod(file_name, S_IRWXU | S_IRWXG | S_IROTH)
         run.write(result)
 
     # generate windows run executable
-    file_name2 = os.path.join(node_dir, "run.bat")
-    with open(file_name2, "w") as run_bat:
-        result = """@echo off
+    result = """@echo off
 
 if "%COHORTE_HOME%" == "" (
   echo [ERROR] the system environment variable COHORTE_HOME is not defined!
@@ -74,6 +74,9 @@ if "%COHORTE_HOME%" == "" (
 
 call %COHORTE_HOME%\\bin\cohorte-start-node.bat --base %CD% %*
 """
+
+    file_name2 = os.path.join(node_dir, "run.bat")
+    with open(file_name2, "w") as run_bat:
         run_bat.write(result)
 
 
@@ -86,8 +89,8 @@ def generate_composition_conf(node_dir, app_name):
         os.makedirs(conf_dir)
     file_name = os.path.join(conf_dir, "composition.js")
     app = app_name.rsplit(".", 2)[-1]
-    with open(file_name, "w") as composition:
-        result = """{{
+
+    result = """{{
     "name": "{app_name}",
     "root": {{
         "name": "{app}-composition",
@@ -97,11 +100,15 @@ def generate_composition_conf(node_dir, app_name):
     }}
 }}
 """.format(app_name=app_name, app=app)
+
+    with open(file_name, "w") as composition:
         composition.write(result)
+
 
 def generate_boot_common(node_dir, app_name, data_dir):
     """
-    Generates boot-common.js file which defines the application's id on which the node will be connected.
+    Generates boot-common.js file which defines the application's id on which
+    the node will be connected.
     """
     conf_dir = os.path.join(node_dir, 'conf')
     if not os.path.exists(conf_dir):
@@ -121,8 +128,7 @@ def generate_boot_common(node_dir, app_name, data_dir):
     "cohorte.node.data.dir" : "{data_dir}"
 """.format(data_dir=data_dir)
 
-    with open(file_name, "w") as boot_common:
-        result = """{header}
+    result = """{header}
 {{
     "import-files" : [ "boot-common.js" ],
     "properties" : {{
@@ -130,6 +136,8 @@ def generate_boot_common(node_dir, app_name, data_dir):
     }}
 }}
 """.format(header=WARNING_COMMENT, content=content)
+
+    with open(file_name, "w") as boot_common:
         boot_common.write(result)
 
 
@@ -140,9 +148,8 @@ def generate_boot_forker(node_dir, http_port, shell_port):
     conf_dir = os.path.join(node_dir, 'conf')
     if not os.path.exists(conf_dir):
         os.makedirs(conf_dir)
-    file_name = os.path.join(conf_dir, "boot-forker.js")
-    with open(file_name, "w") as boot_forker:
-        result = """{header}
+
+    result = """{header}
 {{
     "import-files" : [ "boot-forker.js" ],
     "composition" : [
@@ -160,10 +167,14 @@ def generate_boot_forker(node_dir, http_port, shell_port):
     ]
 }}
 """.format(header=WARNING_COMMENT, http_port=http_port, shell_port=shell_port)
+
+    file_name = os.path.join(conf_dir, "boot-forker.js")
+    with open(file_name, "w") as boot_forker:
         boot_forker.write(result)
 
 
-def generate_herald_conf(node_dir, transport_modes, server, port, user, password):
+def generate_herald_conf(node_dir, transport_modes, server, port,
+                         user, password):
     """
     Generates Herald XMPP transport configuration
     """
@@ -174,7 +185,8 @@ def generate_herald_conf(node_dir, transport_modes, server, port, user, password
     if not os.path.exists(herald_dir):
         os.makedirs(herald_dir)
 
-    tfiles = ['"java-xmpp.js"', '"java-http.js"', '"python-xmpp.js"', '"python-http.js"']
+    tfiles = ['"java-xmpp.js"', '"java-http.js"',
+              '"python-xmpp.js"', '"python-http.js"']
 
     transport_files1 = []
     if "http" in transport_modes:
@@ -206,9 +218,7 @@ def generate_herald_conf(node_dir, transport_modes, server, port, user, password
 """.format(header=WARNING_COMMENT, files=",".join(transport_files2))
         python_transport.write(result)
 
-    file_name = os.path.join(herald_dir, 'all-xmpp.js')
-    with open(file_name, "w") as all_xmpp:
-        result = """{header}
+    result = """{header}
 {{
     "import-files" : [ "all-xmpp.js" ],
     "composition" : [
@@ -223,7 +233,11 @@ def generate_herald_conf(node_dir, transport_modes, server, port, user, password
     }}
     ]
 }}
-""".format(header=WARNING_COMMENT, server=server, port=port, user=user, password=password)
+""".format(header=WARNING_COMMENT, server=server, port=port,
+           user=user, password=password)
+
+    file_name = os.path.join(herald_dir, 'all-xmpp.js')
+    with open(file_name, "w") as all_xmpp:
         all_xmpp.write(result)
 
 
@@ -247,8 +261,8 @@ def generate_top_composer_config(node_dir, composition_file, autostart):
     if not os.path.exists(tc_dir):
         os.makedirs(tc_dir)
     file_name = os.path.join(tc_dir, 'python-top.js')
-    with open(file_name, "w") as top_composer:
-        result = """{header}
+
+    result = """{header}
 {{
     "import-files" : [ "python-top.js" ],
     "composition" : [
@@ -264,6 +278,8 @@ def generate_top_composer_config(node_dir, composition_file, autostart):
 }}
 """.format(header=WARNING_COMMENT, autostart=autostart,
            composition=composition_file)
+
+    with open(file_name, "w") as top_composer:
         top_composer.write(result)
 
 
@@ -276,6 +292,7 @@ def delete_top_composer_config(node_dir):
     except OSError:
         pass
 
+
 def generate_common_http(node_dir):
     """
     Generates conf/python-common-http.js file.
@@ -284,8 +301,8 @@ def generate_common_http(node_dir):
     if not os.path.exists(conf_dir):
         os.makedirs(conf_dir)
     file_name = os.path.join(conf_dir, "python-common-http.js")
-    with open(file_name, "w") as python_common_http:
-        result = """{header}
+
+    result = """{header}
 {{
     "import-files" : [ "python-common-http.js" ],
     "composition" : [
@@ -299,17 +316,21 @@ def generate_common_http(node_dir):
     ]
 }}
 """.format(header=WARNING_COMMENT)
+
+    with open(file_name, "w") as python_common_http:
         python_common_http.write(result)
+
 
 def delete_common_http(node_dir):
     """
     Delete conf/python-common-http.js file.
     """
-    #print("deleting conf/python-common-http.js file.")
+    # print("deleting conf/python-common-http.js file.")
     try:
         os.remove(os.path.join(node_dir, 'conf', 'python-common-http.js'))
     except OSError:
         pass
+
 
 def parse_version_file(version_file):
     """
@@ -321,12 +342,15 @@ def parse_version_file(version_file):
             data = json.load(json_data)
     return data
 
+
 def get_installed_dist_info(cohorte_home):
     """
     Gets the installed distribution's version information.
     """
-    actual = parse_version_file(os.path.join(cohorte_home, "conf", "version.js"))
+    actual = parse_version_file(
+        os.path.join(cohorte_home, "conf", "version.js"))
     return actual
+
 
 def show_installed_dist_info(dist):
     """
