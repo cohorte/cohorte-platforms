@@ -1,7 +1,7 @@
-Cohorte-Python==1.0.2.dev
-Cohorte-Herald==0.0.4
-iPOPO==0.6.2
-jsonrpclib-pelix==0.2.5
+Cohorte-Python==1.0.2
+Cohorte-Herald==0.0.5
+iPOPO==0.6.3
+jsonrpclib-pelix==0.2.6
 sleekxmpp>=1.3.1
 requests>=2.3.0
 
