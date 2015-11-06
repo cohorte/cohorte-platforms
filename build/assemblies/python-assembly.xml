@@ -28,6 +28,7 @@
             <exclude>**/.git</exclude>
             <exclude>**/.gitignore</exclude>
             <exclude>CHANGELOG.txt</exclude>
+            <exclude>README.rst</exclude>
          </excludes>
       </fileSet>
    </fileSets>

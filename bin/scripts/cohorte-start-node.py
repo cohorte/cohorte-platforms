@@ -223,8 +223,8 @@ def main(args=None):
     group.add_argument("--http-ipv", action="store", type=int, dest="http_ipv",
                        help="HTTP IP version to use (4 or 6)")
 
-    parser.add_argument("--console", action="store_true",
-                    dest="install_shell_console", default=False,
+    parser.add_argument("--console", action="store",
+                    dest="install_shell_console", 
                     help="If True, the shell console will be started")
 
     # Parse arguments
@@ -390,17 +390,18 @@ def main(args=None):
     else:
         common.delete_top_composer_config(COHORTE_BASE)
 
-    # show console (or not)
+    # show console (or not)    
     if args.install_shell_console:
-        INSTALL_SHELL_CONSOLE = True
+        INSTALL_SHELL_CONSOLE = args.install_shell_console.lower() in ("true", "yes")
     else:
         INSTALL_SHELL_CONSOLE = set_configuration_value(
             None,
-            get_external_config(external_config, "console"), False)
+            get_external_config(external_config, "console"), True)
+
     if INSTALL_SHELL_CONSOLE == True:
         boot_args.append("--console")
-    # transport mode
 
+    # transport mode
     tmodes = None
     if args.transport_modes:
         tmodes = str(args.transport_modes).split(',')
