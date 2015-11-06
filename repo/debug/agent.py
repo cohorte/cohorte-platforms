@@ -43,7 +43,7 @@ import pelix.http
 import pelix.ipopo.constants
 import pelix.shell
 from pelix.shell.ipopo import ipopo_state_to_str
-from pelix.shell.core import ShellUtils
+from pelix.shell.core import _ShellUtils
 
 # Herald
 import herald
@@ -161,7 +161,7 @@ class DebugAgent(object):
             { 
               "id" : bundle.get_bundle_id(),
               "name" : bundle.get_symbolic_name(),
-              "state" : ShellUtils.bundlestate_to_str(
+              "state" : _ShellUtils.bundlestate_to_str(
                                     bundle.get_state()),
               "version" : bundle.get_version()
             } for bundle in bundles              
@@ -189,7 +189,7 @@ class DebugAgent(object):
                 "id": bundle.get_bundle_id(),
                 "name" : bundle.get_symbolic_name(),
                 "version" : bundle.get_version(),
-                "state" : ShellUtils.bundlestate_to_str(
+                "state" : _ShellUtils.bundlestate_to_str(
                                     bundle.get_state()),
                 "location" : bundle.get_location(),
                 "published-services" : [],
