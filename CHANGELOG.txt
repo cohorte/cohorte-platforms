@@ -3,7 +3,7 @@ Changes form the 1.1.1 to 1.1.2 build: ${timestamp}
 
 ** Bug Fix
 	* Consider OSGi framework user-provided extra packages [isandlaTech/cohorte-runtime#36]
-    * Do not start Fragment bundles in OSGi [isandlaTech/cohorte-runtime#35]
+	* Do not start Fragment bundles in OSGi [isandlaTech/cohorte-runtime#35]
 
 Changes form the 1.1.0 to 1.1.1
 -------------------------------
@@ -19,10 +19,10 @@ Changes form the 1.1.0 to 1.1.1
 
 ** Bug Fix
 	* Concurrent modification in iPOJO Agent, causing the IsolateComposer to stop [isandlaTech/cohorte-runtime#31]
-    * Relative imports in Python [isandlaTech/cohorte-runtime#25]
-    * Correct several bugs on cohorte-update utility [#37][#48][#52][#62]
-    * Cohorte cannot find required artifacts and stops starting the isolate [#59]
-    * Corrected top composer status [#53]
+	* Relative imports in Python [isandlaTech/cohorte-runtime#25]
+	* Correct several bugs on cohorte-update utility [#37][#48][#52][#62]
+	* Cohorte cannot find required artifacts and stops starting the isolate [#59]
+	* Corrected top composer status [#53]
 	* HeraldRPCExporter between two Java components sends infinitly error messages [#49]
 	* Corrected the behaviour of PYTHONPATH on Windows [#70]
 	* Corrected the value of "cohorte.node.data.dir" in "boot-common.js" on Windows [#72]
