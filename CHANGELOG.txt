@@ -1,5 +1,11 @@
-Changes form the 1.1.0 to 1.1.1 build: ${timestamp}
+Changes form the 1.1.1 to 1.1.2 build: ${timestamp}
 ------------------------------------------------------
+
+** Bug Fix
+	* Consider OSGi framework user-provided extra packages [isandlaTech/cohorte-runtime#36]
+
+Changes form the 1.1.0 to 1.1.1
+-------------------------------
 
 ** New Feature
 	* Allow the user to choose a directory where components can write persistent data [#67]
