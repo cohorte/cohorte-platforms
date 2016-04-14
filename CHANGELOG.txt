@@ -5,6 +5,9 @@ Changes form the 1.1.1 to 1.1.2 build: ${timestamp}
 	* Consider OSGi framework user-provided extra packages [isandlaTech/cohorte-runtime#36]
 	* Do not start Fragment bundles in OSGi [isandlaTech/cohorte-runtime#35]
 
+** Improvements
+	* Consider COHORTE_BASE environment variable while running a node	
+
 Changes form the 1.1.0 to 1.1.1
 -------------------------------
 

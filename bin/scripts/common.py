@@ -55,8 +55,11 @@ then
   echo
   exit
 fi
-
-bash $COHORTE_HOME/bin/cohorte-start-node --base $(pwd) $*
+if test -z "$COHORTE_BASE"
+then
+  COHORTE_BASE=$(pwd)
+fi
+bash $COHORTE_HOME/bin/cohorte-start-node --base $COHORTE_BASE $*
 """
 
     file_name = os.path.join(node_dir, "run")
