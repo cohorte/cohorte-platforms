@@ -6,6 +6,11 @@ Cohorte Debug REST API
 :authors: Bassem Debbabi
 :copyright: Copyright 2015, isandlaTech
 :license:  Apache Software License 2.0
+
+HISTORY
+2016/08/08: API V2
+    - Adding get isolate directory (herald directory) function
+
 """
 
 # iPOPO decorators
@@ -43,14 +48,23 @@ _logger = logging.getLogger("debug.debug")
 SUBJECT_GET_HTTP = "cohorte/shell/agent/get_http"
 
 # API path
-DEBUG_REST_API_PATH = "debug/api/v1"
+DEBUG_REST_API_PATH = "debug/api/v2"
 
 # API Version
-DEBUG_REST_API_VERSION = "v1"
+DEBUG_REST_API_VERSION = "v2"
 
 # VERSION
-COHORTE_VERSION = "1.0.1"
+COHORTE_VERSION = "1.1.2"
 
+# ------------------------------------------------------------------------------------
+
+class SetEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, set):
+            return list(obj)
+        return json.JSONEncoder.default(self, obj)
+
+# ------------------------------------------------------------------------------------
 
 @ComponentFactory("cohorte-debug-api-factory")
 @Provides(['pelix.http.servlet'])
@@ -147,7 +161,8 @@ class DebugAPI(object):
 
     def send_json(self, data, response):
         result = json.dumps(data, sort_keys=False,
-                            indent=4, separators=(',', ': '))
+                            indent=4, separators=(',', ': '),
+                            cls=SetEncoder)
         response.send_content(data["meta"]["status"], result, "application/json")
     	
     def send_text(self, data, response, status):
@@ -257,7 +272,17 @@ class DebugAPI(object):
     def get_isolate_log(self, request, response, in_data, out_data, isolate_uuid, log_id):
         out_data["isolate"] = {"uuid" : isolate_uuid}        
         out_data["log"] = self._get_isolate_log(isolate_uuid, log_id)        
-        
+
+    def get_isolate_directory(self, request, response, in_data, out_data, uuid):
+        out_data["isolate"] = {"uuid" : uuid}
+        directory = self._get_isolate_directory(uuid)
+        out_data["directory"] = directory  
+
+    def get_isolate_accesses(self, request, response, in_data, out_data, uuid):
+        out_data["isolate"] = {"uuid" : uuid}
+        accesses = self._get_isolate_accesses(uuid)
+        out_data["accesses"] = accesses        
+
     """
     Internal agent methods ===========================================================================
     """
@@ -385,7 +410,30 @@ class DebugAPI(object):
         else:
             # this is the local isolate
             return self._agent.get_isolate_log(log_id)    
-        
+
+    def _get_isolate_directory(self, uuid):
+        lp = self._directory.get_local_peer()
+        if lp.uid != uuid:  
+            # this is another isolate          
+            msg = beans.Message(debug.agent.SUBJECT_GET_ISOLATE_DIRECTORY)
+            reply = self._herald.send(uuid, msg)
+            return reply.content
+        else:
+            # this is the local isolate
+            return self._agent.get_isolate_directory()
+
+    def _get_isolate_accesses(self, uuid):
+        lp = self._directory.get_local_peer()
+        if lp.uid != uuid:  
+            # this is another isolate          
+            msg = beans.Message(debug.agent.SUBJECT_GET_ISOLATE_ACCESSES)
+            reply = self._herald.send(uuid, msg)
+            return reply.content
+        else:
+            # this is the local isolate
+            return self._agent.get_isolate_accesses()
+
+
     """
     Servlet (url mapping to rest api) ================================================================
     """
@@ -436,7 +484,13 @@ class DebugAPI(object):
                 elif path == DEBUG_REST_API_PATH + "/isolates/" + parts[4] + "/logs":
                     out_data["meta"]["api-method"] = "get_isolate_logs"
                     self.get_isolate_logs(request, response, in_data, out_data, parts[4])
-            
+                elif path == DEBUG_REST_API_PATH + "/isolates/" + parts[4] + "/directory":
+                    out_data["meta"]["api-method"] = "get_isolate_directory"
+                    self.get_isolate_directory(request, response, in_data, out_data, parts[4])
+                elif path == DEBUG_REST_API_PATH + "/isolates/" + parts[4] + "/accesses":
+                    out_data["meta"]["api-method"] = "get_isolate_accesses"
+                    self.get_isolate_accesses(request, response, in_data, out_data, parts[4])
+
             elif len(parts) == 7:
                 if path == DEBUG_REST_API_PATH + "/isolates/" + parts[4] + "/bundles/" + parts[6]:
                     out_data["meta"]["api-method"] = "get_bundle_detail"

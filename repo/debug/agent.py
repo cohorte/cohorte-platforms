@@ -103,11 +103,18 @@ SUBJECT_GET_ISOLATE_LOGS = "{0}/get_isolate_logs".format(_SUBJECT_PREFIX)
 """ Signal to request the list of isolate logs """
 
 SUBJECT_GET_ISOLATE_LOG = "{0}/get_isolate_log".format(_SUBJECT_PREFIX)
-""" Signal to request the request logs """
+""" Signal to request the isolate logs """
+
+SUBJECT_GET_ISOLATE_DIRECTORY = "{0}/get_isolate_directory".format(_SUBJECT_PREFIX)
+""" Signal to request the isolate herald local directory """
+
+SUBJECT_GET_ISOLATE_ACCESSES = "{0}/get_isolate_accesses".format(_SUBJECT_PREFIX)
+""" Signal to request the isolate herald accesses """
 
 @ComponentFactory('cohorte-debug-agent-factory')
 @Requires("_ipopo", pelix.ipopo.constants.SERVICE_IPOPO)
 @Requires('_herald', herald.SERVICE_HERALD)
+@Requires('_directory', herald.SERVICE_DIRECTORY)
 @Provides([debug.SERVICE_DEBUG, herald.SERVICE_LISTENER])
 @Property('_filters', herald.PROP_FILTERS, [_SUBJECT_MATCH_ALL])
 @Property('_reject', pelix.remote.PROP_EXPORT_REJECT, [debug.SERVICE_DEBUG])
@@ -128,6 +135,8 @@ class DebugAgent(object):
         self._herald = None
         # Herald filter property
         self._filters = None
+        # Herald directory
+        self._directory = None
         
         
 
@@ -438,6 +447,15 @@ class DebugAgent(object):
                                  
         return ""
     
+    def get_isolate_directory(self):
+        return self._directory.dump()     
+
+    def get_isolate_accesses(self):
+        accesses = self._directory.get_local_peer().get_accesses()
+        result = {}
+        for access in accesses:
+            result[access] = self._directory.get_local_peer().get_access(access).dump()            
+        return result
     
     def herald_message(self, herald_svc, message):
         """
@@ -472,7 +490,10 @@ class DebugAgent(object):
         elif subject == SUBJECT_GET_ISOLATE_LOG:
             log_id = message.content
             reply = self.get_isolate_log(log_id)
-        
+        elif subject == SUBJECT_GET_ISOLATE_DIRECTORY:            
+            reply = self.get_isolate_directory()
+        elif subject == SUBJECT_GET_ISOLATE_ACCESSES:            
+            reply = self.get_isolate_accesses()
         if reply is not None:
             herald_svc.reply(message, reply)
         else:
