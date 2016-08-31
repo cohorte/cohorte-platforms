@@ -42,7 +42,7 @@ fi
 
 # Set up the virtual environment
 VENV_NAME=tmp_venv
-INDEX_URL=http://forge.isandlatech.com:3080/devpi/jenkins/cohorte/+simple/
+INDEX_URL=http://forge.cohorte-technologies.com:7080/jenkins/cohorte/+simple/
 rm -fr $VENV_NAME
 virtualenv $VENV_NAME -p python3 || return 1
 PATH=$WORKSPACE/$VENV_NAME/bin:$PATH

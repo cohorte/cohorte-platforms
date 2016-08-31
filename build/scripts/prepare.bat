@@ -3,7 +3,7 @@ REM Python preparation file
 echo [INFO] Preparing Python dependencies...
 
 REM Variables
-set INDEX_URL=http://forge.isandlatech.com:3080/devpi/jenkins/cohorte/+simple/
+set INDEX_URL=http://forge.cohorte-technologies.com:7080/jenkins/cohorte/+simple/
 set VENV_NAME=tmp_venv
 set PATH=%WORKSPACE%/%VENV_NAME%/bin;%PATH%
 
