@@ -19,7 +19,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.cohorte.platforms</groupId>
 	<artifactId>cohorte</artifactId>
-	<version>1.1.2</version>
+	<version>1.2.0</version>
 	<packaging>pom</packaging>
 
 	<name>COHORTE Project ::: Platforms :: HOME </name>
@@ -58,7 +58,7 @@
 		<dependency>
 			<groupId>org.cohorte.runtime</groupId>
 			<artifactId>cohorte-runtime-package</artifactId>
-			<version>1.0.3</version>
+			<version>1.1.0</version>
 			<type>pom</type>
 			<scope>provided</scope>
 		</dependency>
@@ -66,7 +66,7 @@
 		<dependency>
 			<groupId>org.cohorte.herald</groupId>
 			<artifactId>cohorte-herald-package</artifactId>
-			<version>0.0.5</version>
+			<version>1.0.0</version>
 			<type>pom</type>
 			<scope>provided</scope>
 		</dependency>
@@ -611,8 +611,8 @@
 	</licenses>
 
 	<organization>
-		<name>isandlaTech</name>
-		<url>http://isandlatech.com</url>
+		<name>Cohorte Technologies (ex. isandlaTech)</name>
+		<url>http://cohorte-technologies.com</url>
 	</organization>
 
 	<issueManagement>

@@ -1,5 +1,37 @@
-Changes form the 1.1.1 to 1.1.2 build: ${timestamp}
+Changes form the 1.1.2 to 1.2.0 build: ${timestamp}
 ------------------------------------------------------
+
+** New Feature
+	* Cohorte-Runtime : new Local Discovery 
+
+** Improvements
+	* Webadmin : adding Herald Tab that shows the isolate accesses and directory content [#80]
+	* Cohorte-Runtime : Adding Forker's HTTP Port to OSGi java framework properties
+	* Cohorte-Herald : new multicast discovery paquets format 
+	* Cohorte-Herald : option to avoid discover local peers (of the same node)
+	* Updating dependencies
+		- Cohorte-Utilities from 1.0.4 to 1.0.6
+		- Cohorte-Runtime from 1.0.3 to 1.1.0
+		- Cohorte-Herald from 0.0.5 to 1.0.0
+		- Pelix/iPOPO from 0.6.3 to 0.6.4
+		- Apache Felix:
+			> updated commons-logging from 1.1.1-0003-SNAPSHOT to 1.2
+			> updated org.apache.felix.bundlerepository from 1.6.6 to 2.0.6		
+			> updated org.apache.felix.framework from 4.2.1 to 5.4.0
+			> updated org.apache.felix.gogo.command from 0.12.0 to 0.16.0
+			> updated org.apache.felix.gogo.runtime from 0.10.0 to 0.16.2
+			> updated org.apache.felix.http.jetty from 2.2.1-SNAPSHOT to 3.2.0
+			> added   org.apache.felix.http.servlet-api 1.1.1			
+			> removed org.apache.servicemix.bundles.commons-httpclient 3.1			
+			> added   org.apache.httpcomponents.httpclient 4.5.2
+			> added   org.apache.httpcomponents.httpcore 4.4.4
+
+** Bug Fix
+	* Cohorte-Runtime : Java isolates are not started if no vm_args configuration was given [#79]
+	* Cohorte-Runtime : Normalize paths coming from PYTHONPATH [isandlatech/cohorte-runtime#34]
+
+Changes form the 1.1.1 to 1.1.2
+-------------------------------
 
 ** Bug Fix
 	* Consider OSGi framework user-provided extra packages [isandlaTech/cohorte-runtime#36]
