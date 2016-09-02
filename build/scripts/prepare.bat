@@ -3,7 +3,7 @@ REM Python preparation file
 echo [INFO] Preparing Python dependencies...
 
 REM Variables
-set INDEX_URL=http://forge.isandlatech.com:3080/devpi/jenkins/cohorte/+simple/
+set INDEX_URL=http://forge.cohorte-technologies.com:7080/jenkins/cohorte/+simple/
 set VENV_NAME=tmp_venv
 set PATH=%WORKSPACE%/%VENV_NAME%/bin;%PATH%
 
@@ -15,16 +15,17 @@ REM Activate it
 call %VENV_NAME%\Scripts\activate.bat
 
 REM Install test and deployment tools
-pip install --upgrade --index-url=%INDEX_URL% pip setuptools || exit /b 2
-pip install --upgrade --index-url=%INDEX_URL% wheel || exit /b 2
-pip install --upgrade --index-url=%INDEX_URL% nose || exit /b 2
-pip install --upgrade --index-url=%INDEX_URL% devpi-client || exit /b 2
+set PIP_HOST=forge.cohorte-technologies.com
+pip install --upgrade --index-url=%INDEX_URL% --trusted-host=%PIP_HOST% pip setuptools || exit /b 2
+pip install --upgrade --index-url=%INDEX_URL% --trusted-host=%PIP_HOST% wheel || exit /b 2
+pip install --upgrade --index-url=%INDEX_URL% --trusted-host=%PIP_HOST% nose || exit /b 2
+pip install --upgrade --index-url=%INDEX_URL% --trusted-host=%PIP_HOST% devpi-client || exit /b 2
 
 REM Install JPype
-pip install --upgrade --index-url=%INDEX_URL% JPype1-py3 || exit /b 2
+pip install --upgrade --index-url=%INDEX_URL% --trusted-host=%PIP_HOST% JPype1-py3 || exit /b 2
 
 REM Install dependencies
-pip install --upgrade --index-url=%INDEX_URL% -r build/scripts/requirements.txt || exit /b 2
+pip install --upgrade --index-url=%INDEX_URL% --trusted-host=%PIP_HOST% -r build/scripts/requirements.txt || exit /b 2
 
 REM Copy dependencies to repo
 move /Y %VENV_NAME%\Lib\site-packages\jsonrpclib repo

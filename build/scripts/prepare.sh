@@ -42,17 +42,19 @@ fi
 
 # Set up the virtual environment
 VENV_NAME=tmp_venv
-INDEX_URL=http://forge.isandlatech.com:3080/devpi/jenkins/cohorte/+simple/
+INDEX_URL=http://forge.cohorte-technologies.com:7080/jenkins/cohorte/+simple/
 rm -fr $VENV_NAME
 virtualenv $VENV_NAME -p python3 || return 1
 PATH=$WORKSPACE/$VENV_NAME/bin:$PATH
 . $VENV_NAME/bin/activate
 
 # Install test and deployment tools
-pip install --force --upgrade --index-url=$INDEX_URL pip==1.5.6 setuptools #|| return 2
-pip install --upgrade --index-url=$INDEX_URL wheel #|| return 2
-pip install --upgrade --index-url=$INDEX_URL nose #|| return 2
-pip install --upgrade --index-url=$INDEX_URL devpi-client #|| return 2
+PIP_HOST=forge.cohorte-technologies.com
+#--trusted-host $PIP_HOST
+pip install --force --upgrade --index-url=$INDEX_URL --trusted-host=$PIP_HOST pip==8.1.2 setuptools  #|| return 2
+pip install --upgrade --index-url=$INDEX_URL --trusted-host=$PIP_HOST wheel #|| return 2
+pip install --upgrade --index-url=$INDEX_URL --trusted-host=$PIP_HOST nose #|| return 2
+pip install --upgrade --index-url=$INDEX_URL --trusted-host=$PIP_HOST devpi-client #|| return 2
 
 # install JPype
 # JPype1-py3==0.5.5.2
@@ -70,7 +72,7 @@ cp -r build/extra/windows/* repo
 fi
 
 # Install dependencies
-pip install --upgrade --index-url=$INDEX_URL -r build/scripts/requirements.txt
+pip install --upgrade --index-url=$INDEX_URL --trusted-host=$PIP_HOST -r build/scripts/requirements.txt
 
 # Copy dependencies to repo
 
