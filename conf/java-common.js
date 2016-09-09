@@ -36,6 +36,8 @@
 		"name" : "org.cohorte.shell.osgi"
 	}, {
 		"name" : "org.cohorte.shell.remote"
+	}, {
+		"name" : "org.cohorte.isolates.discovery.local"
 	} ],
 
 	/*

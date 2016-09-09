@@ -202,7 +202,7 @@ class DebugAgent(object):
                                     bundle.get_state()),
                 "location" : bundle.get_location(),
                 "published-services" : [],
-                "used-services" : [],
+                "used-services" : []
             }                   
             try:
                 services = bundle.get_registered_services()

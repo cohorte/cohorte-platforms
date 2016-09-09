@@ -13,6 +13,8 @@
 		"name" : "pelix.shell.ipopo"
 	}, {
 		"name" : "pelix.shell.remote"
+	}, {
+		"name" : "cohorte.local.discovery"
 	} ],
 
 	/*
