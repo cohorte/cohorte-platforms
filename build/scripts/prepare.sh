@@ -51,7 +51,9 @@ PATH=$WORKSPACE/$VENV_NAME/bin:$PATH
 # Install test and deployment tools
 PIP_HOST=forge.cohorte-technologies.com
 #--trusted-host $PIP_HOST
-pip install --force --upgrade --index-url=$INDEX_URL --trusted-host=$PIP_HOST pip==8.1.2 setuptools  #|| return 2
+pip --version
+pip install --force --upgrade --index-url=$INDEX_URL pip==8.1.2 setuptools  #|| return 2
+pip --version 
 pip install --upgrade --index-url=$INDEX_URL --trusted-host=$PIP_HOST wheel #|| return 2
 pip install --upgrade --index-url=$INDEX_URL --trusted-host=$PIP_HOST nose #|| return 2
 pip install --upgrade --index-url=$INDEX_URL --trusted-host=$PIP_HOST devpi-client #|| return 2
