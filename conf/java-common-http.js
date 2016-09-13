@@ -10,6 +10,9 @@
 	{
 		"name" : "org.apache.felix.http.jetty"
 	},
+	{
+		"name" : "org.apache.felix.http.servlet-api"
+	},
 
 	/* JSON Support */
 	{
