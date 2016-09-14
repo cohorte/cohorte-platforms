@@ -407,10 +407,10 @@ def main(args=None):
         tmodes = str(args.transport_modes).split(',')
     if not tmodes:
         TRANSPORT_MODES = set_configuration_value(
-            None, get_external_config(external_config, "transport"), ["http"])
+            None, get_external_config(external_config, "transport"), [])
     else:
         TRANSPORT_MODES = set_configuration_value(
-            tmodes, get_external_config(external_config, "transport"), ["http"])
+            tmodes, get_external_config(external_config, "transport"), [])
 
     if "http" in TRANSPORT_MODES:
         HTTP_IPV = set_configuration_value(
@@ -445,18 +445,20 @@ def main(args=None):
     - xmpp user password: *
             """.format(server=XMPP_SERVER, port=XMPP_PORT, jid=XMPP_JID))
 
-        # 2) create conf/herald configs for node
-        common.generate_herald_conf(COHORTE_BASE, TRANSPORT_MODES,
-                                    XMPP_SERVER, XMPP_PORT,
-                                    XMPP_JID, XMPP_PASS)
+    
+    # remove 'conf/herald' folder
+    try:
+        shutil.rmtree(os.path.join(COHORTE_BASE, 'conf', 'herald'))
+    except OSError:
+        pass
+    
+    # create conf/herald configs for node
+    common.generate_herald_conf(COHORTE_BASE, TRANSPORT_MODES,
+                                XMPP_SERVER, XMPP_PORT,
+                                XMPP_JID, XMPP_PASS)
         # all-xmpp.js
         #
-    else:
-        # remove 'conf/herald' folder
-        try:
-            shutil.rmtree(os.path.join(COHORTE_BASE, 'conf', 'herald'))
-        except OSError:
-            pass
+    #else:        
 
     # update configuration if not exists
     CONFIG_FILE = config_file

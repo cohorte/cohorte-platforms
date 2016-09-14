@@ -221,8 +221,8 @@ def generate_herald_conf(node_dir, transport_modes, server, port,
 }}
 """.format(header=WARNING_COMMENT, files=",".join(transport_files2))
         python_transport.write(result)
-
-    result = """{header}
+    if "xmpp" in transport_modes:
+        result = """{header}
 {{
     "import-files" : [ "all-xmpp.js" ],
     "composition" : [
@@ -240,9 +240,9 @@ def generate_herald_conf(node_dir, transport_modes, server, port,
 """.format(header=WARNING_COMMENT, server=server, port=port,
            user=user, password=password)
 
-    file_name = os.path.join(herald_dir, 'all-xmpp.js')
-    with open(file_name, "w") as all_xmpp:
-        all_xmpp.write(result)
+        file_name = os.path.join(herald_dir, 'all-xmpp.js')
+        with open(file_name, "w") as all_xmpp:
+            all_xmpp.write(result)
 
 
 def update_startup_file(config_file, configuration):
