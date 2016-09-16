@@ -294,12 +294,12 @@ class DebugAPI(object):
             try:       
                 msg = beans.Message(debug.agent.SUBJECT_GET_ISOLATE_DETAIL)
                 reply = self._herald.send(uuid, msg)
-                return reply.content
+                return json.loads(reply.content)
             except KeyError:
                 return None
         else:
             # this is the local isolate
-            return self._agent.get_isolate_detail()
+            return json.loads(self._agent.get_isolate_detail())
 
     def _get_isolate_bundles(self, uuid):
         lp = self._directory.get_local_peer()
@@ -307,10 +307,10 @@ class DebugAPI(object):
             # this is another isolate          
             msg = beans.Message(debug.agent.SUBJECT_GET_BUNDLES)
             reply = self._herald.send(uuid, msg)
-            return reply.content
+            return json.loads(reply.content)
         else:
             # this is the local isolate
-            return self._agent.get_bundles()
+            return json.loads(self._agent.get_bundles())
     
     def _get_bundle_detail(self, uuid, bundle_id):
         lp = self._directory.get_local_peer()
@@ -318,10 +318,10 @@ class DebugAPI(object):
             # this is another isolate          
             msg = beans.Message(debug.agent.SUBJECT_GET_BUNDLE_DETAIL, bundle_id)
             reply = self._herald.send(uuid, msg)
-            return reply.content
+            return json.loads(reply.content)
         else:
             # this is the local isolate
-            return self._agent.get_bundle_detail(bundle_id)
+            return json.loads(self._agent.get_bundle_detail(bundle_id))
                 
     def _get_isolate_factories(self, uuid):
         lp = self._directory.get_local_peer()
@@ -329,10 +329,10 @@ class DebugAPI(object):
             # this is another isolate          
             msg = beans.Message(debug.agent.SUBJECT_GET_FACTORIES)
             reply = self._herald.send(uuid, msg)
-            return reply.content
+            return json.loads(reply.content)
         else:
             # this is the local isolate
-            return self._agent.get_factories()
+            return json.loads(self._agent.get_factories())
 
     def _get_factory_detail(self, uuid, factory_name):
         lp = self._directory.get_local_peer()
@@ -340,10 +340,10 @@ class DebugAPI(object):
             # this is another isolate          
             msg = beans.Message(debug.agent.SUBJECT_GET_FACTORY_DETAIL, factory_name)
             reply = self._herald.send(uuid, msg)
-            return reply.content
+            return json.loads(reply.content)
         else:
             # this is the local isolate
-            return self._agent.get_factory_detail(factory_name)
+            return json.loads(self._agent.get_factory_detail(factory_name))
             
     def _get_isolate_instances(self, uuid):
         lp = self._directory.get_local_peer()
@@ -351,10 +351,10 @@ class DebugAPI(object):
             # this is another isolate          
             msg = beans.Message(debug.agent.SUBJECT_GET_INSTANCES)
             reply = self._herald.send(uuid, msg)
-            return reply.content
+            return json.loads(reply.content)
         else:
             # this is the local isolate
-            return self._agent.get_instances()
+            return json.loads(self._agent.get_instances())
 
     def _get_instance_detail(self, uuid, instance_name):
         lp = self._directory.get_local_peer()
@@ -362,10 +362,10 @@ class DebugAPI(object):
             # this is another isolate          
             msg = beans.Message(debug.agent.SUBJECT_GET_INSTANCE_DETAIL, instance_name)
             reply = self._herald.send(uuid, msg)
-            return reply.content
+            return json.loads(reply.content)
         else:
             # this is the local isolate
-            return self._agent.get_instance_detail(instance_name)
+            return json.loads(self._agent.get_instance_detail(instance_name))
 
     def _get_isolate_services(self, uuid):
         lp = self._directory.get_local_peer()
@@ -373,10 +373,10 @@ class DebugAPI(object):
             # this is another isolate          
             msg = beans.Message(debug.agent.SUBJECT_GET_SERVICES)
             reply = self._herald.send(uuid, msg)
-            return reply.content
+            return json.loads(reply.content)
         else:
             # this is the local isolate
-            return self._agent.get_services()
+            return json.loads(self._agent.get_services())
 
     def _get_isolate_threads(self, uuid):
         lp = self._directory.get_local_peer()
@@ -384,10 +384,10 @@ class DebugAPI(object):
             # this is another isolate          
             msg = beans.Message(debug.agent.SUBJECT_GET_THREADS)
             reply = self._herald.send(uuid, msg)
-            return reply.content
+            return json.loads(reply.content)
         else:
             # this is the local isolate
-            return self._agent.get_threads()
+            return json.loads(self._agent.get_threads())
     	
     def _get_isolate_logs(self, uuid):
         lp = self._directory.get_local_peer()
@@ -395,10 +395,10 @@ class DebugAPI(object):
             # this is another isolate          
             msg = beans.Message(debug.agent.SUBJECT_GET_ISOLATE_LOGS)
             reply = self._herald.send(uuid, msg)
-            return reply.content
+            return json.loads(reply.content)
         else:
             # this is the local isolate
-            return self._agent.get_isolate_logs()
+            return json.loads(self._agent.get_isolate_logs())
             
     def _get_isolate_log(self, uuid, log_id):
         lp = self._directory.get_local_peer()
@@ -406,10 +406,10 @@ class DebugAPI(object):
             # this is another isolate          
             msg = beans.Message(debug.agent.SUBJECT_GET_ISOLATE_LOG, log_id)
             reply = self._herald.send(uuid, msg)
-            return reply.content
+            return json.loads(reply.content)
         else:
             # this is the local isolate
-            return self._agent.get_isolate_log(log_id)    
+            return json.loads(self._agent.get_isolate_log(log_id))
 
     def _get_isolate_directory(self, uuid):
         lp = self._directory.get_local_peer()
@@ -428,10 +428,10 @@ class DebugAPI(object):
             # this is another isolate          
             msg = beans.Message(debug.agent.SUBJECT_GET_ISOLATE_ACCESSES)
             reply = self._herald.send(uuid, msg)
-            return reply.content
+            return json.loads(reply.content)
         else:
             # this is the local isolate
-            return self._agent.get_isolate_accesses()
+            return json.loads(self._agent.get_isolate_accesses())
 
 
     """
@@ -505,7 +505,7 @@ class DebugAPI(object):
                     if 'raw' in in_data:
                         # send raw log
                         log = self._get_isolate_log(parts[4], parts[6])
-                        self.send_text(log, response, 200)
+                        self.send_text(log["content"], response, 200)
                     else:
                         # send log within a json object data["log"]
                         out_data["meta"]["api-method"] = "get_isolate_log"

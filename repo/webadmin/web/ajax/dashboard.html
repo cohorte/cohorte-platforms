@@ -158,10 +158,15 @@
         $('#isolate_modal_ajax-content').html('<img src="img/devoops_getdata.gif"  alt="preloader"/>');
         $.getJSON( "/debug/api/v2/isolates/"+uid, function( data ) {            
               var content = '<table class="table table-condensed table-striped table-hover">'
+              var kind = "python";
+              if (data["isolate"]["cohorte.isolate.kind"] == "Java") {
+                kind = "java"
+              } 
+              content += '<tr><td>KIND</td><td><img src="img/'+kind+'_16x16.gif"/> '+data["isolate"]["cohorte.isolate.kind"]+'</td></tr>'
               content += '<tr><td>ISOLATE UID</td><td>' + data["isolate"]["cohorte.isolate.uid"] + '</td></tr>'
               content += '<tr><td>ISOLATE NAME</td><td>' + data["isolate"]["cohorte.isolate.name"] + '</td></tr>'
               content += '<tr><td>HTTP SERVICE PORT</td><td>'+data["isolate"]["cohorte.isolate.http.port"]+'</td></tr>'            
-              //content += '<tr><td>REMOTE SHELL PORT</td><td>' + data['isolate']['shell_port'] + '</td></tr>'
+              //content += '<tr><td>REMOTE SHELL PORT</td><td>' + data['isolate']['shell_port'] + '</td></tr>'              
               content += '</table>'
               $('#isolate_modal_ajax-content').html(content);
           });
@@ -235,7 +240,7 @@
             content += "</p>";     
             content += '<table class="table table-condensed table-striped table-hover">';
             content += '<tr><td><b>NAME</b></td><td>' + data["factory"]["name"] + '</td></tr>';
-            content += '<tr><td><b>BUNDLE</b></td><td>' + data["factory"]["name"] + '</td></tr>';
+            content += '<tr><td><b>BUNDLE</b></td><td>' + data["factory"]["bundle"]["name"] + '</td></tr>';
             content += '<tr><td><b>HANDLERS</b></td><td>' + data["factory"]["handlers"] + '</td></tr>';
             content += '<tr><td><b>PROVIDED SERVICES</b></td><td>' + data["factory"]["provided-services"] + '</td></tr>';
             // requirements
@@ -299,9 +304,21 @@
               content += "<p><br/><a class='btn btn-default' id='link_get_instances' href='#' data-uuid='"+isolate_uuid+"'>&lt; Instances list</a></p>";     
             }
             content += '<table class="table table-condensed table-striped table-hover">';
+            var kind = "python";
+            if (data["instance"]["kind"] == "Java") {
+              kind = "java"
+            } 
+            content += '<tr><td><b>KIND</b></td><td><img src="img/'+kind+'_16x16.gif"/> '+data["instance"]["kind"]+'</td></tr>'
+              
             content += '<tr><td><b>NAME</b></td><td>' + data["instance"]["name"] + '</td></tr>';
             content += '<tr><td><b>FACTORY</b></td><td>' + data["instance"]["factory"] + '</td></tr>';
-            content += '<tr><td><b>STATE</b></td><td>' + data["instance"]["state"] + '</td></tr>';
+            var stateColor = "black";
+            if (data["instance"]["state"] == "VALID") {
+                stateColor = "green";
+            } else if (data["instance"]["state"] == "INVALID") {
+                stateColor = "red";
+            }           
+            content += '<tr><td><b>STATE</b></td><td style="color:'+stateColor+'">' + data["instance"]["state"] + '</td></tr>';
             if (frame == "isolate_modal_ajax-content_instances" ) {
               	content += '<tr><td><b>BUNDLE ID</b></td><td>' + data["instance"]["bundle-id"] + '</td></tr>';
             }
@@ -397,16 +414,33 @@
     function get_logs(isolate_uuid) {
         $('#isolate_modal_ajax-content_logs').html('<img src="img/devoops_getdata.gif"  alt="preloader"/>');   
         $.getJSON( "/debug/api/v2/isolates/"+isolate_uuid+"/logs", function( data ) { 
-                    
-            var content = '<table class="table table-condensed table-striped table-hover">';
+            var content = '';        
+            content += '<br/><p>Log Level: ';
+            content += '<select id="log_levels">';
+            content += '<option value="OFF">OFF</option>';
+            content += '<option value="SEVERE">SEVERE</option>';
+            content += '<option value="WARNING">WARNING</option>';
+            content += '<option value="INFO">INFO</option>';
+            content += '<option value="CONFIG">CONFIG</option>';
+            content += '<option value="FINE">FINE</option>';
+            content += '<option value="FINER">FINER</option>';
+            content += '<option value="FINEST">FINEST</option>';
+            content += '<option value="ALL">ALL</option>';
+            content += '</select></p>';                        
+            content += '<table class="table table-condensed table-striped table-hover">';
             content += '<tr><th>LOG ID</th><th>CREATION DATE</th></tr>';
-            for (var i in data['logs']) {                
-                var log_id = Object.keys(data['logs'][i])[0]
-                var log_timestamp = data['logs'][i][log_id]
+            for (var i in data['logs']['log-files']) {                
+                var log_id = Object.keys(data['logs']['log-files'][i])[0]
+                var log_timestamp = data['logs']['log-files'][i][log_id]
               	content += '<tr><td><a href="#" class="link_get_log" data-uuid="'+isolate_uuid+'" data-logid="'+log_id+'">'+log_id+'</a></td><td>'+log_timestamp+'</td></tr>';
             }
             content += '</table>'                        
             $('#isolate_modal_ajax-content_logs').html(content);
+            $('#log_levels').val(data['logs']["level"]);
+            $("#log_levels").change(function() {
+              //$.getJSON( "/debug/api/v2/isolates/"+isolate_uuid+"/logs", function( data ) { 
+              //});              
+            });
             $(".link_get_log").click(function(event) {
                 get_log($(this).attr("data-uuid"), $(this).attr("data-logid"));
             });
@@ -418,7 +452,7 @@
         $.getJSON( "/debug/api/v2/isolates/"+isolate_uuid+"/logs/"+log_id, function( data ) { 
             var content = "<p><br/><a class='btn btn-default' id='link_get_logs' href='#' data-uuid='"+isolate_uuid+"'>&lt; Logs list</a> ";
             content += " <a href='/debug/api/v2/isolates/"+isolate_uuid+"/logs/"+log_id+"?raw' target='_blanc' class='btn btn-default'>Open in a seperate window</a></p>";
-            content += "<pre>" + escapeHTML(data["log"]) + "</pre>";
+            content += "<pre>" + escapeHTML(data["log"]["content"]) + "</pre>";
             $('#isolate_modal_ajax-content_logs').html(content);
             $("#link_get_logs").click(function(event) {
                 console.log("link_get_logs clicked!");

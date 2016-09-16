@@ -56,6 +56,7 @@ import threading
 import traceback
 import os
 import time
+import json
 
 # cohorte plutform debug agent and api
 import debug
@@ -156,8 +157,10 @@ class DebugAgent(object):
             pelix.http.HTTP_SERVICE)
         if svc_ref is not None:
             port = svc_ref.get_property(pelix.http.HTTP_SERVICE_PORT)            
-        result["cohorte.isolate.http.port"] = port        
-        return result
+        result["cohorte.isolate.http.port"] = port  
+        # overrite isolate kind to python (original=pelix)
+        result["cohorte.isolate.kind"] = "Python"
+        return json.dumps(result)
 
     def get_bundles(self):
         """
@@ -166,7 +169,7 @@ class DebugAgent(object):
         bundles = self._context.get_bundles()
         bundles.insert(0, self._context.get_bundle(0))
         
-        return [
+        result = [
             { 
               "id" : bundle.get_bundle_id(),
               "name" : bundle.get_symbolic_name(),
@@ -175,6 +178,7 @@ class DebugAgent(object):
               "version" : bundle.get_version()
             } for bundle in bundles              
         ]
+        return json.dumps(result)
 
     def get_bundle_detail(self, bundle_number):
         """
@@ -184,7 +188,7 @@ class DebugAgent(object):
         try:
             bundle_id = int(bundle_number)            
         except ValueError as ex:
-            return {"error" : str(ex)}
+            return json.dumps({"error" : str(ex)})
         else:
             # Integer ID
             try:
@@ -223,14 +227,14 @@ class DebugAgent(object):
                 # Bundle in a invalid state
                 pass
             
-            return details
+            return json.dumps(details)
 
     def get_factories(self):
         """
         Returns the list of isolate factories
         """
         ipopo_factories = self._ipopo.get_factories()
-        return [
+        result = [
             { 
               "name" : name,
               "bundle" : { 
@@ -239,6 +243,7 @@ class DebugAgent(object):
               } 
             } for name in ipopo_factories              
         ]
+        return json.dumps(result)
         
     def get_factory_detail(self, factory_name):
         """
@@ -248,7 +253,7 @@ class DebugAgent(object):
         try:
             details = self._ipopo.get_factory_details(factory_name)
         except ValueError as ex:
-            return {"error" : str(ex)}
+            return json.dumps({"error" : str(ex)})
         if details is not None:
             factory_detail = {
                 "name" : details["name"],
@@ -294,21 +299,21 @@ class DebugAgent(object):
                     }
                     factory_detail["handlers"].append(handler)
                                                                 
-            return factory_detail
+            return json.dumps(factory_detail)
         else:
-            return {}
+            return json.dumps({})
            
     def get_instances(self):
         """
         Returns the list of iPOPO instances in the local isolate
         """
         ipopo_instances = self._ipopo.get_instances()
-        return [
+        result = [
             {"name" : name, 
              "factory": factory, 
              "state": ipopo_state_to_str(state)}
             for name, factory, state in ipopo_instances]
-
+        return json.dumps(result)
 
     def get_instance_detail(self, instance_name):
         """
@@ -318,10 +323,11 @@ class DebugAgent(object):
         try:
             details = self._ipopo.get_instance_details(instance_name)
         except ValueError as ex:
-            return {"error" : str(ex)}
+            return json.dumps({"error" : str(ex)})
         # basic info
         if details is not None:
-            instance_detail = { "name": details["name"],
+            instance_detail = { "kind": "Python",
+                                "name": details["name"],
                                 "factory": details["factory"],
                                 "bundle-id": details["bundle_id"],
                                 "state": ipopo_state_to_str(details["state"]),
@@ -339,9 +345,9 @@ class DebugAgent(object):
                                 "error-trace" : details["error_trace"]
                               }
             # instance properties
-            return instance_detail
+            return json.dumps(instance_detail)
         else:
-            return {}
+            return json.dumps({})
 
     def get_services(self):
         """
@@ -371,7 +377,7 @@ class DebugAgent(object):
                 lines.append('<dt>{0}</dt>\n<dd>{1}</dd>'.format(key, value))
             lines.append('</dl></td>')
             """
-        return result                    
+        return json.dumps(result)
         
     def get_threads(self):
         """
@@ -398,10 +404,10 @@ class DebugAgent(object):
                 th["stack"][str(index)]["line"] = line
                 index += 1
             result.append(th)
-        return result
+        return json.dumps(result)
         
     def get_isolate_logs(self):
-        isolate = self.get_isolate_detail()
+        isolate = json.loads(self.get_isolate_detail())
         if isolate is not None:            
             cohorte_base = isolate["cohorte.base"]
             if isolate["cohorte.isolate.kind"] == "forker":
@@ -409,10 +415,10 @@ class DebugAgent(object):
                 path = os.path.join(cohorte_base, "var", "forker.log")
                 if os.path.exists(path):
                     ct = time.ctime(os.path.getctime(path))
-                    ct_parser = time.strptime(ct)                 
-                    return [{"000": time.strftime("%Y%m%d-%H%M%S", ct_parser)}]
+                    ct_parser = time.strptime(ct)                                     
+                    return json.dumps({"level": "INFO", "log-files": [{"000": time.strftime("%Y%m%d-%H%M%S", ct_parser)}]})
                 else:
-                    return []
+                    return json.dumps({"level": "INFO", "log-files": []})
             else:
                 isolate_uid = isolate["cohorte.isolate.uid"]
                 isolate_name = isolate["cohorte.isolate.name"]
@@ -427,11 +433,11 @@ class DebugAgent(object):
                             toadd =  ldir[0:3]  
                             ct = time.ctime(os.path.getctime(path))
                             ct_parser = time.strptime(ct)          
-                            result.append({toadd: time.strftime("%Y%m%d-%H%M%S", ct_parser)})                                     
-                return result                
+                            result.append({toadd: time.strftime("%Y%m%d-%H%M%S", ct_parser)})                                                      
+                return json.dumps({"level": "INFO", "log-files": result})
     
     def get_isolate_log(self, log_id):
-        isolate = self.get_isolate_detail()
+        isolate = json.loads(self.get_isolate_detail())
         if isolate is not None:            
             cohorte_base = isolate["cohorte.base"]
             if isolate["cohorte.isolate.kind"] == "forker":                
@@ -443,19 +449,19 @@ class DebugAgent(object):
                                  log_id + "-" + isolate_uid, "log_" + isolate_name + ".log")
             with open (path, "r") as forker_log:
                 log=forker_log.read()
-                return log
+                return json.dumps({"content": log})
                                  
-        return ""
+        return json.dumps("")
     
-    def get_isolate_directory(self):
-        return self._directory.dump()     
+    def get_isolate_directory(self):        
+        return self._directory.dump()
 
     def get_isolate_accesses(self):
         accesses = self._directory.get_local_peer().get_accesses()
         result = {}
         for access in accesses:
             result[access] = self._directory.get_local_peer().get_access(access).dump()            
-        return result
+        return json.dumps(result)
     
     def herald_message(self, herald_svc, message):
         """
