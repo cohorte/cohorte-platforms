@@ -10,11 +10,26 @@
 <h3 class="page-header">Dashboard</h3>
 <div class="row">
     <div class="col-xs-12 col-sm-6 col-md-8">
-    A global view of the COHORTE system | show internal isolates <input type="checkbox" checked="false" data-size="mini" data-on-text="YES" data-off-text="NO" name="show-internal-isolates-checkbox" checked>
+    <p>
+      <table>        
+        <tr><td>Application Id: </td><td><b><span id="application_id_lbl"></span></b></td></tr>
+        <tr><td>Cohorte version: </td><td><b><span id="cohorte_version_lbl"></span></b></td></tr>
+        <tr><td>Show internal isolates: </td><td><input type="checkbox" checked="false" data-size="mini" data-on-text="YES" data-off-text="NO" name="show-internal-isolates-checkbox" checked/></td></tr>
+      </table>
+    </p>
     </div>
-    <div class="">
-    <a id="killall-nodes-btn" href="#" class="btn btn-danger" style="float:right;margin-right:20px;">Stop all nodes</a>
-    </div>
+    <div style="float:right;margin-right:20px;" class="btn-group">
+				<a class="btn btn-default disabled" href="#">Actions</a>
+				<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
+				<span class="fa fa-caret-down"></span></a>
+				<ul class="dropdown-menu">
+					<li><a id="killall-nodes-btn" href="#"><i class="fa fa-power-off fa-fw"></i> Stop All Nodes</a></li>		
+          <!--			
+					<li class="divider"></li>
+					<li><a href="#"><i class="i"></i> Make admin</a></li>
+          -->
+				</ul>
+		</div>    
 </div>
 <br/>
 
@@ -40,7 +55,14 @@
         </div>
       </div>    
       <div class="modal-footer">
-        <a id="kill-node-btn" class="btn btn-danger" data-dismiss="modal" data-uid="0" href="#" >Stop</a>        
+          <div style="float:right;margin-right:20px;" class="btn-group">
+              <a class="btn btn-default disabled" href="#">Actions</a>
+              <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
+              <span class="fa fa-caret-down"></span></a>
+              <ul class="dropdown-menu">
+                <li><a id="kill-node-btn" href="#"><i class="fa fa-power-off fa-fw"></i> Stop Node</a></li>
+              </ul>
+          </div>                    
       </div>    
 
     </div>
@@ -765,9 +787,7 @@
         loadNodes();
         setTimeout(refresh, 2000);
         
-            /* ************************ links ************************** */
-
-        
+        /* ************************ links ************************** */       
         $('#killall-nodes-btn').click(function() {                         
             killAllNodes()
         })
@@ -779,10 +799,27 @@
             var uid = $(this).attr('data-uid');            
             killIsolate(uid)
         })
+        // get platform infos
+        $.ajax({
+              url: "/debug/api/v2/platform",
+              type:"GET",                          
+              contentType:"application/json",
+              success: function(data) {                
+                $("#cohorte_version_lbl").html(data["platform"]["cohorte-version"])
+              }
+        });
+        // get application infos
+        $.ajax({
+              url: "/debug/api/v2/application",
+              type:"GET",                          
+              contentType:"application/json",
+              success: function(data) {
+                $("#application_id_lbl").html(data["application"]["app-id"])                
+              }
+        });
         // see http://www.bootstrap-switch.org/
         $("input[name='show-internal-isolates-checkbox']").bootstrapSwitch();
         $('input[name="show-internal-isolates-checkbox"]').on('switchChange.bootstrapSwitch', function(event, state) {
-          
           $.ajax({
               url: "/webadmin/gui/options",
               type:"GET",
@@ -791,7 +828,7 @@
               success: function(data) {
                 loadNodes();
               }
-            });
+           });
         });
 
         $.ajax({
