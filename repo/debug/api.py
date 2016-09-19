@@ -80,6 +80,7 @@ class SetEncoder(json.JSONEncoder):
              optional=True, allow_none=False)
 @Requires("_icomposerlocal", cohorte.composer.SERVICE_COMPOSER_ISOLATE,
           optional=True, spec_filter="(!(service.imported=*))")
+@Requires("_composer_top", cohorte.composer.SERVICE_COMPOSER_TOP)
 @Requires("_isolates", cohorte.composer.SERVICE_COMPOSER_ISOLATE, aggregate=True, optional=True)
 @Property('_reject', pelix.remote.PROP_EXPORT_REJECT, ['pelix.http.servlet', herald.SERVICE_DIRECTORY_LISTENER])
 @Instantiate('cohorte-debug-api')
@@ -102,9 +103,11 @@ class DebugAPI(object):
         # herald directory service
         self._directory = None
         self._herald = None
-        # isolate composer service
+
+        # composer services
         self._icomposers = {}
         self._icomposerlocal = None
+        self._composer_top = None
         self._isolates = []
 
         # List of platform activities
@@ -116,6 +119,9 @@ class DebugAPI(object):
         time_now = time.time()
         self._last_updates["nodes"] = time_now
         self._last_updates["platform_activities"] = time_now
+
+        # local infos
+        self._version_json = None
 
     def decrypt_request(self, request, action="GET"):
         """
@@ -155,7 +161,7 @@ class DebugAPI(object):
         data["meta"]["msg"] = "OK"
         data["meta"]["api-version"] = DEBUG_REST_API_VERSION
         data["meta"]["api-method"] = ""
-        data["meta"]["cohorte-version"] = COHORTE_VERSION
+        data["meta"]["cohorte-version"] = self._get_cohorte_version()
         data["meta"]["request-path"] = request.get_path()
         data["meta"]["request-method"] = action
         data["meta"]["duration"] = 0.0
@@ -190,6 +196,19 @@ class DebugAPI(object):
 
     def get_api_info(self, request, response, in_data, out_data):
         out_data["api"] = {"name": "debug"} 
+
+    def get_platform_details(self, request, response, in_data, out_data):
+        out_data["platform"] = {}        
+        out_data["platform"]["cohorte-version"] = self._get_cohorte_version()
+
+    def get_application_details(self, request, response, in_data, out_data):
+        out_data["application"] = {}        
+        out_data["application"]["app-id"] = self._get_application_id()
+
+    def get_application_composition(self, request, response, in_data, out_data):
+        out_data["application"] = {}        
+        out_data["application"]["app-id"] = self._get_application_id()
+        out_data["application"]["composition"] = self._get_application_composition()
 
     def get_isolates(self, request, response, in_data, out_data):
         out_data["isolates"] = []
@@ -470,6 +489,28 @@ class DebugAPI(object):
         # Not yet implemented in Python
         return None
 
+    """
+    Internal api methods ===========================================================================
+    """
+
+    def _get_cohorte_version_details(self):
+        if not self._version_json:
+            conf_dir = os.path.join(self._context.get_property("cohorte.home"), "conf")
+            file_name = os.path.join(conf_dir, "version.js")        
+            with open(file_name, "r") as version_json_file:
+                self._version_json = json.load(version_json_file)
+        return self._version_json
+
+    def _get_cohorte_version(self):
+        version = self._get_cohorte_version_details()
+        return "{0}_{1}_{2}".format(version["version"], version["timestamp"], version["stage"]) 
+
+    def _get_application_id(self):
+        comp = self._get_application_composition()
+        return comp["name"]
+
+    def _get_application_composition(self):
+        return self._composer_top.get_composition_json()
 
     """
     Servlet (url mapping to rest api) ================================================================
@@ -487,12 +528,21 @@ class DebugAPI(object):
             if path == DEBUG_REST_API_PATH:
                 out_data["meta"]["api-method"] = "get_api_info"
                 self.get_api_info(request, response, in_data, out_data)
+            elif path == DEBUG_REST_API_PATH + "/platform":
+                out_data["meta"]["api-method"] = "get_platform_details"
+                self.get_platform_details(request, response, in_data, out_data)
+            elif path == DEBUG_REST_API_PATH + "/application":
+                out_data["meta"]["api-method"] = "get_application_details"
+                self.get_application_details(request, response, in_data, out_data)    
             elif path == DEBUG_REST_API_PATH + "/isolates":
                 out_data["meta"]["api-method"] = "get_isolates"
                 self.get_isolates(request, response, in_data, out_data)
-            
+
             elif len(parts) == 5:    
-                if path == DEBUG_REST_API_PATH + "/isolates/" + parts[4]:
+                if path == DEBUG_REST_API_PATH + "/application/composition":
+                    out_data["meta"]["api-method"] = "get_application_composition"
+                    self.get_application_composition(request, response, in_data, out_data)
+                elif path == DEBUG_REST_API_PATH + "/isolates/" + parts[4]:
                     out_data["meta"]["api-method"] = "get_isolate"
                     self.get_isolate(request, response, in_data, out_data, parts[4])
                 else:

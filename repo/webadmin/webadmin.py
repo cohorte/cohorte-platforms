@@ -119,7 +119,7 @@ class WebAdmin(object):
         platform["meta"]["code"] = 200
         platform["meta"]["lastupdate"] = time.time()
         platform["platform"]["app-id"] = "led-isandlatech-demo"
-        platform["platform"]["cohorte-version"] = "1.0.1"
+        platform["platform"]["cohorte-version"] = "1.2.0"
         return platform
 
     def get_platform_activities(self):
@@ -811,7 +811,7 @@ class WebAdmin(object):
         tabs["tabs"].append({"name": "Dashboard", "icon": "fa-dashboard", "page": "ajax/dashboard.html"})
         tabs["tabs"].append({"name": "Global view", "icon": "fa-sitemap", "page": "ajax/globalview.html"})
         tabs["tabs"].append({"name": "Activity Log", "icon": "fa-desktop", "page": "ajax/activitylog.html"})
-        #tabs["tabs"].append({"name": "Composition", "icon": "fa-book", "page": "ajax/composition.html"})
+        tabs["tabs"].append({"name": "Composition", "icon": "fa-book", "page": "ajax/composition.html"})
         #tabs["tabs"].append({"name": "Timeline", "icon": "fa-sort-amount-asc", "page": "ajax/timeline.html"})
         tabs["meta"]["code"] = 200
         tabs["meta"]["lastupdate"] = self._nodes_list_lastupdate
