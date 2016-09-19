@@ -112,6 +112,9 @@ SUBJECT_GET_ISOLATE_DIRECTORY = "{0}/get_isolate_directory".format(_SUBJECT_PREF
 SUBJECT_GET_ISOLATE_ACCESSES = "{0}/get_isolate_accesses".format(_SUBJECT_PREFIX)
 """ Signal to request the isolate herald accesses """
 
+SUBJECT_SET_ISOLATE_LOGS_LEVEL = "{0}/set_isolate_logs_level".format(_SUBJECT_PREFIX)
+""" Signal to change the isolate logs level """
+
 @ComponentFactory('cohorte-debug-agent-factory')
 @Requires("_ipopo", pelix.ipopo.constants.SERVICE_IPOPO)
 @Requires('_herald', herald.SERVICE_HERALD)
@@ -414,7 +417,7 @@ class DebugAgent(object):
                 # this is a forker. returns only "000" which references var/forker.log file                
                 path = os.path.join(cohorte_base, "var", "forker.log")
                 if os.path.exists(path):
-                    ct = time.ctime(os.path.getctime(path))
+                    ct = time.ctime(os.path.getmtime(path))
                     ct_parser = time.strptime(ct)                                     
                     return json.dumps({"level": "INFO", "log-files": [{"000": time.strftime("%Y%m%d-%H%M%S", ct_parser)}]})
                 else:
@@ -433,7 +436,7 @@ class DebugAgent(object):
                             toadd =  ldir[0:3]  
                             ct = time.ctime(os.path.getctime(path))
                             ct_parser = time.strptime(ct)          
-                            result.append({toadd: time.strftime("%Y%m%d-%H%M%S", ct_parser)})                                                      
+                            result.append({toadd: time.strftime("%Y-%m-%dT%H:%M:%S", ct_parser)})                                                      
                 return json.dumps({"level": "INFO", "log-files": result})
     
     def get_isolate_log(self, log_id):
@@ -463,6 +466,9 @@ class DebugAgent(object):
             result[access] = self._directory.get_local_peer().get_access(access).dump()            
         return json.dumps(result)
     
+    def set_isolate_logs_level(self, level):
+        return json.dumps({"old_log_level": "ALL", "new_log_level": "INFO"})
+
     def herald_message(self, herald_svc, message):
         """
         Called by Herald when a message is received
@@ -500,6 +506,9 @@ class DebugAgent(object):
             reply = self.get_isolate_directory()
         elif subject == SUBJECT_GET_ISOLATE_ACCESSES:            
             reply = self.get_isolate_accesses()
+        elif subject == SUBJECT_SET_ISOLATE_LOGS_LEVEL:
+            level = message.content
+            reply = self.set_isolate_logs_level(level)
         if reply is not None:
             herald_svc.reply(message, reply)
         else:

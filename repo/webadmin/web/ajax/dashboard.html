@@ -428,7 +428,7 @@
             content += '<option value="ALL">ALL</option>';
             content += '</select></p>';                        
             content += '<table class="table table-condensed table-striped table-hover">';
-            content += '<tr><th>LOG ID</th><th>CREATION DATE</th></tr>';
+            content += '<tr><th>LOG ID</th><th>LAST MODIFICATION DATE</th></tr>';
             for (var i in data['logs']['log-files']) {                
                 var log_id = Object.keys(data['logs']['log-files'][i])[0]
                 var log_timestamp = data['logs']['log-files'][i][log_id]
@@ -438,8 +438,32 @@
             $('#isolate_modal_ajax-content_logs').html(content);
             $('#log_levels').val(data['logs']["level"]);
             $("#log_levels").change(function() {
-              //$.getJSON( "/debug/api/v2/isolates/"+isolate_uuid+"/logs", function( data ) { 
-              //});              
+              var myData = {                  
+                    logLevel: $('#log_levels').val(),
+                    hello: "World"
+                };
+              $.ajax(
+                {
+                  url: "/debug/api/v2/isolates/"+isolate_uuid+"/logs/level",
+                  type: "POST",
+                  data: $.toJSON(myData),
+                  contentType: "application/json; charset=utf-8",
+                  dataType: "text",
+                  success: function(data) {
+
+                  }
+                }
+              );
+              /*
+              $.post( "/debug/api/v2/isolates/"+isolate_uuid+"/logs/level",
+                {                  
+                  logLevel: $('#log_levels').val()
+                },
+                function(data, status) {
+                  console.log("received data:" + data + " - status:" + status);
+                }
+              );
+              */              
             });
             $(".link_get_log").click(function(event) {
                 get_log($(this).attr("data-uuid"), $(this).attr("data-logid"));

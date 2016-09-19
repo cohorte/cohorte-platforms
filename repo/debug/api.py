@@ -54,7 +54,8 @@ DEBUG_REST_API_PATH = "debug/api/v2"
 DEBUG_REST_API_VERSION = "v2"
 
 # VERSION
-COHORTE_VERSION = "1.1.2"
+## TODO should retrieved automatically
+COHORTE_VERSION = "1.2.0"
 
 # ------------------------------------------------------------------------------------
 
@@ -139,8 +140,9 @@ class DebugAPI(object):
             in_data = urlparse.parse_qs(query, keep_blank_values=True)
         else:
             data = request.read_data()
-            if data != None:
-                in_data = json.loads(str(data))
+            if data != None:                                
+                indata = data.decode('UTF-8')                
+                in_data = json.loads(str(indata))
             else:
                 in_data = urlparse.parse_qs(query, keep_blank_values=True)
 
@@ -168,9 +170,19 @@ class DebugAPI(object):
     def send_text(self, data, response, status):
         response.send_content(status, data, "text/plain")
         
-    def bad_request(self, request, response, in_data, out_data):
+    def bad_request(self, request, response, in_data, out_data, msg=None):
         out_data["meta"]["status"] = 400
-        out_data["meta"]["msg"] = "BAD REQUEST"
+        if msg:
+            out_data["meta"]["msg"] = "BAD REQUEST: " + msg
+        else:
+            out_data["meta"]["msg"] = "BAD REQUEST"
+
+    def internal_server_error(self, request, response, in_data, out_data, msg=None):
+        out_data["meta"]["status"] = 500
+        if msg:
+            out_data["meta"]["msg"] = "INTERNAL SERVER ERROR: " + msg
+        else:
+            out_data["meta"]["msg"] = "INTERNAL SERVER ERROR"
 
     """
     GET actions ========================================================================
@@ -282,6 +294,17 @@ class DebugAPI(object):
         out_data["isolate"] = {"uuid" : uuid}
         accesses = self._get_isolate_accesses(uuid)
         out_data["accesses"] = accesses        
+
+    def set_isolate_logs_level(self, request, response, in_data, out_data, uuid):
+        out_data["isolate"] = {"uuid" : uuid}        
+        level = in_data["logLevel"]
+        logs_level = self._set_isolate_logs_level(uuid, level)        
+        if logs_level:
+            out_data["logs"] = logs_level
+        else:
+            self.internal_server_error(request, response, in_data, out_data, "Cannot change log level!")
+        
+
 
     """
     Internal agent methods ===========================================================================
@@ -427,11 +450,25 @@ class DebugAPI(object):
         if lp.uid != uuid:  
             # this is another isolate          
             msg = beans.Message(debug.agent.SUBJECT_GET_ISOLATE_ACCESSES)
-            reply = self._herald.send(uuid, msg)
+            reply = self._herald.send(uuid, msg)            
             return json.loads(reply.content)
         else:
             # this is the local isolate
             return json.loads(self._agent.get_isolate_accesses())
+
+    def _set_isolate_logs_level(self, uuid, level):
+        lp = self._directory.get_local_peer()
+        if lp.uid != uuid:  
+            # this is another isolate          
+            msg = beans.Message(debug.agent.SUBJECT_SET_ISOLATE_LOGS_LEVEL, level)
+            reply = self._herald.send(uuid, msg)
+            _logger.info("##### content:" + reply.content)
+            return json.loads(reply.content)
+        else:
+            # this is the local isolate
+            return json.loads(self._agent.set_isolate_logs_level(level))
+        # Not yet implemented in Python
+        return None
 
 
     """
@@ -518,6 +555,30 @@ class DebugAPI(object):
 
         self.send_json(out_data, response)
 
+    
+    def do_POST(self, request, response):
+        """
+        Handle a POST
+        """
+        path, parts, in_data = self.decrypt_request(request, "POST")
+
+        out_data = self.prepare_response(request, "POST")
+
+        if path.startswith(DEBUG_REST_API_PATH):            
+            if len(parts) == 7:
+                if path == DEBUG_REST_API_PATH + "/isolates/" + parts[4] + "/logs/level":
+                    out_data["meta"]["api-method"] = "set_isolate_logs_level"
+                    if 'logLevel' in in_data:                                           
+                        self.set_isolate_logs_level(request, response, in_data, out_data, parts[4])
+                    else:
+                        self.bad_request(request, response, in_data, out_data, "no logLevel parameter provided!")
+            else:
+                self.bad_request(request, response, in_data, out_data)
+
+        else:
+            self.bad_request(request, response, in_data, out_data)
+
+        self.send_json(out_data, response)
 
     """
 	iPOPO STUFF --------------------------------------------------------------------------------------------------------
