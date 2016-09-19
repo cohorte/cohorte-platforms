@@ -943,6 +943,7 @@ class WebAdmin(object):
                 self.show_webadmin_page(request, response)
             elif len(parts) > 1:
                 if str(parts[1]) == "static":
+                    #response.set_header("Set-Cookie", "session=1234567890")
                     if len(parts) > 2:
                         self.load_resource('/'.join(parts[2:]), request, response)
                     else:

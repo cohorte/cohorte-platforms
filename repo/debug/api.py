@@ -314,6 +314,14 @@ class DebugAPI(object):
         accesses = self._get_isolate_accesses(uuid)
         out_data["accesses"] = accesses        
 
+
+    """
+    POST actions ========================================================================
+    """
+
+    def auth_login(self, request, response, in_data, out_data, uuid):
+        pass 
+
     def set_isolate_logs_level(self, request, response, in_data, out_data, uuid):
         out_data["isolate"] = {"uuid" : uuid}        
         level = in_data["logLevel"]
@@ -614,7 +622,10 @@ class DebugAPI(object):
 
         out_data = self.prepare_response(request, "POST")
 
-        if path.startswith(DEBUG_REST_API_PATH):            
+        if path.startswith(DEBUG_REST_API_PATH): 
+            if path == DEBUG_REST_API_PATH + "/auth/login":
+                out_data["meta"]["api-method"] = "auth_login"
+                self.auth_login(request, response, in_data, out_data)
             if len(parts) == 7:
                 if path == DEBUG_REST_API_PATH + "/isolates/" + parts[4] + "/logs/level":
                     out_data["meta"]["api-method"] = "set_isolate_logs_level"
