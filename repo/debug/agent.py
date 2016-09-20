@@ -259,6 +259,7 @@ class DebugAgent(object):
             return json.dumps({"error" : str(ex)})
         if details is not None:
             factory_detail = {
+                "kind": "Python",
                 "name" : details["name"],
                 "bundle" : { 
                     "id" : details["bundle"].get_bundle_id(), 

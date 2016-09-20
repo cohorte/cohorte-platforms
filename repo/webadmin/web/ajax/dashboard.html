@@ -294,30 +294,36 @@
             var content = "<p><br/><a class='btn btn-default' id='link_get_factories' href='#' data-uuid='"+isolate_uuid+"'>&lt; Factories list</a> ";
             content += "</p>";     
             content += '<table class="table table-condensed table-striped table-hover">';
+            var kind = "python";
+            if (data["factory"]["kind"] == "Java") {
+              kind = "java"
+            } 
             content += '<tr><td><b>NAME</b></td><td>' + data["factory"]["name"] + '</td></tr>';
             content += '<tr><td><b>BUNDLE</b></td><td>' + data["factory"]["bundle"]["name"] + '</td></tr>';
-            content += '<tr><td><b>HANDLERS</b></td><td>' + data["factory"]["handlers"] + '</td></tr>';
-            content += '<tr><td><b>PROVIDED SERVICES</b></td><td>' + data["factory"]["provided-services"] + '</td></tr>';
-            // requirements
-            content += '<tr><td><b>REQUIREMENTS</b></td><td>';
-              content += '<table class="table table-condensed table-striped table-hover">';
-              content += '<tr><th>ID</th><th>Specification</th><th>Filter</th><th>Aggregate</th><th>Optional</th></tr>';
-              for (var i in data["factory"]["requirements"]) {
-                  var req = data["factory"]["requirements"];
-                  content += '<tr><td>'+req[i]["id"]+'</td><td>'+req[i]["specification"]+'</td><td>'+req[i]["filter"]+'</td><td>'+req[i]["aggregate"]+'</td><td>'+req[i]["optional"]+'</td></tr>';
-                }              
-              content += '</table>';                
-            content += '</td></tr>';
-            // properties
-            content += '<tr><td><b>PROPERTIES</b></td><td>';
-              content += '<table class="table table-condensed table-striped table-hover">';
-              content += '<tr><th>Key</th><th>Default Value</th></tr>';
-              var keys = Object.keys(data["factory"]["properties"])
-              for (var i in keys) {
-                var key = keys[i]                
-                content += '<tr><td>'+key+'</td><td>'+data["factory"]["properties"][key]+'</td></tr>';
-              }
-              content += "</table>";
+            if (kind != "java") {
+              content += '<tr><td><b>HANDLERS</b></td><td>' + data["factory"]["handlers"] + '</td></tr>';
+              content += '<tr><td><b>PROVIDED SERVICES</b></td><td>' + data["factory"]["provided-services"] + '</td></tr>';
+              // requirements
+              content += '<tr><td><b>REQUIREMENTS</b></td><td>';
+                content += '<table class="table table-condensed table-striped table-hover">';
+                content += '<tr><th>ID</th><th>Specification</th><th>Filter</th><th>Aggregate</th><th>Optional</th></tr>';
+                for (var i in data["factory"]["requirements"]) {
+                    var req = data["factory"]["requirements"];
+                    content += '<tr><td>'+req[i]["id"]+'</td><td>'+req[i]["specification"]+'</td><td>'+req[i]["filter"]+'</td><td>'+req[i]["aggregate"]+'</td><td>'+req[i]["optional"]+'</td></tr>';
+                  }              
+                content += '</table>';                
+              content += '</td></tr>';
+              // properties
+              content += '<tr><td><b>PROPERTIES</b></td><td>';
+                content += '<table class="table table-condensed table-striped table-hover">';
+                content += '<tr><th>Key</th><th>Default Value</th></tr>';
+                var keys = Object.keys(data["factory"]["properties"])
+                for (var i in keys) {
+                  var key = keys[i]                
+                  content += '<tr><td>'+key+'</td><td>'+data["factory"]["properties"][key]+'</td></tr>';
+                }
+            }
+            content += "</table>";
             content +='</td></tr>';                        
             content += '</table>';                                                 
             $('#isolate_modal_ajax-content_factories').html(content);
@@ -385,10 +391,10 @@
             if (frame == "isolate_modal_ajax-content_instances" ) {
               	content += '<tr><td><b>BUNDLE ID</b></td><td>' + data["instance"]["bundle-id"] + '</td></tr>';
             }
-            content += '<tr><td><b>SERVICES</b></td><td>' + data["instance"]["services"] + '</td></tr>';
-            // dependencies
-            
-            content += '<tr><td><b>DEPENDENCIES</b></td><td>';
+            if (kind != "java") {
+              content += '<tr><td><b>SERVICES</b></td><td>' + data["instance"]["services"] + '</td></tr>';
+              // dependencies            
+              content += '<tr><td><b>DEPENDENCIES</b></td><td>';
               content += '<table class="table table-condensed table-striped table-hover">';
               content += '<tr><th>Field</th><th>Specification</th><th>Optional</th><th>Aggregate</th><th>Handler</th><th>Bindings</th></tr>';
               var deps = data["instance"]["dependencies"];              
@@ -397,11 +403,12 @@
                   var key = Object.keys(dep)[0]                                    
                   content += '<tr><td>'+key+'</td><td>'+dep[key]["specification"]+'</td><td>'+dep[key]["optional"]+'</td><td>'+dep[key]["aggregate"]+'</td><td>'+dep[key]["handler"]+'</td><td>'+dep[key]["bindings"]+'</td></tr>';
                 }              
-              content += '</table>';                
-            content += '</td></tr>';
             
-            // properties
-            content += '<tr><td><b>PROPERTIES</b></td><td>';
+              content += '</table>';                
+              content += '</td></tr>';
+            
+              // properties
+              content += '<tr><td><b>PROPERTIES</b></td><td>';
               content += '<table class="table table-condensed table-striped table-hover">';
               content += '<tr><th>Key</th><th>Default Value</th></tr>';
               var keys = Object.keys(data["instance"]["properties"])
@@ -410,13 +417,14 @@
                 content += '<tr><td>'+key+'</td><td>'+data["instance"]["properties"][key]+'</td></tr>';
               }
               content += "</table>";
-            content +='</td></tr>';
-            if (frame == "isolate_modal_ajax-content_instances" ) {       
-              if (data["instance"]["error-trace"] != null) {
-                content += '<tr><td><b>ERROR TRACE</b></td><td><pre>' + data["instance"]["error-trace"] + '</pre></td></tr>';
-              } else {
-                content += '<tr><td><b>ERROR TRACE</b></td><td><pre></pre></td></tr>';
-              }               
+              content +='</td></tr>';            
+              if (frame == "isolate_modal_ajax-content_instances" ) {       
+                if (data["instance"]["error-trace"] != null) {
+                  content += '<tr><td><b>ERROR TRACE</b></td><td><pre>' + data["instance"]["error-trace"] + '</pre></td></tr>';
+                } else {
+                  content += '<tr><td><b>ERROR TRACE</b></td><td><pre></pre></td></tr>';
+                }               
+              }
             }
             content += '</table>';                                                 
             $('#'+frame).html(content);
