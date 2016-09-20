@@ -30,6 +30,7 @@ import cohorte.monitor
 import logging
 import threading
 import json, time, os, uuid
+import hashlib
 
 
 try:
@@ -389,7 +390,16 @@ class DebugAPI(object):
     """
     
     def check_credentials(self, username, password):
-        return self._username == username and self._password == password
+        if username and password:
+            if self._username == username:
+                if self._password.startswith("hash:"):
+                    hashed_password = self._password[5:]
+                    hashed_user_pass_obj = hashlib.md5(password.encode('UTF-8'))
+                    hashed_user_pass = hashed_user_pass_obj.hexdigest()
+                    return hashed_password == hashed_user_pass
+                else:
+                    return self._password == password                        
+        return False
     
     def check_session_timeout(self, request, response, in_data, out_data, session_id, update=True):
         if session_id in self._sessions:

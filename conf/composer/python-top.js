@@ -58,9 +58,17 @@
 			"name" : "cohorte-admin-api",
 			"properties" : {
 				"username" : "admin",
-				"password" : "nimda",
-				"session.timeout" : 120000
+				"password" : "hash:ee10c315eba2c75b403ea99136f5b48d",
+				"session.timeout" : 240000
 			}
+			/*
+				To generated a hashed password and put it in "password" property, 
+				you can use the following python code:
+					import hashlib				
+					hash_object = hashlib.md5(b'Hello World')
+					print(hash_object.hexdigest())
+
+			*/
 		}
 	 ]
 /* All components of the Composer are automatically instantiated */
