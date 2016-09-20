@@ -5,10 +5,17 @@ Changes form the 1.1.2 to 1.2.0 build: ${timestamp}
 	* Cohorte-Runtime : new Local Discovery 
 
 ** Improvements
-	* Webadmin : adding Herald Tab that shows the isolate accesses and directory content [#80]
-	* Cohorte-Runtime : Adding Forker's HTTP Port to OSGi java framework properties
-	* Cohorte-Herald : new multicast discovery paquets format 
-	* Cohorte-Herald : option to avoid discover local peers (of the same node)
+	* Webadmin
+		- supporting basic authentification
+		- adding Herald Tab that shows the isolate accesses and directory content [#80]
+		- implementing Logs Tab for Java isolates
+		- adding "Composition" menu that shows the application's composition		
+		- several improvements on the dashboard page
+	* Cohorte-Runtime
+		- Adding Forker's HTTP Port to OSGi java framework properties
+	* Cohorte-Herald
+		- new multicast discovery paquets format 
+		- option to avoid discover local peers (of the same node)
 	* Updating dependencies
 		- Cohorte-Utilities from 1.0.4 to 1.0.6
 		- Cohorte-Runtime from 1.0.3 to 1.1.0
@@ -27,8 +34,9 @@ Changes form the 1.1.2 to 1.2.0 build: ${timestamp}
 			> added   org.apache.httpcomponents.httpcore 4.4.4
 
 ** Bug Fix
-	* Cohorte-Runtime : Java isolates are not started if no vm_args configuration was given [#79]
-	* Cohorte-Runtime : Normalize paths coming from PYTHONPATH [isandlatech/cohorte-runtime#34]
+	* Cohorte-Runtime
+		- Java isolates are not started if no vm_args configuration was given [#79]
+		- Normalize paths coming from PYTHONPATH [isandlatech/cohorte-runtime#34]
 
 Changes form the 1.1.1 to 1.1.2
 -------------------------------
