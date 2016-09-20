@@ -14,8 +14,7 @@
       <table class="table table-condensed table-hover">        
         <tr><td style="width:130px;">Application Id: </td><td><b><span id="application_id_lbl"></span></b></td></tr>
         <tr><td>Application name: </td><td><b><span id="application_name_lbl"></span></b></td></tr>
-        <tr><td>Cohorte version: </td><td><b><span id="cohorte_version_lbl"></span></b></td></tr>
-        <!--<tr><td>Show internal isolates: </td><td><input type="checkbox" checked="false" data-size="mini" data-on-text="YES" data-off-text="NO" name="show-internal-isolates-checkbox" checked/></td></tr>-->
+        <tr><td>Cohorte version: </td><td><b><span id="cohorte_version_lbl"></span></b></td></tr>        
       </table>
     </p>
     </div>
@@ -26,7 +25,7 @@
 				<ul class="dropdown-menu" style="z-index: 9999; width:240px">
           <li> <a href="#">Show internal isolates: <input type="checkbox" checked="false" data-size="mini" data-on-text="YES" data-off-text="NO" name="show-internal-isolates-checkbox" checked/></a></li>
 					<li class="divider"></li>
-          <li><a id="killall-nodes-btn" href="#"><i class="fa fa-power-off fa-fw"></i> Stop All Nodes</a></li>		          	
+          <li><a href="#" data-toggle="modal" data-target="#stop_all_nodes_modal"><i class="fa fa-power-off fa-fw"></i> Stop All Nodes</a></li>		          	
 				</ul>
 		</div>    
 </div>
@@ -41,6 +40,26 @@
 
 
 <!-- Modals -->
+
+<div class="modal modal-wide" id="stop_all_nodes_modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Stop All Nodes</h4>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to stop all the nodes?</p>
+        <p>This running application will stop to function, you need to restart all the nodes manually!</p>
+      </div>  
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button id="killall-nodes-btn" type="button" class="btn btn-danger" data-dismiss="modal">Stop All Nodes</button>
+      </div>    
+    </div>
+  </div>
+</div>
+
 <div class="modal"  id="node_modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -186,10 +205,13 @@
               content += '<tr><td>KIND</td><td><img src="img/'+kind+'_16x16.gif"/> '+data["isolate"]["cohorte.isolate.kind"]+'</td></tr>'
               content += '<tr><td>ISOLATE UID</td><td>' + data["isolate"]["cohorte.isolate.uid"] + '</td></tr>'
               content += '<tr><td>ISOLATE NAME</td><td>' + data["isolate"]["cohorte.isolate.name"] + '</td></tr>'
-              content += '<tr><td>HTTP SERVICE PORT</td><td>'+data["isolate"]["cohorte.isolate.http.port"]+'</td></tr>'            
-              //content += '<tr><td>REMOTE SHELL PORT</td><td>' + data['isolate']['shell_port'] + '</td></tr>'              
+              content += '<tr><td>HTTP SERVICE PORT</td><td>'+data["isolate"]["cohorte.isolate.http.port"]+'</td></tr>'
               content += '</table>'
               $('#isolate_modal_ajax-content').html(content);
+          }).fail(function(jqXHR) {
+              if (jqXHR.status == 401) {
+                  window.location.href = "login.html"
+              } 
           });
     }
     
@@ -211,6 +233,10 @@
                 console.log("data-logid="+$(this).attr("data-bundle"));
                 get_bundle($(this).attr("data-uuid"), $(this).attr("data-bundle"));
             });
+        }).fail(function(jqXHR) {
+            if (jqXHR.status == 401) {
+                window.location.href = "login.html"
+            } 
         });         
     }
     
@@ -233,7 +259,11 @@
                 console.log("link_get_bundles clicked!");
                 get_bundles($(this).attr("data-uuid"));
             });
-        });
+        }).fail(function(jqXHR) {
+            if (jqXHR.status == 401) {
+                window.location.href = "login.html"
+            } 
+        }); 
     }
     
     function get_factories(uid) {
@@ -251,7 +281,11 @@
                 console.log("link_get_factory clicked!");
                 get_factory($(this).attr("data-uuid"), $(this).attr("data-factory"));
             });
-        });    
+        }).fail(function(jqXHR) {
+            if (jqXHR.status == 401) {
+                window.location.href = "login.html"
+            } 
+        });     
     }
     
     function get_factory(isolate_uuid, factory_name) {
@@ -291,7 +325,11 @@
                 console.log("link_get_factories clicked!");
                 get_factories($(this).attr("data-uuid"));
             });
-        });
+        }).fail(function(jqXHR) {
+            if (jqXHR.status == 401) {
+                window.location.href = "login.html"
+            } 
+        }); 
     }
     
     function get_instances(uid) {
@@ -314,7 +352,11 @@
                 activateTab("factories");
                 get_factory($(this).attr("data-uuid"), $(this).attr("data-factory"));
             });
-        });
+        }).fail(function(jqXHR) {
+            if (jqXHR.status == 401) {
+                window.location.href = "login.html"
+            } 
+        }); 
     }
     
     function get_instance(isolate_uuid, instance_name, frame) {
@@ -382,7 +424,11 @@
                 console.log("link_get_instances clicked!");
                 get_instances($(this).attr("data-uuid"));
             });
-        });
+        }).fail(function(jqXHR) {
+            if (jqXHR.status == 401) {
+                window.location.href = "login.html"
+            } 
+        }); 
     }
     
     function get_services(uid) {
@@ -396,7 +442,11 @@
             }
             content += '</table>'            
             $('#isolate_modal_ajax-content_services').html(content);
-        });
+        }).fail(function(jqXHR) {
+            if (jqXHR.status == 401) {
+                window.location.href = "login.html"
+            } 
+        }); 
     }
     
     function get_threads(uid) {
@@ -429,7 +479,11 @@
             }
             content += '</table>'            
             $('#isolate_modal_ajax-content_threads').html(content);
-        });
+        }).fail(function(jqXHR) {
+            if (jqXHR.status == 401) {
+                window.location.href = "login.html"
+            } 
+        }); 
     }
     
     function get_logs(isolate_uuid) {
@@ -491,7 +545,11 @@
             $(".link_get_log").click(function(event) {
                 get_log($(this).attr("data-uuid"), $(this).attr("data-logid"));
             });
-        });     
+        }).fail(function(jqXHR) {
+            if (jqXHR.status == 401) {
+                window.location.href = "login.html"
+            } 
+        });      
     }
 
     function get_log(isolate_uuid, log_id) {
@@ -505,7 +563,11 @@
                 console.log("link_get_logs clicked!");
                 get_logs($(this).attr("data-uuid"));
             });
-        });
+        }).fail(function(jqXHR) {
+            if (jqXHR.status == 401) {
+                window.location.href = "login.html"
+            } 
+        }); 
     }
     
     function get_herald(isolate_uuid) {        
@@ -522,7 +584,11 @@
             }
             content += '</table>'  
             $('#isolate_modal_ajax-content_herald_accesses').html(content);            
-        });  
+        }).fail(function(jqXHR) {
+            if (jqXHR.status == 401) {
+                window.location.href = "login.html"
+            } 
+        });   
 
         $.getJSON( "/debug/api/v2/isolates/"+isolate_uuid+"/directory", function( data ) {                     
             var content = '<table class="table table-condensed table-striped table-hover">';
@@ -540,7 +606,11 @@
             }
             content += '</table>'  
             $('#isolate_modal_ajax-content_herald_directory').html(content);            
-        });     
+        }).fail(function(jqXHR) {
+            if (jqXHR.status == 401) {
+                window.location.href = "login.html"
+            } 
+        });      
 
            
     }

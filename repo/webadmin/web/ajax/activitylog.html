@@ -109,7 +109,11 @@ function loadActivities() {
         } 
         $('#list_of_platform_activities').html(frame);        
         activities_lastupdate = data['meta']['lastupdate'];
-    });
+    }).fail(function(jqXHR) {
+          if (jqXHR.status == 401) {
+              window.location.href = "login.html"
+          } 
+      });
 }
 
 function refresh() {

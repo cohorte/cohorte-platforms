@@ -48,7 +48,11 @@ function loadApplicationComposition() {
         var compjson = JSON.stringify(data["application"]["composition"], null, 2);    
         $('#application_composition_txt').html("<code class='JavaScript'>" + compjson + "</code>");        
         activities_lastupdate = data['meta']['lastupdate'];
-    });
+    }).fail(function(jqXHR) {
+          if (jqXHR.status == 401) {
+              window.location.href = "login.html"
+          } 
+      });
 }
 
 $(document).ready(function() {
