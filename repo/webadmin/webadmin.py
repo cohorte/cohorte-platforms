@@ -817,8 +817,9 @@ class WebAdmin(object):
         tabs = {"meta": {}, "tabs": []}
         tabs["tabs"].append({"name": "Dashboard", "icon": "fa-dashboard", "page": "ajax/dashboard.html"})
         tabs["tabs"].append({"name": "Global view", "icon": "fa-sitemap", "page": "ajax/globalview.html"})
-        tabs["tabs"].append({"name": "Activity Log", "icon": "fa-desktop", "page": "ajax/activitylog.html"})
-        tabs["tabs"].append({"name": "Composition", "icon": "fa-book", "page": "ajax/composition.html"})
+        tabs["tabs"].append({"name": "Activity Log", "icon": "fa-desktop", "page": "ajax/activitylog.html"})        
+        tabs["tabs"].append({"name": "Composition", "icon": "fa-cogs", "page": "ajax/composition.html"})
+        #tabs["tabs"].append({"name": "Configuration", "icon": "fa-book", "page": "ajax/configuration.html"})
         #tabs["tabs"].append({"name": "Timeline", "icon": "fa-sort-amount-asc", "page": "ajax/timeline.html"})
         tabs["meta"]["code"] = 200
         tabs["meta"]["lastupdate"] = self._nodes_list_lastupdate

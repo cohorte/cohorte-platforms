@@ -64,6 +64,8 @@
 			/*
 				To generated a hashed password and put it in "password" property, 
 				you can use the following python code:
+				online: http://www.md5online.org/md5-encrypt.html
+				python:
 					import hashlib				
 					hash_object = hashlib.md5(b'Hello World')
 					print(hash_object.hexdigest())
