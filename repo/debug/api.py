@@ -231,11 +231,13 @@ class DebugAPI(object):
 
     def get_application_details(self, request, response, in_data, out_data):
         out_data["application"] = {}        
-        out_data["application"]["app-id"] = self._get_application_id()
+        out_data["application"]["id"] = self._get_application_id()
+        out_data["application"]["name"] = self._get_application_name()
 
     def get_application_composition(self, request, response, in_data, out_data):
         out_data["application"] = {}        
-        out_data["application"]["app-id"] = self._get_application_id()
+        out_data["application"]["id"] = self._get_application_id()
+        out_data["application"]["name"] = self._get_application_name()
         out_data["application"]["composition"] = self._get_application_composition()
 
     def get_isolates(self, request, response, in_data, out_data):
@@ -591,12 +593,16 @@ class DebugAPI(object):
         version = self._get_cohorte_version_details()
         return "{0}_{1}_{2}".format(version["version"], version["timestamp"], version["stage"]) 
 
-    def _get_application_id(self):
+    def _get_application_id(self):        
+        app_id = self._context.get_property("herald.application.id")
+        return app_id
+
+    def _get_application_name(self):        
         comp = self._get_application_composition()
         return comp["name"]
 
     def _get_application_composition(self):
-        return self._composer_top.get_composition_json()
+        return self._composer_top.get_composition_json()    
 
     """
     Servlet (url mapping to rest api) ================================================================

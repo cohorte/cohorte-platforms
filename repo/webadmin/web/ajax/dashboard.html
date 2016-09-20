@@ -11,10 +11,11 @@
 <div class="row">
     <div class="col-xs-12 col-sm-6 col-md-8">
     <p>
-      <table>        
-        <tr><td>Application Id: </td><td><b><span id="application_id_lbl"></span></b></td></tr>
+      <table class="table table-condensed table-hover">        
+        <tr><td style="width:130px;">Application Id: </td><td><b><span id="application_id_lbl"></span></b></td></tr>
+        <tr><td>Application name: </td><td><b><span id="application_name_lbl"></span></b></td></tr>
         <tr><td>Cohorte version: </td><td><b><span id="cohorte_version_lbl"></span></b></td></tr>
-        <tr><td>Show internal isolates: </td><td><input type="checkbox" checked="false" data-size="mini" data-on-text="YES" data-off-text="NO" name="show-internal-isolates-checkbox" checked/></td></tr>
+        <!--<tr><td>Show internal isolates: </td><td><input type="checkbox" checked="false" data-size="mini" data-on-text="YES" data-off-text="NO" name="show-internal-isolates-checkbox" checked/></td></tr>-->
       </table>
     </p>
     </div>
@@ -22,12 +23,10 @@
 				<a class="btn btn-default disabled" href="#">Actions</a>
 				<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
 				<span class="fa fa-caret-down"></span></a>
-				<ul class="dropdown-menu">
-					<li><a id="killall-nodes-btn" href="#"><i class="fa fa-power-off fa-fw"></i> Stop All Nodes</a></li>		
-          <!--	
+				<ul class="dropdown-menu" style="z-index: 9999; width:240px">
+          <li> <a href="#">Show internal isolates: <input type="checkbox" checked="false" data-size="mini" data-on-text="YES" data-off-text="NO" name="show-internal-isolates-checkbox" checked/></a></li>
 					<li class="divider"></li>
-					<li><a id="logout-btn" href="#"><i class="i"></i> Logout</a></li>
-          -->
+          <li><a id="killall-nodes-btn" href="#"><i class="fa fa-power-off fa-fw"></i> Stop All Nodes</a></li>		          	
 				</ul>
 		</div>    
 </div>
@@ -818,7 +817,8 @@
               type:"GET",                          
               contentType:"application/json",
               success: function(data) {
-                $("#application_id_lbl").html(data["application"]["app-id"])                
+                $("#application_id_lbl").html(data["application"]["id"])
+                $("#application_name_lbl").html(data["application"]["name"])
               }
         });
         // see http://www.bootstrap-switch.org/

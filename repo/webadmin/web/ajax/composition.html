@@ -44,7 +44,7 @@ var activities_lastupdate = 0.00;
 
 function loadApplicationComposition() {
     $.getJSON( "/debug/api/v2/application/composition", function( data ) {              
-        $('#application_composition_lbl').html(data["application"]["app-id"]);
+        $('#application_composition_lbl').html(data["application"]["name"]);
         var compjson = JSON.stringify(data["application"]["composition"], null, 2);    
         $('#application_composition_txt').html("<code class='JavaScript'>" + compjson + "</code>");        
         activities_lastupdate = data['meta']['lastupdate'];
