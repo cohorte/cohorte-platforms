@@ -26,6 +26,11 @@ import threading
 import json, time, os
 
 try:
+    import Cookie
+except ImportError:
+    import http.cookies as Cookie
+    
+try:
     # Python 3
     import urllib.parse as urlparse
 
@@ -57,6 +62,7 @@ SUBJECT_GET_HTTP = "cohorte/shell/agent/get_http"
 @Requires("_icomposerlocal", cohorte.composer.SERVICE_COMPOSER_ISOLATE,
           optional=True, spec_filter="(!(service.imported=*))")
 @Requires("_isolates", cohorte.composer.SERVICE_COMPOSER_ISOLATE, aggregate=True, optional=True)
+@Requires("_admin", 'cohorte.admin.api')
 # Reject the export the servlet specification
 @Property('_reject', pelix.remote.PROP_EXPORT_REJECT, ['pelix.http.servlet', herald.SERVICE_DIRECTORY_LISTENER])
 @Instantiate('WebAdmin')
@@ -77,7 +83,8 @@ class WebAdmin(object):
         self._icomposers = {}
         self._icomposerlocal = None
         self._isolates = []
-
+        # admin service
+        self._admin = None
         # pooling related states
         self._nodes_list_lastupdate = None
         self._platform_activities_list_lastupdate = None
@@ -935,17 +942,37 @@ class WebAdmin(object):
             query = query[1:]
         if query[-1] == '/':
             query = query[:-1]
-        parts = str(query).split('/')
-
-
-        if str(parts[0]) == "webadmin":
+        parts = str(query).split('/')        
+        if str(parts[0]) == "webadmin":            
             if len(parts) == 1:
                 self.show_webadmin_page(request, response)
             elif len(parts) > 1:
-                if str(parts[1]) == "static":
-                    #response.set_header("Set-Cookie", "session=1234567890")
+                if str(parts[1]) == "static":                    
                     if len(parts) > 2:
-                        self.load_resource('/'.join(parts[2:]), request, response)
+                        res_path = '/'.join(parts[2:])                        
+                        if str(res_path).startswith("web/index.html"):
+                            cookies = request.get_header("Cookie")
+                            if cookies:
+                                cookie = Cookie.SimpleCookie()
+                                cookie.load(cookies)
+                                session_id = cookie["session"].value
+                                if session_id:
+                                    if self._admin.check_session_timeout(request, response, None, None, session_id) == False:                                                  
+                                        self.load_resource('/'.join(parts[2:]), request, response)
+                                        #pass
+                                    else:
+                                        #session timeout
+                                        response.set_header("Location", "login.html")
+                                        response.send_content(302, "Redirection...")
+                                        #pass
+                                else:
+                                    response.set_header("Location", "login.html")
+                                    response.send_content(302, "Redirection...")
+                            else:
+                                response.set_header("Location", "login.html")
+                                response.send_content(302, "Redirection...")                    
+                        else:
+                            self.load_resource(res_path, request, response)
                     else:
                         self.show_error_page(request, response)
                 elif str(parts[1]) == "api":
@@ -996,8 +1023,27 @@ class WebAdmin(object):
                         if str(parts[3]).lower() == "platform":
                             if str(parts[4]).lower() == "activities":
                                 if str(parts[5]).lower() == "lastupdate":
-                                    lastupdate = self.get_platform_activities_lastupdate()
-                                    self.sendJson(lastupdate, response)
+                                    cookies = request.get_header("Cookie")
+                                    if cookies:
+                                        cookie = Cookie.SimpleCookie()
+                                        cookie.load(cookies)
+                                        session_id = cookie["session"].value
+                                        if session_id:
+                                            if self._admin.check_session_timeout(request, response, None, None, session_id, False) == False:                                                  
+                                                lastupdate = self.get_platform_activities_lastupdate()
+                                                self.sendJson(lastupdate, response)
+                                            else:
+                                                #session timeout
+                                                response.set_header("Location", "login.html")
+                                                response.send_content(302, "Redirection...")
+                                                #pass
+                                        else:
+                                            response.set_header("Location", "login.html")
+                                            response.send_content(302, "Redirection...")
+                                    else:
+                                        response.set_header("Location", "login.html")
+                                        response.send_content(302, "Redirection...")  
+                                
                         if str(parts[3]).lower() == "nodes":
                             if str(parts[5]).lower() == "isolates":
                                 isolates = self.get_node_isolates(str(parts[4]))
@@ -1039,8 +1085,8 @@ class WebAdmin(object):
             else:
                 self.show_error_page(request, response)
         else:
-            self.show_error_page(request, response)
-
+            self.show_error_page(request, response)  
+            
     def sendJson(self, data, response):
         result = json.dumps(data, sort_keys=False,
                             indent=4, separators=(',', ': '))

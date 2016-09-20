@@ -48,11 +48,20 @@
 	] ,
 
 	"composition" : [ {
-		"factory" : "cohorte-composer-top-factory",
-		"name" : "cohorte-composer-top",
-		"properties" : {
-			"autostart" : "True"
+			"factory" : "cohorte-composer-top-factory",
+			"name" : "cohorte-composer-top",
+			"properties" : {
+				"autostart" : "True"
+			}
+		}, {
+			"factory": "cohorte-admin-api-factory",
+			"name" : "cohorte-admin-api",
+			"properties" : {
+				"username" : "admin",
+				"password" : "nimda",
+				"session.timeout" : 120000
+			}
 		}
-	} ]
+	 ]
 /* All components of the Composer are automatically instantiated */
 }

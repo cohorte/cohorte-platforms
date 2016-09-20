@@ -24,9 +24,9 @@
 				<span class="fa fa-caret-down"></span></a>
 				<ul class="dropdown-menu">
 					<li><a id="killall-nodes-btn" href="#"><i class="fa fa-power-off fa-fw"></i> Stop All Nodes</a></li>		
-          <!--			
+          <!--	
 					<li class="divider"></li>
-					<li><a href="#"><i class="i"></i> Make admin</a></li>
+					<li><a id="logout-btn" href="#"><i class="i"></i> Logout</a></li>
           -->
 				</ul>
 		</div>    
@@ -436,7 +436,8 @@
     function get_logs(isolate_uuid) {
         $('#isolate_modal_ajax-content_logs').html('<img src="img/devoops_getdata.gif"  alt="preloader"/>');   
         $.getJSON( "/debug/api/v2/isolates/"+isolate_uuid+"/logs", function( data ) { 
-            var content = '';        
+            var content = '';     
+            if (data["logs"]["kind"] != "Python") {   
             content += '<br/><p>Log Level: ';
             content += '<select id="log_levels">';
             content += '<option value="OFF">OFF</option>';
@@ -448,7 +449,8 @@
             content += '<option value="FINER">FINER</option>';
             content += '<option value="FINEST">FINEST</option>';
             content += '<option value="ALL">ALL</option>';
-            content += '</select></p>';                        
+            content += '</select></p>';            
+            }            
             content += '<table class="table table-condensed table-striped table-hover">';
             content += '<tr><th>LOG ID</th><th>LAST MODIFICATION DATE</th></tr>';
             for (var i in data['logs']['log-files']) {                
@@ -782,23 +784,25 @@
         });
     }
 
+    
+
     $(document).ready(function() {
         WinMove();
         loadNodes();
         setTimeout(refresh, 2000);
         
-        /* ************************ links ************************** */       
+        /* ************************ links ************************** */               
         $('#killall-nodes-btn').click(function() {                         
             killAllNodes()
-        })
+        });
         $('#kill-node-btn').click(function() {
             var uid = $(this).attr('data-uid');            
             killNode(uid)
-        })
+        });
         $('#kill-isolate-btn').click(function() {
             var uid = $(this).attr('data-uid');            
             killIsolate(uid)
-        })
+        });
         // get platform infos
         $.ajax({
               url: "/debug/api/v2/platform",

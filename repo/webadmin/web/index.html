@@ -56,7 +56,7 @@
 	<div class="container-fluid expanded-panel">
 		<div class="row">
 			<div id="logo" class="col-xs-12 col-sm-2" style="">
-				<a href="index.html">Admin</a>
+				<img class="img" src="img/cohorte_admin_inverse.png"  alt="avatar">				
 			</div>
 			<div id="top-panel" class="col-xs-12 col-sm-10">
 				<div class="row">
@@ -68,10 +68,61 @@
 					</div>
 
 					<div class="col-xs-4 col-sm-8 top-panel-right">
-						<ul class="nav navbar-nav pull-right panel-menu">
-							
-							<a href="index.html"><img src="img/cohorte_admin.png"/></a>								
+						<ul class="nav navbar-nav pull-right panel-menu">															
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle account" data-toggle="dropdown">
+									<div class="avatar">
+										<img src="img/user.jpg"  alt="avatar">
+									</div>
+									<i class="fa fa-angle-down pull-right"></i>
+									<div class="user-mini pull-right">
+										<span class="welcome">Welcome,</span>
+										<span id="username_lbl"></span>
+									</div>
+								</a>
+								<ul class="dropdown-menu">
+									<!--
+									<li>
+										<a href="#">
+											<i class="fa fa-user"></i>
+											<span class="hidden-sm text">Profile</span>
+										</a>
+									</li>
+									<li>
+										<a href="ajax/page_messages.html" class="ajax-link">
+											<i class="fa fa-envelope"></i>
+											<span class="hidden-sm text">Messages</span>
+										</a>
+									</li>
+									<li>
+										<a href="ajax/gallery_simple.html" class="ajax-link">
+											<i class="fa fa-picture-o"></i>
+											<span class="hidden-sm text">Albums</span>
+										</a>
+									</li>
+									<li>
+										<a href="ajax/calendar.html" class="ajax-link">
+											<i class="fa fa-tasks"></i>
+											<span class="hidden-sm text">Tasks</span>
+										</a>
+									</li>
+									<li>
+										<a href="#">
+											<i class="fa fa-cog"></i>
+											<span class="hidden-sm text">Settings</span>
+										</a>
+									</li>
+									-->
+									<li>
+										<a id="logout-btn" href="#">
+											<i class="fa fa-power-off"></i>
+											<span class="hidden-sm text">Logout</span>
+										</a>
+									</li>
+								</ul>
+							</li>						
 						</ul>
+						
 					</div>
 				</div>
 			</div>
@@ -125,6 +176,7 @@ when the page first loads -->
 <script src="plugins/jquery/jquery.min.js"></script>
 <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
 <script src="plugins/jquery-json/jquery.json.min.js"></script>
+<script src="plugins/js-cookie/js.cookie.js"></script>
 <!-- notification -->
 <script src="plugins/notify/jquery.notify.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
@@ -139,11 +191,48 @@ when the page first loads -->
 <!-- All functions for this theme + document.ready processing -->
 
 <script type="text/javascript">
-    
-    /*
-    $(document).ready(function() {        
-        loadTabs();        
-    });*/
+    function loadUsername() {
+		$.ajax(
+        {
+          url: "/debug/api/v2/auth",
+          type: "GET",                    
+          contentType: "application/json; charset=utf-8",			
+          success: function(data) {				
+            $("#username_lbl").html(data["auth"]["session-user"])			
+          },
+		  statusCode: {
+			401: function() {
+				window.location.href = "login.html"
+			}
+		  }
+        }
+      );
+	}
+	
+	function logout() {
+      var myData = {           
+        session: Cookies.get('session'),              
+        redirect: "login.html"      
+      };
+      $.ajax(
+        {
+          url: "/debug/api/v2/auth/logout",
+          type: "POST",     
+          data: $.toJSON(myData),     
+          contentType: "application/json; charset=utf-8",			
+          success: function(data) {				
+            Cookies.remove('session');
+            window.location.href = data["logout"]["redirect"];				
+          }
+        }
+      );
+    }
+	$(document).ready(function() {            
+        $('#logout-btn').click(function() {                         
+            logout()
+        })
+		loadUsername();
+	});
 </script>
 <script src="js/webadmin.js"></script>
 </body>

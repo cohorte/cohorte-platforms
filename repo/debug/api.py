@@ -29,7 +29,13 @@ import cohorte.monitor
 # Standard library
 import logging
 import threading
-import json, time, os
+import json, time, os, uuid
+
+
+try:
+    import Cookie
+except ImportError:
+    import http.cookies as Cookie
 
 try:
     # Python 3
@@ -53,9 +59,11 @@ DEBUG_REST_API_PATH = "debug/api/v2"
 # API Version
 DEBUG_REST_API_VERSION = "v2"
 
-# VERSION
-## TODO should retrieved automatically
-COHORTE_VERSION = "1.2.0"
+PROP_USERNAME = "username"
+
+PROP_PASSWORD = "password"
+
+PROP_SESSION_TIMEOUT = "session.timeout"
 
 # ------------------------------------------------------------------------------------
 
@@ -67,8 +75,8 @@ class SetEncoder(json.JSONEncoder):
 
 # ------------------------------------------------------------------------------------
 
-@ComponentFactory("cohorte-debug-api-factory")
-@Provides(['pelix.http.servlet'])
+@ComponentFactory("cohorte-admin-api-factory")
+@Provides(['pelix.http.servlet', 'cohorte.admin.api'])
 @Property('_path', 'pelix.http.path', "/debug")\
 
 @Requires("_agent", debug.SERVICE_DEBUG)
@@ -82,8 +90,10 @@ class SetEncoder(json.JSONEncoder):
           optional=True, spec_filter="(!(service.imported=*))")
 @Requires("_composer_top", cohorte.composer.SERVICE_COMPOSER_TOP)
 @Requires("_isolates", cohorte.composer.SERVICE_COMPOSER_ISOLATE, aggregate=True, optional=True)
-@Property('_reject', pelix.remote.PROP_EXPORT_REJECT, ['pelix.http.servlet', herald.SERVICE_DIRECTORY_LISTENER])
-@Instantiate('cohorte-debug-api')
+@Property('_reject', pelix.remote.PROP_EXPORT_REJECT, ['pelix.http.servlet', 'cohorte.admin.api'])
+@Property('_username', PROP_USERNAME, 'admin')
+@Property('_password', PROP_PASSWORD, 'admin')
+@Property('_sessions_timeout', PROP_SESSION_TIMEOUT, 120000)
 class DebugAPI(object):
     """
     A Component that provides the REST Admin API
@@ -109,7 +119,11 @@ class DebugAPI(object):
         self._icomposerlocal = None
         self._composer_top = None
         self._isolates = []
-
+        
+        #properties
+        self._username = None
+        self._password = None
+        
         # List of platform activities
         self._platform_activities = []
         self._platform_activities_index = 0
@@ -122,6 +136,12 @@ class DebugAPI(object):
 
         # local infos
         self._version_json = None
+        
+        # sessions
+        # uuid -> {"user":"admin", "last-activity": "123454444323"}
+        self._sessions = {}
+        # in muliseconds
+        self._sessions_timeout = 1 * 60 * 1000
 
     def decrypt_request(self, request, action="GET"):
         """
@@ -147,7 +167,7 @@ class DebugAPI(object):
         else:
             data = request.read_data()
             if data != None:                                
-                indata = data.decode('UTF-8')                
+                indata = data.decode('UTF-8')              
                 in_data = json.loads(str(indata))
             else:
                 in_data = urlparse.parse_qs(query, keep_blank_values=True)
@@ -194,6 +214,13 @@ class DebugAPI(object):
     GET actions ========================================================================
     """
 
+    def get_auth_info(self, request, response, in_data, out_data, session_id):                            
+        out_data["auth"] = {
+            "session-id": session_id,
+            "session-user": self._sessions[session_id]["user"],
+            "session-timeout": self._sessions_timeout,            
+            }        
+                        
     def get_api_info(self, request, response, in_data, out_data):
         out_data["api"] = {"name": "debug"} 
 
@@ -319,8 +346,33 @@ class DebugAPI(object):
     POST actions ========================================================================
     """
 
-    def auth_login(self, request, response, in_data, out_data, uuid):
-        pass 
+    def auth_login(self, request, response, in_data, out_data):
+        username = in_data["username"]
+        password = in_data["password"]
+        rediect = in_data["redirect"]
+        if self.check_credentials(username, password):
+            # create new session
+            session_id = str(uuid.uuid1())
+            # session creation time in seconds
+            current_time = int(round(time.time() * 1000))
+            self._sessions[session_id] = {"user": username, "last-activity": current_time}        
+            out_data["login"] = {"redirect": rediect, "session": session_id}
+        else:
+            out_data["meta"]["status"] = 401
+            out_data["meta"]["msg"] = "Unauthorized"    
+        
+        # get session number
+        # if exists, check if not timeout
+        # else, check credentials and creates new session id
+        
+    def auth_logout(self, request, response, in_data, out_data):
+        session = None
+        rediect = None
+        if "session" in in_data:
+            session = in_data["session"]
+        if "redirect" in in_data:
+            rediect = in_data["redirect"]
+        out_data["logout"] = {"redirect": rediect}     
 
     def set_isolate_logs_level(self, request, response, in_data, out_data, uuid):
         out_data["isolate"] = {"uuid" : uuid}        
@@ -332,7 +384,24 @@ class DebugAPI(object):
             self.internal_server_error(request, response, in_data, out_data, "Cannot change log level!")
         
 
-
+    """
+    Internal api methods ===========================================================================
+    """
+    
+    def check_credentials(self, username, password):
+        return self._username == username and self._password == password
+    
+    def check_session_timeout(self, request, response, in_data, out_data, session_id, update=True):
+        if session_id in self._sessions:
+            current_time = int(round(time.time() * 1000))
+            session_time = self._sessions[session_id]["last-activity"]            
+            if current_time - session_time < self._sessions_timeout:
+                # update session time
+                if update == True:
+                    self._sessions[session_id]["last-activity"] = current_time
+                return False
+        return True 
+    
     """
     Internal agent methods ===========================================================================
     """
@@ -488,8 +557,7 @@ class DebugAPI(object):
         if lp.uid != uuid:  
             # this is another isolate          
             msg = beans.Message(debug.agent.SUBJECT_SET_ISOLATE_LOGS_LEVEL, level)
-            reply = self._herald.send(uuid, msg)
-            _logger.info("##### content:" + reply.content)
+            reply = self._herald.send(uuid, msg)            
             return json.loads(reply.content)
         else:
             # this is the local isolate
@@ -531,86 +599,112 @@ class DebugAPI(object):
         path, parts, in_data = self.decrypt_request(request)
 
         out_data = self.prepare_response(request, "GET")
+        
+        # check session
+        cookies = request.get_header("Cookie")
+        if cookies:
+            cookie = Cookie.SimpleCookie()
+            cookie.load(cookies)
+            session_id = cookie["session"].value
+            if session_id:
+                out_data["meta"]["session"] = session_id
+                if self.check_session_timeout(request, response, in_data, out_data, session_id) == False:                    
+                    # valid session                
+                    if path.startswith(DEBUG_REST_API_PATH):
+                        if path.startswith(DEBUG_REST_API_PATH + "/auth"):
+                            out_data["meta"]["api-method"] = "get_auth_info"
+                            self.get_auth_info(request, response, in_data, out_data, session_id)
+                        elif path == DEBUG_REST_API_PATH:                            
+                            out_data["meta"]["api-method"] = "get_api_info"            
+                            self.get_api_info(request, response, in_data, out_data)
+                        elif path == DEBUG_REST_API_PATH + "/platform":
+                            out_data["meta"]["api-method"] = "get_platform_details"
+                            self.get_platform_details(request, response, in_data, out_data)
+                        elif path == DEBUG_REST_API_PATH + "/application":
+                            out_data["meta"]["api-method"] = "get_application_details"
+                            self.get_application_details(request, response, in_data, out_data)    
+                        elif path == DEBUG_REST_API_PATH + "/isolates":
+                            out_data["meta"]["api-method"] = "get_isolates"
+                            self.get_isolates(request, response, in_data, out_data)
 
-        if path.startswith(DEBUG_REST_API_PATH):
-            if path == DEBUG_REST_API_PATH:
-                out_data["meta"]["api-method"] = "get_api_info"
-                self.get_api_info(request, response, in_data, out_data)
-            elif path == DEBUG_REST_API_PATH + "/platform":
-                out_data["meta"]["api-method"] = "get_platform_details"
-                self.get_platform_details(request, response, in_data, out_data)
-            elif path == DEBUG_REST_API_PATH + "/application":
-                out_data["meta"]["api-method"] = "get_application_details"
-                self.get_application_details(request, response, in_data, out_data)    
-            elif path == DEBUG_REST_API_PATH + "/isolates":
-                out_data["meta"]["api-method"] = "get_isolates"
-                self.get_isolates(request, response, in_data, out_data)
-
-            elif len(parts) == 5:    
-                if path == DEBUG_REST_API_PATH + "/application/composition":
-                    out_data["meta"]["api-method"] = "get_application_composition"
-                    self.get_application_composition(request, response, in_data, out_data)
-                elif path == DEBUG_REST_API_PATH + "/isolates/" + parts[4]:
-                    out_data["meta"]["api-method"] = "get_isolate"
-                    self.get_isolate(request, response, in_data, out_data, parts[4])
-                else:
-                    self.bad_request(request, response, in_data, out_data)
-            
-            elif len(parts) == 6:
-                if path == DEBUG_REST_API_PATH + "/isolates/" + parts[4] + "/bundles":
-                    out_data["meta"]["api-method"] = "get_isolate_bundles"
-                    self.get_isolate_bundles(request, response, in_data, out_data, parts[4])
-                
-                elif path == DEBUG_REST_API_PATH + "/isolates/" + parts[4] + "/factories":
-                    out_data["meta"]["api-method"] = "get_isolate_factories"
-                    self.get_isolate_factories(request, response, in_data, out_data, parts[4])
-                            
-                elif path == DEBUG_REST_API_PATH + "/isolates/" + parts[4] + "/instances":
-                    out_data["meta"]["api-method"] = "get_isolate_instances"
-                    self.get_isolate_instances(request, response, in_data, out_data, parts[4])
+                        elif len(parts) == 5:    
+                            if path == DEBUG_REST_API_PATH + "/application/composition":
+                                out_data["meta"]["api-method"] = "get_application_composition"
+                                self.get_application_composition(request, response, in_data, out_data)
+                            elif path == DEBUG_REST_API_PATH + "/isolates/" + parts[4]:
+                                out_data["meta"]["api-method"] = "get_isolate"
+                                self.get_isolate(request, response, in_data, out_data, parts[4])
+                            else:
+                                self.bad_request(request, response, in_data, out_data)
                         
-                elif path == DEBUG_REST_API_PATH + "/isolates/" + parts[4] + "/services":
-                    out_data["meta"]["api-method"] = "get_isolate_services"
-                    self.get_isolate_services(request, response, in_data, out_data, parts[4])
-                
-                elif path == DEBUG_REST_API_PATH + "/isolates/" + parts[4] + "/threads":
-                    out_data["meta"]["api-method"] = "get_isolate_threads"
-                    self.get_isolate_threads(request, response, in_data, out_data, parts[4])
-                elif path == DEBUG_REST_API_PATH + "/isolates/" + parts[4] + "/logs":
-                    out_data["meta"]["api-method"] = "get_isolate_logs"
-                    self.get_isolate_logs(request, response, in_data, out_data, parts[4])
-                elif path == DEBUG_REST_API_PATH + "/isolates/" + parts[4] + "/directory":
-                    out_data["meta"]["api-method"] = "get_isolate_directory"
-                    self.get_isolate_directory(request, response, in_data, out_data, parts[4])
-                elif path == DEBUG_REST_API_PATH + "/isolates/" + parts[4] + "/accesses":
-                    out_data["meta"]["api-method"] = "get_isolate_accesses"
-                    self.get_isolate_accesses(request, response, in_data, out_data, parts[4])
+                        elif len(parts) == 6:
+                            if path == DEBUG_REST_API_PATH + "/isolates/" + parts[4] + "/bundles":
+                                out_data["meta"]["api-method"] = "get_isolate_bundles"
+                                self.get_isolate_bundles(request, response, in_data, out_data, parts[4])
+                            
+                            elif path == DEBUG_REST_API_PATH + "/isolates/" + parts[4] + "/factories":
+                                out_data["meta"]["api-method"] = "get_isolate_factories"
+                                self.get_isolate_factories(request, response, in_data, out_data, parts[4])
+                                        
+                            elif path == DEBUG_REST_API_PATH + "/isolates/" + parts[4] + "/instances":
+                                out_data["meta"]["api-method"] = "get_isolate_instances"
+                                self.get_isolate_instances(request, response, in_data, out_data, parts[4])
+                                    
+                            elif path == DEBUG_REST_API_PATH + "/isolates/" + parts[4] + "/services":
+                                out_data["meta"]["api-method"] = "get_isolate_services"
+                                self.get_isolate_services(request, response, in_data, out_data, parts[4])
+                            
+                            elif path == DEBUG_REST_API_PATH + "/isolates/" + parts[4] + "/threads":
+                                out_data["meta"]["api-method"] = "get_isolate_threads"
+                                self.get_isolate_threads(request, response, in_data, out_data, parts[4])
+                            elif path == DEBUG_REST_API_PATH + "/isolates/" + parts[4] + "/logs":
+                                out_data["meta"]["api-method"] = "get_isolate_logs"
+                                self.get_isolate_logs(request, response, in_data, out_data, parts[4])
+                            elif path == DEBUG_REST_API_PATH + "/isolates/" + parts[4] + "/directory":
+                                out_data["meta"]["api-method"] = "get_isolate_directory"
+                                self.get_isolate_directory(request, response, in_data, out_data, parts[4])
+                            elif path == DEBUG_REST_API_PATH + "/isolates/" + parts[4] + "/accesses":
+                                out_data["meta"]["api-method"] = "get_isolate_accesses"
+                                self.get_isolate_accesses(request, response, in_data, out_data, parts[4])
 
-            elif len(parts) == 7:
-                if path == DEBUG_REST_API_PATH + "/isolates/" + parts[4] + "/bundles/" + parts[6]:
-                    out_data["meta"]["api-method"] = "get_bundle_detail"
-                    self.get_bundle_detail(request, response, in_data, out_data, parts[4], parts[6])
-                elif path == DEBUG_REST_API_PATH + "/isolates/" + parts[4] + "/factories/" + parts[6]:
-                    out_data["meta"]["api-method"] = "get_factory_detail"
-                    self.get_factory_detail(request, response, in_data, out_data, parts[4], parts[6])
-                elif path == DEBUG_REST_API_PATH + "/isolates/" + parts[4] + "/instances/" + parts[6]:
-                    out_data["meta"]["api-method"] = "get_instance_detail"
-                    self.get_instance_detail(request, response, in_data, out_data, parts[4], parts[6])
-                elif path == DEBUG_REST_API_PATH + "/isolates/" + parts[4] + "/logs/" + parts[6]:
-                    if 'raw' in in_data:
-                        # send raw log
-                        log = self._get_isolate_log(parts[4], parts[6])
-                        self.send_text(log["content"], response, 200)
+                        elif len(parts) == 7:
+                            if path == DEBUG_REST_API_PATH + "/isolates/" + parts[4] + "/bundles/" + parts[6]:
+                                out_data["meta"]["api-method"] = "get_bundle_detail"
+                                self.get_bundle_detail(request, response, in_data, out_data, parts[4], parts[6])
+                            elif path == DEBUG_REST_API_PATH + "/isolates/" + parts[4] + "/factories/" + parts[6]:
+                                out_data["meta"]["api-method"] = "get_factory_detail"
+                                self.get_factory_detail(request, response, in_data, out_data, parts[4], parts[6])
+                            elif path == DEBUG_REST_API_PATH + "/isolates/" + parts[4] + "/instances/" + parts[6]:
+                                out_data["meta"]["api-method"] = "get_instance_detail"
+                                self.get_instance_detail(request, response, in_data, out_data, parts[4], parts[6])
+                            elif path == DEBUG_REST_API_PATH + "/isolates/" + parts[4] + "/logs/" + parts[6]:
+                                if 'raw' in in_data:
+                                    # send raw log
+                                    log = self._get_isolate_log(parts[4], parts[6])
+                                    self.send_text(log["content"], response, 200)
+                                else:
+                                    # send log within a json object data["log"]
+                                    out_data["meta"]["api-method"] = "get_isolate_log"
+                                    self.get_isolate_log(request, response, in_data, out_data, parts[4], parts[6])
+                        else:
+                            self.bad_request(request, response, in_data, out_data)
+
                     else:
-                        # send log within a json object data["log"]
-                        out_data["meta"]["api-method"] = "get_isolate_log"
-                        self.get_isolate_log(request, response, in_data, out_data, parts[4], parts[6])
+                        self.bad_request(request, response, in_data, out_data)
+                
+                else:
+                    # session timeout
+                    out_data["meta"]["status"] = 401
+                    out_data["meta"]["msg"] = "Unauthorized - session timeout!" 
             else:
-                self.bad_request(request, response, in_data, out_data)
-
+                # session timeout
+                out_data["meta"]["status"] = 401
+                out_data["meta"]["msg"] = "Unauthorized - session cookie no provided!"
         else:
-            self.bad_request(request, response, in_data, out_data)
-
+            # session timeout
+            out_data["meta"]["status"] = 401
+            out_data["meta"]["msg"] = "Unauthorized - request cookie not provided!" 
+                
         self.send_json(out_data, response)
 
     
@@ -623,16 +717,28 @@ class DebugAPI(object):
         out_data = self.prepare_response(request, "POST")
 
         if path.startswith(DEBUG_REST_API_PATH): 
-            if path == DEBUG_REST_API_PATH + "/auth/login":
+            if path.startswith(DEBUG_REST_API_PATH + "/auth/login"):
                 out_data["meta"]["api-method"] = "auth_login"
                 self.auth_login(request, response, in_data, out_data)
-            if len(parts) == 7:
+            elif path.startswith(DEBUG_REST_API_PATH + "/auth/logout"):
+                out_data["meta"]["api-method"] = "auth_logout"
+                self.auth_logout(request, response, in_data, out_data)
+            elif len(parts) == 7:
                 if path == DEBUG_REST_API_PATH + "/isolates/" + parts[4] + "/logs/level":
                     out_data["meta"]["api-method"] = "set_isolate_logs_level"
-                    if 'logLevel' in in_data:                                           
-                        self.set_isolate_logs_level(request, response, in_data, out_data, parts[4])
-                    else:
-                        self.bad_request(request, response, in_data, out_data, "no logLevel parameter provided!")
+                    # check session
+                    cookies = request.get_header("Cookie")
+                    if cookies:
+                        cookie = Cookie.SimpleCookie()
+                        cookie.load(cookies)
+                        session_id = cookie["session"].value
+                        if session_id:
+                            out_data["meta"]["session"] = session_id
+                            if self.check_session_timeout(request, response, in_data, out_data, session_id) == False: 
+                                if 'logLevel' in in_data:                                           
+                                    self.set_isolate_logs_level(request, response, in_data, out_data, parts[4])
+                                else:
+                                    self.bad_request(request, response, in_data, out_data, "no logLevel parameter provided!")
             else:
                 self.bad_request(request, response, in_data, out_data)
 

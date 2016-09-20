@@ -419,9 +419,9 @@ class DebugAgent(object):
                 if os.path.exists(path):
                     ct = time.ctime(os.path.getmtime(path))
                     ct_parser = time.strptime(ct)                                     
-                    return json.dumps({"level": "INFO", "log-files": [{"000": time.strftime("%Y%m%d-%H%M%S", ct_parser)}]})
+                    return json.dumps({"kind": isolate["cohorte.isolate.kind"] , "level": "INFO", "log-files": [{"000": time.strftime("%Y%m%d-%H%M%S", ct_parser)}]})
                 else:
-                    return json.dumps({"level": "INFO", "log-files": []})
+                    return json.dumps({"kind": isolate["cohorte.isolate.kind"] , "level": "INFO", "log-files": []})
             else:
                 isolate_uid = isolate["cohorte.isolate.uid"]
                 isolate_name = isolate["cohorte.isolate.name"]
@@ -437,7 +437,7 @@ class DebugAgent(object):
                             ct = time.ctime(os.path.getctime(path))
                             ct_parser = time.strptime(ct)          
                             result.append({toadd: time.strftime("%Y-%m-%dT%H:%M:%S", ct_parser)})                                                      
-                return json.dumps({"level": "INFO", "log-files": result})
+                return json.dumps({"kind": isolate["cohorte.isolate.kind"] , "level": "INFO", "log-files": result})
     
     def get_isolate_log(self, log_id):
         isolate = json.loads(self.get_isolate_detail())
