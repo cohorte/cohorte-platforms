@@ -2,6 +2,7 @@ Changes form the 1.1.2 to 1.2.0 build: ${timestamp}
 ------------------------------------------------------
 
 ** New Feature
+	* New official Cohorte Docker image
 	* Cohorte-Runtime : new Local Discovery 
 
 ** Improvements
