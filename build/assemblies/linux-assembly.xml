@@ -13,7 +13,8 @@
             <include>*</include> 
             <include>bin/**</include>
             <include>conf/**</include>
-            <include>repo/**</include>            
+            <include>repo/**</include>
+            <include>extra/**</include>             
          </includes>
          <useDefaultExcludes>false</useDefaultExcludes>
          <excludes>

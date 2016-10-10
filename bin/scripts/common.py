@@ -6,9 +6,12 @@ Startup scripts common file.
 :author: Bassem Debbabi
 :license: Apache Software License 2.0
 
+:hostory:
+    MOD_BD_20161010: adding setup_jpype function
+
 ..
 
-    Copyright 2014 isandlaTech
+    Copyright 2014-2006 Cohorte-Technologies (e.x. isandlaTech)
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -24,6 +27,7 @@ Startup scripts common file.
 """
 
 # Standard Library
+import platform
 import os
 import json
 import shutil
@@ -371,3 +375,39 @@ def show_installed_dist_info(dist):
     print("")
     print("-----------------------------------------------------------------------")
     print("")
+
+def setup_jpype(cohorte_home):
+    platform_name = platform.system()
+    # possible values: 'Linux', 'Windows', or 'Darwin'        
+    repo_dir = os.path.join(cohorte_home, "repo")
+    if platform_name == 'Darwin':
+        jpype_file_name = "_jpype.so"                    
+    elif platform_name == 'Windows':
+        jpype_file_name = "_jpype.pyd"
+    elif platform_name == 'Linux':
+        jpype_file_name = "_jpype.cpython-34m.so"
+    
+    jpype_file = os.path.join(repo_dir, jpype_file_name)
+    if not os.path.exists(jpype_file):        
+        repo_dir = os.path.join(cohorte_home, 'repo')
+        extra_dir = os.path.join(cohorte_home, 'extra')
+        try:
+            # remove existing jpype
+            jpype_dir = os.path.join(repo_dir, 'jpype')
+            if os.path.exists(jpype_dir):
+                shutil.rmtree(jpype_dir)
+            jpypex_dir = os.path.join(repo_dir, 'jpypex')
+            if os.path.exists(jpypex_dir):
+                shutil.rmtree(jpypex_dir)    
+            for fname in os.listdir(repo_dir):
+                if fname.startswith("_jpype"):
+                    os.remove(os.path.join(repo_dir, fname))
+            # install adequate jpype                
+            shutil.copytree(os.path.join(extra_dir, "jpype"), 
+                        os.path.join(repo_dir, "jpype"))
+            shutil.copytree(os.path.join(extra_dir, "jpypex"), 
+                        os.path.join(repo_dir, "jpypex"))
+            shutil.copyfile(os.path.join(extra_dir, platform_name, jpype_file_name),
+                        os.path.join(repo_dir, jpype_file_name))        
+        except OSError:
+            pass

@@ -55,31 +55,6 @@ def parse_config_file(config_file):
             data = json.load(json_data)
     return data
 
-def install_jpype(cohorte_home_dir, platform_name, jpype_file_name):
-    print("cohorte_home={0}, platform_name={1}, jpyps_file_name={2}".format(cohorte_home_dir, platform_name, jpype_file_name))
-    repo_dir = os.path.join(cohorte_home_dir, 'repo')
-    extra_dir = os.path.join(cohorte_home_dir, 'extra')
-    #try:
-    # remove existing jpype
-    jpype_dir = os.path.join(repo_dir, 'jpype')
-    if os.path.exists(jpype_dir):
-        shutil.rmtree(jpype_dir)
-    jpypex_dir = os.path.join(repo_dir, 'jpypex')
-    if os.path.exists(jpypex_dir):
-        shutil.rmtree(jpypex_dir)    
-    for fname in os.listdir(repo_dir):
-        if fname.startswith("_jpype"):
-            os.remove(os.path.join(repo_dir, fname))
-    # install adequate jpype                
-    shutil.copytree(os.path.join(extra_dir, "jpype"), 
-                os.path.join(repo_dir, "jpype"))
-    shutil.copytree(os.path.join(extra_dir, "jpypex"), 
-                os.path.join(repo_dir, "jpypex"))
-    shutil.copyfile(os.path.join(extra_dir, platform_name, jpype_file_name),
-                os.path.join(repo_dir, jpype_file_name))
-    #shutil.copyfile(jpype_file, "toto")
-    #except OSError:
-    #    pass
 
 def get_external_config(parsed_conf_file, conf_name):
     """
@@ -599,21 +574,9 @@ def main(args=None):
             print("It you have Python 3.4 installed on your machine and its Python 2.x which is used,")
             print("   use --interpreter <PATH_TO_PYTHON34> argument when starting your node.\n")
             return 3        
-        # change jpype implementation depending on platform system
-        platform_name = platform.system()
-        # possible values: 'Linux', 'Windows', or 'Darwin'        
-        repo_dir = os.path.join(COHORTE_HOME, "repo")
-        if platform_name == 'Darwin':
-            jpype_file_name = "_jpype.so"                    
-        elif platform_name == 'Windows':
-            jpype_file_name = "_jpype.pyd"
-        elif platform_name == 'Linux':
-            jpype_file_name = "_jpype.cpython-34m.so"
         
-        jpype_file = os.path.join(repo_dir, jpype_file_name)
-        if not os.path.exists(jpype_file):
-            install_jpype(COHORTE_HOME, platform_name, jpype_file_name)
-
+        # change jpype implementation depending on platform system
+        common.setup_jpype(COHORTE_HOME)        
 
     # write to log file
     with open(str(os.environ.get('COHORTE_LOGFILE')), "w") as log_file:
