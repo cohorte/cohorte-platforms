@@ -1,3 +1,4 @@
 #!/bin/bash
 
-bash setup.sh
+here="`dirname \"$0\"`"
+bash "$here/setup.sh"
