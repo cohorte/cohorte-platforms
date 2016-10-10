@@ -40,8 +40,7 @@ def main(args=None):
         print("[ERROR] environment variable COHORTE_HOME not set")
         return 1
     # Show actual version    
-    common.setup_jpype(COHORTE_HOME)
-    print("Setup complete!")
+    common.setup_jpype(COHORTE_HOME)    
     return 0
 
 if __name__ == "__main__":

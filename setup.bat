@@ -9,6 +9,8 @@ set COHORTE_HOME=%~dp0
 set PATH="%COHORTE_HOME%/bin";%PATH%
 echo [INFO] COHORTE_HOME=%COHORTE_HOME%
 
+REM setup jpype
+call "%COHORTE_HOME%\bin\cohorte-setup.bat"
 REM Get back where we were
 popd
 

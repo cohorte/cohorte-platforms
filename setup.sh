@@ -19,15 +19,14 @@ if test -e "$HOME/.bashrc"; then
         echo "[INFO] COHORTE_HOME not declared! We will add it"
     fi
     if grep "COHORTE_PATH" $HOME/.bashrc &> /dev/null; then
-    echo "[INFO] COHORTE_PATH already set! But we will update it"
-    echo "`sed  /COHORTE_PATH/d  $HOME/.bashrc`" > $HOME/.bashrc
+        echo "[INFO] COHORTE_PATH already set! But we will update it"
+        echo "`sed  /COHORTE_PATH/d  $HOME/.bashrc`" > $HOME/.bashrc
     else
-    echo "[INFO] COHORTE_PATH not set! We will set it"
+        echo "[INFO] COHORTE_PATH not set! We will set it"
     fi
 
 else
     echo "[INFO] .bashrc doest not exist on your home folder. We will create it"
-
 fi
 echo "export COHORTE_HOME=\"$COHORTE_HOME\" #COHORTE_HOME" >> $HOME/.bashrc
 tmp='export PATH=$COHORTE_HOME/bin:$PATH'
@@ -42,8 +41,11 @@ if test -e "$HOME/.bash_profile"; then
     fi
 fi
 
+# install jpype
+bash "$COHORTE_HOME/bin/cohorte-setup"
+
 # source .bashrc
-source $HOME/.bashrc
+source ~/.bashrc
 
 # Get back where we were
 cd -
