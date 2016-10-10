@@ -5,6 +5,9 @@ Changes form the 1.1.2 to 1.2.0 build: ${timestamp}
 	* Cohorte-Runtime : new Local Discovery 
 
 ** Improvements
+	* Cohorte-Platform
+		- having only one distribution of Cohorte for all platforms [#85]
+		- controlling the used Python Interpreter version when having Java Isolates [#7]
 	* Webadmin
 		- supporting basic authentification
 		- adding Herald Tab that shows the isolate accesses and directory content [#80]
