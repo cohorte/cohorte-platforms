@@ -19,7 +19,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.cohorte.platforms</groupId>
 	<artifactId>cohorte</artifactId>
-	<version>1.2.0</version>
+	<version>1.2.1-SNAPSHOT</version> <!-- MOD_BD_20161011 -->
 	<packaging>pom</packaging>
 
 	<name>COHORTE Project ::: Platforms :: HOME </name>

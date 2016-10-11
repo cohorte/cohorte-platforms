@@ -1,5 +1,10 @@
-Changes form the 1.1.2 to 1.2.0 build: ${timestamp}
+Changes form the 1.2.0 to 1.2.1 build: ${timestamp}
 ------------------------------------------------------
+
+
+
+Changes form the 1.1.2 to 1.2.0
+-------------------------------
 
 ** New Feature
 	* New official Cohorte Docker image
