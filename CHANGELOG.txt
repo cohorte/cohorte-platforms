@@ -1,7 +1,9 @@
 Changes form the 1.2.0 to 1.2.1 build: ${timestamp}
 ------------------------------------------------------
 
-
+** Bug Fix
+	* Cohorte-Platform
+		- Case sensetive problem when installing jpype
 
 Changes form the 1.1.2 to 1.2.0
 -------------------------------

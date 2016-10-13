@@ -407,7 +407,7 @@ def setup_jpype(cohorte_home):
                         os.path.join(repo_dir, "jpype"))
             shutil.copytree(os.path.join(extra_dir, "jpypex"), 
                         os.path.join(repo_dir, "jpypex"))
-            shutil.copyfile(os.path.join(extra_dir, platform_name, jpype_file_name),
+            shutil.copyfile(os.path.join(extra_dir, str(platform_name).lower(), jpype_file_name),
                         os.path.join(repo_dir, jpype_file_name))        
         except OSError:
             pass
