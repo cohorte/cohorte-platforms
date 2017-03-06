@@ -7,6 +7,7 @@ Startup scripts common file.
 :license: Apache Software License 2.0
 
 :hostory:
+    MOD_BD_20170306: enhance setup_jpype to support win32 bits
     MOD_BD_20161010: adding setup_jpype function
 
 ..
@@ -407,7 +408,14 @@ def setup_jpype(cohorte_home):
                         os.path.join(repo_dir, "jpype"))
             shutil.copytree(os.path.join(extra_dir, "jpypex"), 
                         os.path.join(repo_dir, "jpypex"))
-            shutil.copyfile(os.path.join(extra_dir, str(platform_name).lower(), jpype_file_name),
-                        os.path.join(repo_dir, jpype_file_name))        
+            # MOD_BD_20170306 support win 32 bits
+            if "32bit" in platform.architecture():
+                source_jpype_file = os.path.join(extra_dir, str(platform_name).lower(), "32", jpype_file_name)
+            else:
+                source_jpype_file = os.path.join(extra_dir, str(platform_name).lower(), jpype_file_name)
+            
+            shutil.copyfile(source_jpype_file, os.path.join(repo_dir, jpype_file_name))        
+            
+
         except OSError:
             pass

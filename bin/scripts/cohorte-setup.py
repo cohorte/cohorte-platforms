@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -- Content-Encoding: UTF-8 --
 """
-Shows installed Cohorte distribution's version.
+Install the good version of JPype
 :author: Bassem Debbabi
 :license: Apache Software License 2.0
 ..
-    Copyright 2015 isandlaTech
+    Copyright 2015-2016 Cohorte Technologies (ex. ISANDLATECH)
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -39,7 +39,7 @@ def main(args=None):
     if not COHORTE_HOME:
         print("[ERROR] environment variable COHORTE_HOME not set")
         return 1
-    # Show actual version    
+    # install   
     common.setup_jpype(COHORTE_HOME)    
     return 0
 
