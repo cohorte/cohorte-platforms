@@ -17,8 +17,8 @@ Install the good version of JPype
     limitations under the License.
 """
 
-import sys
 import os
+import sys
 
 # cohorte scripts
 import common
@@ -30,12 +30,16 @@ __docformat__ = "restructuredtext en"
 __version__ = "1.0.0"
 
 
-def main(args=None):
+def main(argv):
     """
     main script
     """
-    # Test if the COHORTE_HOME environment variable is set. If not exit
-    COHORTE_HOME = os.environ.get('COHORTE_HOME')
+    # Test if COHORTE_HOME is given as parameter, otherelse, get it from OS 
+    if len(argv) > 0:        
+        COHORTE_HOME = argv[0]
+    else:        
+        COHORTE_HOME = os.environ.get('COHORTE_HOME')
+    # Test if the COHORTE_HOME is set. If not exit
     if not COHORTE_HOME:
         print("[ERROR] environment variable COHORTE_HOME not set")
         return 1
@@ -44,4 +48,4 @@ def main(args=None):
     return 0
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(main(sys.argv[1:]))
