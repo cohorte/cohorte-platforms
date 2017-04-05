@@ -506,6 +506,8 @@ def main(args=None):
     output = subprocess.check_output([PYTHON_INTERPRETER , "-c", 
             'import sys; print("{0}.{1}.{2}".format(sys.version_info[0], sys.version_info[1], sys.version_info[2]))'])
     PYTHON_VERSION = output.decode("utf-8").strip()
+    
+    
     # get cohorte_home version
     conf_dir = os.path.join(COHORTE_HOME, "conf")
     with open(os.path.join(conf_dir, "version.js")) as version_file:
@@ -551,7 +553,7 @@ def main(args=None):
        COHORTE DATA : {data}
  PYTHON INTERPRETER : {python} ({python_version})
            LOG FILE : {logfile}
-
+           
 """.format(home=COHORTE_HOME, base=os.environ['COHORTE_BASE'],
            data=NODE_DATA_DIR,
            logfile=os.environ.get('COHORTE_LOGFILE'),
@@ -561,29 +563,56 @@ def main(args=None):
 
     print(msg1)
 
-    # if java distribution => check python version > 3.4    
+	# MOD_OG_20170404 - move this writing in log file
+    # write msg1 to log file
+    out_logfile = open(str(os.environ.get('COHORTE_LOGFILE')), "w")
+    out_logfile.write(msg1)
+    
 
+ 	#  MOD_OG_20170404 - use the distutils.version standard lib to check the cversion of python
+ 	# if cohorte has to launch one or more java isolate (java distribution) => check python version > 3.4   
     if version["distribution"] not in ("cohorte-python-distribution"):
-        # java distribution
-        # => should have python 3.4                
-        python_version_tuple = tuple(map(int, (PYTHON_VERSION.split("."))))
-        if python_version_tuple < (3,4):
-            print("You should have Python 3.4 to launch Java isolates!\n")
-            print("If you need only Python isolates,")
-            print("   please download cohorte-python-distribution which requires only Python 2.7.\n")
-            print("It you have Python 3.4 installed on your machine and its Python 2.x which is used,")
-            print("   use --interpreter <PATH_TO_PYTHON34> argument when starting your node.\n")
-            return 3     
-        elif python_version_tuple > (3,4):
-            print("You should have Python 3.4 to launch Java isolates!\n")
-            print("Your Python version is not yet supported!\n")   
+    
+        # MOD_OG_20170404 - dump the java version
+        # get java interpreter version (to be used by cohorte)
+        # - java version "1.8.0_92"
+        # - Java(TM) SE Runtime Environment (build 1.8.0_92-b14)
+        # - Java HotSpot(TM) 64-Bit Server VM (build 25.92-b14, mixed mode)
+        wJavaHome = os.environ.get('JAVA_HOME')
+        wJavaCmd = wJavaHome + "/bin/java.exe"
+        # the shell process still has to wait for the background process to finish.
+        wJavaOutput = subprocess.Popen([wJavaCmd, "-version"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True).communicate()[0].decode("utf-8") 
+        wJavaOutputLines= wJavaOutput.split("\r\n")
+        msg2 = """       JAVA VERSION : {0}
+                      {1}
+                      {2}\n""".format(wJavaOutputLines[0],wJavaOutputLines[1],wJavaOutputLines[2])
+        print(msg2)
+        # write msg2 to log file
+        out_logfile.write(msg2)
         
-        # change jpype implementation depending on platform system
+        # distutils.version  in PEP 386 available since 2009
+        from distutils.version import LooseVersion, StrictVersion
+    
+        if (LooseVersion("3.4.0") > LooseVersion(PYTHON_VERSION)):
+            print ("""  - The version of your python interpretor "{vers}" is less than "3.4.0".\n
+  - You have to upgrade your python interpretor to a version between 3.4.0 and 3.5.0.\n""".format(vers=PYTHON_VERSION))
+            return 3   
+        elif (LooseVersion("3.5.0") <= LooseVersion(PYTHON_VERSION)):
+            print ("""  - The version of your python interpretor "{vers}" is equal or greater than  "3.5.0".\n
+  - You have to downgrade your python interpretor to a version between 3.4.0 and 3.5.0.\n""".format(vers=PYTHON_VERSION))
+            return 3   
+        else:
+            msg3 = """  - The version of your python interpretor "{vers}" is ok to launch Java isolates.""".format(vers=PYTHON_VERSION)
+            print(msg3)
+            out_logfile.write(msg3+"\n")
+
+         
+        # MOD_OG_20170404 - dump infos
+        msg3= """  - Adjust jpype implementation depending on platform system."""
+        print(msg3)
+        out_logfile.write(msg3+"\n")
         common.setup_jpype(COHORTE_HOME)        
 
-    # write to log file
-    with open(str(os.environ.get('COHORTE_LOGFILE')), "w") as log_file:
-        log_file.write(msg1)
 
     # starting cohorte isolate
     result_code = 0
@@ -594,6 +623,16 @@ def main(args=None):
     if sys.platform == 'cli':
         # Enable frames support in IronPython
         interpreter_args.insert(0, '-X:Frames')
+    
+    # MOD_OG_20170404 - dump infos
+    # Dump command
+    msg4 = """  - Launch command: {command}""".format(command=[PYTHON_INTERPRETER] + interpreter_args + boot_args)
+    print(msg4)
+    out_logfile.write(msg4+"\n")
+
+    # MOD_OG_20170404 - close log
+    out_logfile.close()
+
 
     try:
         p = subprocess.Popen(
