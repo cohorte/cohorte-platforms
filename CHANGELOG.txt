@@ -4,6 +4,7 @@ Changes form the 1.2.0 to 1.2.1 build: ${timestamp}
 ** Improvements
 	* Cohorte-Platform
 		- Enhance setup_jpype to support win32 bits [#90]
+		- Enhance output informations showed when starting a Node
 		
 ** Bug Fix
 	* Cohorte-Platform
