@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-	Copyright 2014 isandlaTech (http://isandlatech.com/)
+	Copyright 2014-2017 Cohorte Technologies (ex. isandlaTech)  http://cohorte.tech
 
 	Licensed under the Apache License, Version 2.0 (the "License"); you may 
 	not use this file
@@ -19,7 +19,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.cohorte.platforms</groupId>
 	<artifactId>cohorte</artifactId>
-	<version>1.2.1-SNAPSHOT</version> <!-- MOD_BD_20161011 -->
+	<version>1.2.1</version> <!-- MOD_BD_20170706 -->
 	<packaging>pom</packaging>
 
 	<name>COHORTE Project ::: Platforms :: HOME </name>
@@ -36,7 +36,7 @@
 		<dependency>
 			<groupId>org.cohorte.utilities</groupId>
 			<artifactId>org.cohorte.utilities</artifactId>
-			<version>1.0.6</version>
+			<version>1.0.9</version>
 			<scope>provided</scope>
 		</dependency>
 		<!-- cohorte-jabsorb -->
@@ -733,7 +733,7 @@
         <repository>
             <id>cohorte.snapshots</id>
             <name>Cohorte Snapshot Repository</name>
-            <url>http://forge.cohorte-technologies.com:6080/repository/cohorte-snapshots</url>
+            <url>http://nrm.cohorte.tech/repository/cohorte-snapshots</url>
             <releases>
                 <enabled>false</enabled>
             </releases>
@@ -744,7 +744,7 @@
         <repository>
             <id>cohorte.releases</id>
             <name>Cohorte Releases Repository</name>
-            <url>http://forge.cohorte-technologies.com:6080/repository/cohorte-releases</url>
+            <url>http://nrm.cohorte.tech/repository/cohorte-releases</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -757,13 +757,13 @@
         <repository>
             <id>cohorte-nexus</id>
             <name>Cohorte Releases Repository</name>
-            <url>http://forge.cohorte-technologies.com:6080/repository/cohorte-releases/</url>
+            <url>http://nrm.cohorte.tech/repository/cohorte-releases/</url>
             <layout>default</layout>
         </repository>
         <snapshotRepository>
             <id>cohorte-nexus</id>
             <name>Cohorte Snapshots Repository</name>
-            <url>http://forge.cohorte-technologies.com:6080/repository/cohorte-snapshots/</url>
+            <url>http://nrm.cohorte.tech/repository/cohorte-snapshots/</url>
             <uniqueVersion>true</uniqueVersion>
             <layout>default</layout>
         </snapshotRepository>
