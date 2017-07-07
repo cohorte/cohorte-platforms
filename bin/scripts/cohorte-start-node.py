@@ -578,17 +578,17 @@ def main(args=None):
         # - java version "1.8.0_92"
         # - Java(TM) SE Runtime Environment (build 1.8.0_92-b14)
         # - Java HotSpot(TM) 64-Bit Server VM (build 25.92-b14, mixed mode)
-        wJavaHome = os.environ.get('JAVA_HOME')
-        wJavaCmd = wJavaHome + "/bin/java.exe"
+        #wJavaHome = os.environ.get('JAVA_HOME')
+        #wJavaCmd = wJavaHome + "/bin/java.exe"
         # the shell process still has to wait for the background process to finish.
-        wJavaOutput = subprocess.Popen([wJavaCmd, "-version"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True).communicate()[0].decode("utf-8") 
-        wJavaOutputLines= wJavaOutput.split("\r\n")
-        msg2 = """       JAVA VERSION : {0}
-                      {1}
-                      {2}\n""".format(wJavaOutputLines[0],wJavaOutputLines[1],wJavaOutputLines[2])
-        print(msg2)
+        #wJavaOutput = subprocess.Popen([wJavaCmd, "-version"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True).communicate()[0].decode("utf-8") 
+        #wJavaOutputLines= wJavaOutput.split("\r\n")
+        #msg2 = """       JAVA VERSION : {0}
+        #              {1}
+        #              {2}\n""".format(wJavaOutputLines[0],wJavaOutputLines[1],wJavaOutputLines[2])
+        #print(msg2)
         # write msg2 to log file
-        out_logfile.write(msg2)
+        #out_logfile.write(msg2)
         
         # distutils.version  in PEP 386 available since 2009
         from distutils.version import LooseVersion, StrictVersion
