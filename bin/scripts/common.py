@@ -139,7 +139,6 @@ def generate_boot_common(node_dir, app_name, data_dir):
 
     result = """{header}
 {{
-    "import-files" : [ "boot-common.js" ],
     "properties" : {{
         {content}
     }}
@@ -160,7 +159,6 @@ def generate_boot_forker(node_dir, http_port, shell_port):
 
     result = """{header}
 {{
-    "import-files" : [ "boot-forker.js" ],
     "composition" : [
     {{
         "name" : "pelix-http-service",
