@@ -114,7 +114,6 @@ function loadActivities() {
 }
 
 function refresh() {
-  setTimeout(refresh, 2000);
   $.getJSON("/webadmin/api/v1/platform/activities/lastupdate", function(data) {
     var result = data['meta']['lastupdate'];
       if (result > activities_lastupdate) {
@@ -126,7 +125,7 @@ function refresh() {
 
 $(document).ready(function() {
     loadActivities();
-    setTimeout(refresh, 2000);
+    setInterval(refresh, 2000);
 
 });
 </script>

@@ -9,22 +9,21 @@ Cohorte Web Admin Servlet
 """
 
 # iPOPO decorators
+import cohorte.composer
+import cohorte.monitor
+import json, time, os
+import logging
 from pelix.ipopo.decorators import ComponentFactory, Provides, Property, Instantiate, \
     Validate, Invalidate, Requires, RequiresMap, Bind, BindField, UnbindField
 import pelix.remote
+import threading 
 
-# Herald
 import herald
 import herald.beans as beans
 
+
+# Herald
 # Cohorte 
-import cohorte.composer
-import cohorte.monitor
-
-import logging
-import threading 
-import json, time, os
-
 try:
     import Cookie
 except ImportError:
@@ -42,8 +41,16 @@ _logger = logging.getLogger("webadmin.webadmin")
 
 
 # collecting information 
+
+COOKIE = "Cookie"
+COOKIE_SESSION = "session"
+
 SUBJECT_GET_HTTP = "cohorte/shell/agent/get_http"
 """ Signal to request the ports to access HTTP services """
+
+# TODO manage in a better the dispatching of request. to don't have a lot of if 
+# it will help to read the code
+
 
 """
     TODO: should have a local cache of all information.
@@ -294,7 +301,7 @@ class WebAdmin(object):
         for rcomposer in self._icomposers.values():
             uid = rcomposer.get_isolate_uid()
             info = rcomposer.get_isolate_info()
-            #_logger.critical('Getting info: %s -- %s', info, info.components)
+            # _logger.critical('Getting info: %s -- %s', info, info.components)
             for com in info.components:
                 components["components"].append({"name": com.name,
                                                  "factory": com.factory,
@@ -732,8 +739,8 @@ class WebAdmin(object):
                     "event" : "Isolate Created",
                     "object": "Isolate",
                     "name" : peer.name,
-                    "uuid" : peer.uid,  
-                    "node" : peer.node_name,                           
+                    "uuid" : peer.uid,
+                    "node" : peer.node_name,
                     "info" : ""
                 })
             self._platform_activities_list_lastupdate = inow
@@ -753,8 +760,8 @@ class WebAdmin(object):
                     "event" : "Isolate Lost",
                     "object": "Isolate",
                     "name" : peer.name,
-                    "uuid" : peer.uid,  
-                    "node" : peer.node_name,                           
+                    "uuid" : peer.uid,
+                    "node" : peer.node_name,
                     "info" : ""                    
                 })
             self._platform_activities_list_lastupdate = inow
@@ -819,8 +826,8 @@ class WebAdmin(object):
         tabs["tabs"].append({"name": "Global view", "icon": "fa-sitemap", "page": "ajax/globalview.html"})
         tabs["tabs"].append({"name": "Activity Log", "icon": "fa-desktop", "page": "ajax/activitylog.html"})        
         tabs["tabs"].append({"name": "Composition", "icon": "fa-cogs", "page": "ajax/composition.html"})
-        #tabs["tabs"].append({"name": "Configuration", "icon": "fa-book", "page": "ajax/configuration.html"})
-        #tabs["tabs"].append({"name": "Timeline", "icon": "fa-sort-amount-asc", "page": "ajax/timeline.html"})
+        # tabs["tabs"].append({"name": "Configuration", "icon": "fa-book", "page": "ajax/configuration.html"})
+        # tabs["tabs"].append({"name": "Timeline", "icon": "fa-sort-amount-asc", "page": "ajax/timeline.html"})
         tabs["meta"]["code"] = 200
         tabs["meta"]["lastupdate"] = self._nodes_list_lastupdate
         tabs["meta"]["count"] = 1
@@ -884,7 +891,7 @@ class WebAdmin(object):
             node = {"name": n["name"], "size":100, "children": []}
             isolates = self.get_node_isolates(n["uid"])
             for i in isolates["isolates"]:
-                #if i["name"] == "cohorte.internals.forker":
+                # if i["name"] == "cohorte.internals.forker":
                 #    continue                
                 isolate = {"name": i["name"], "size":10, "children": []}
                 components = self.get_isolate_components(i["uid"])
@@ -929,9 +936,148 @@ class WebAdmin(object):
         response.send_content(200, content)
 
 
+    def get_session_cookie(self, request):
+        """
+            return the session cookie 
+        """
+        cookies = request.get_header(COOKIE)
+        if cookies:
+            cookie = Cookie.SimpleCookie()
+            cookie.load(cookies)
+            session_id = cookie[COOKIE_SESSION].value if COOKIE_SESSION in cookie else None
+            return session_id
+        return None
+        
     """
     SERVLET ------------------------------------------------------------------------------------------------------------
     """
+    
+    
+    def do_gui(self, parts, request, response):
+        if len(parts) == 3:
+            if str(parts[2]).lower() == "tabs":
+                tabs = self.get_tabs()
+                self.sendJson(tabs, response)
+            elif str(parts[2]).lower().startswith("options"):
+                result = self.change_gui_options(request, parts[2][8:])
+                self.sendJson(result, response)
+            else:
+                self.show_error_page(request, response)
+        elif len(parts) == 4:
+            if str(parts[2]).lower() == "tabs":
+                if str(parts[3]).lower() == "globalview":
+                    globalview = self.get_globalview()
+                    if globalview is None:
+                        self.show_error_page(request, response)
+                    result = json.dumps(globalview, sort_keys=False,
+                                        indent=4, separators=(',', ': '))
+                    response.send_content(200, result, "application/json")
+        else:
+            self.show_error_page(request, response)
+
+    def do_api(self, parts, request, response):
+        if len(parts) == 3:
+            self.show_api_welcome_page(request, response)
+        if len(parts) == 4:
+            if str(parts[3]).lower() == "platform":
+                platform = self.get_platform()
+                self.sendJson(platform, response)
+
+            if str(parts[3]).lower() == "nodes":
+                nodes = self.get_nodes()
+                self.sendJson(nodes, response)
+
+            elif str(parts[3]).lower() == "isolates":
+                isolates = self.get_isolates()
+                self.sendJson(isolates, response)
+
+            elif str(parts[3]).lower() == "components":
+                components = self.get_components()
+                self.sendJson(components, response)
+
+        if len(parts) == 5:
+            if str(parts[3]).lower() == "platform":
+                if str(parts[4]).lower() == "activities":
+                    activities = self.get_platform_activities()
+                    self.sendJson(activities, response)
+            if str(parts[3]).lower() == "nodes":
+                if str(parts[4]).lower() == "killall":
+                    result = self.killall_nodes()
+                    self.sendJson(result, response)
+                elif str(parts[4]) == "lastupdate":
+                    node = self.get_nodes_lastupdate()
+                    self.sendJson(node, response)
+                else:
+                    node = self.get_node_detail(str(parts[4]))
+                    self.sendJson(node, response)
+
+            elif str(parts[3]).lower() == "isolates":
+                isolate = self.get_isolate_detail(str(parts[4]))
+                self.sendJson(isolate, response)
+
+            elif str(parts[3]).lower() == "components":
+                isolate = self.get_component_detail(str(parts[4]))
+                self.sendJson(isolate, response)
+
+        if len(parts) == 6:
+            if str(parts[3]).lower() == "platform":
+                if str(parts[4]).lower() == "activities":
+                    if str(parts[5]).lower() == "lastupdate":
+                        session_id = self.get_session_cookie(request)
+                        if session_id:
+                            if self._admin.check_session_timeout(request, response, None, None, session_id, False) == False:                                                  
+                                lastupdate = self.get_platform_activities_lastupdate()
+                                self.sendJson(lastupdate, response)
+                            else:
+                                # session timeout
+                                response.set_header("Location", "login.html")
+                                response.send_content(302, "Redirection...")
+                                # pass
+                      
+                        else:
+                            response.set_header("Location", "login.html")
+                            response.send_content(302, "Redirection...")  
+                    
+            if str(parts[3]).lower() == "nodes":
+                if str(parts[5]).lower() == "isolates":
+                    isolates = self.get_node_isolates(str(parts[4]))
+                    self.sendJson(isolates, response)
+                elif str(parts[5]).lower() == "kill":
+                    result = self.kill_node(str(parts[4]))
+                    self.sendJson(result, response)
+
+            if str(parts[3]).lower() == "isolates":
+                if str(parts[5]).lower() == "components":
+                    components = self.get_isolate_components(str(parts[4]))
+                    self.sendJson(components, response)
+                elif str(parts[5]).lower() == "kill":
+                    result = self.kill_isolate(str(parts[4]))
+                    self.sendJson(result, response)
+                    
+        
+    def do_static(self, parts, request, response):
+        if len(parts) > 2:
+            res_path = '/'.join(parts[2:])                        
+            if str(res_path).startswith("web/index.html"):
+                session_id = self.get_session_cookie(request)
+                if session_id:
+                    if self._admin.check_session_timeout(request, response, None, None, session_id) == False:                                                  
+                        self.load_resource('/'.join(parts[2:]), request, response)
+                        # pass
+                    else:
+                        # session timeout
+                        response.set_header("Location", "login.html")
+                        response.send_content(302, "Redirection...")
+                        # pass
+                else:
+                    response.set_header("Location", "login.html")
+                    response.send_content(302, "Redirection...")
+                             
+            else:
+                self.load_resource(res_path, request, response)   
+        else:
+            self.show_error_page(request, response)
+            
 
     def do_GET(self, request, response):
         """
@@ -949,138 +1095,11 @@ class WebAdmin(object):
                 self.show_webadmin_page(request, response)
             elif len(parts) > 1:
                 if str(parts[1]) == "static":                    
-                    if len(parts) > 2:
-                        res_path = '/'.join(parts[2:])                        
-                        if str(res_path).startswith("web/index.html"):
-                            cookies = request.get_header("Cookie")
-                            if cookies:
-                                cookie = Cookie.SimpleCookie()
-                                cookie.load(cookies)
-                                session_id = cookie["session"].value
-                                if session_id:
-                                    if self._admin.check_session_timeout(request, response, None, None, session_id) == False:                                                  
-                                        self.load_resource('/'.join(parts[2:]), request, response)
-                                        #pass
-                                    else:
-                                        #session timeout
-                                        response.set_header("Location", "login.html")
-                                        response.send_content(302, "Redirection...")
-                                        #pass
-                                else:
-                                    response.set_header("Location", "login.html")
-                                    response.send_content(302, "Redirection...")
-                            else:
-                                response.set_header("Location", "login.html")
-                                response.send_content(302, "Redirection...")                    
-                        else:
-                            self.load_resource(res_path, request, response)
-                    else:
-                        self.show_error_page(request, response)
+                    self.do_static(parts, request, response)
                 elif str(parts[1]) == "api":
-                    if len(parts) == 3:
-                        self.show_api_welcome_page(request, response)
-                    if len(parts) == 4:
-                        if str(parts[3]).lower() == "platform":
-                            platform = self.get_platform()
-                            self.sendJson(platform, response)
-
-                        if str(parts[3]).lower() == "nodes":
-                            nodes = self.get_nodes()
-                            self.sendJson(nodes, response)
-
-                        elif str(parts[3]).lower() == "isolates":
-                            isolates = self.get_isolates()
-                            self.sendJson(isolates, response)
-
-                        elif str(parts[3]).lower() == "components":
-                            components = self.get_components()
-                            self.sendJson(components, response)
-
-                    if len(parts) == 5:
-                        if str(parts[3]).lower() == "platform":
-                            if str(parts[4]).lower() == "activities":
-                                activities = self.get_platform_activities()
-                                self.sendJson(activities, response)
-                        if str(parts[3]).lower() == "nodes":
-                            if str(parts[4]).lower() == "killall":
-                                result = self.killall_nodes()
-                                self.sendJson(result, response)
-                            elif str(parts[4]) == "lastupdate":
-                                node = self.get_nodes_lastupdate()
-                                self.sendJson(node, response)
-                            else:
-                                node = self.get_node_detail(str(parts[4]))
-                                self.sendJson(node, response)
-
-                        elif str(parts[3]).lower() == "isolates":
-                            isolate = self.get_isolate_detail(str(parts[4]))
-                            self.sendJson(isolate, response)
-
-                        elif str(parts[3]).lower() == "components":
-                            isolate = self.get_component_detail(str(parts[4]))
-                            self.sendJson(isolate, response)
-
-                    if len(parts) == 6:
-                        if str(parts[3]).lower() == "platform":
-                            if str(parts[4]).lower() == "activities":
-                                if str(parts[5]).lower() == "lastupdate":
-                                    cookies = request.get_header("Cookie")
-                                    if cookies:
-                                        cookie = Cookie.SimpleCookie()
-                                        cookie.load(cookies)
-                                        session_id = cookie["session"].value
-                                        if session_id:
-                                            if self._admin.check_session_timeout(request, response, None, None, session_id, False) == False:                                                  
-                                                lastupdate = self.get_platform_activities_lastupdate()
-                                                self.sendJson(lastupdate, response)
-                                            else:
-                                                #session timeout
-                                                response.set_header("Location", "login.html")
-                                                response.send_content(302, "Redirection...")
-                                                #pass
-                                        else:
-                                            response.set_header("Location", "login.html")
-                                            response.send_content(302, "Redirection...")
-                                    else:
-                                        response.set_header("Location", "login.html")
-                                        response.send_content(302, "Redirection...")  
-                                
-                        if str(parts[3]).lower() == "nodes":
-                            if str(parts[5]).lower() == "isolates":
-                                isolates = self.get_node_isolates(str(parts[4]))
-                                self.sendJson(isolates, response)
-                            elif str(parts[5]).lower() == "kill":
-                                result = self.kill_node(str(parts[4]))
-                                self.sendJson(result, response)
-
-                        if str(parts[3]).lower() == "isolates":
-                            if str(parts[5]).lower() == "components":
-                                components = self.get_isolate_components(str(parts[4]))
-                                self.sendJson(components, response)
-                            elif str(parts[5]).lower() == "kill":
-                                result = self.kill_isolate(str(parts[4]))
-                                self.sendJson(result, response)
+                    self.do_api(parts, request, response)
                 elif str(parts[1]) == "gui":
-                    if len(parts) == 3:
-                        if str(parts[2]).lower() == "tabs":
-                            tabs = self.get_tabs()
-                            self.sendJson(tabs, response)
-                        elif str(parts[2]).lower().startswith("options"):
-                            result = self.change_gui_options(request, parts[2][8:])
-                            self.sendJson(result, response)
-                        else:
-                            self.show_error_page(request, response)
-                    elif len(parts) == 4:
-                        if str(parts[2]).lower() == "tabs":
-                            if str(parts[3]).lower() == "globalview":
-                                globalview = self.get_globalview()
-                                if globalview is None:
-                                    self.show_error_page(request, response)
-                                result = json.dumps(globalview, sort_keys=False,
-                                                    indent=4, separators=(',', ': '))
-                                response.send_content(200, result, "application/json")
-                    else:
-                        self.show_error_page(request, response)
+                    self.do_gui(parts, request, response)
                 else:
                     self.show_error_page(request, response)
             else:

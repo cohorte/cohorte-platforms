@@ -14,25 +14,24 @@ HISTORY
 """
 
 # iPOPO decorators
+import cohorte.composer
+import cohorte.monitor
+import hashlib
+import json, time, os, uuid
+import logging
 from pelix.ipopo.decorators import ComponentFactory, Provides, Property, Instantiate, \
     Validate, Invalidate, Requires, RequiresMap, Bind, BindField, UnbindField
 import pelix.remote
+import threading
 
-# Herald
+import debug
 import herald
 import herald.beans as beans
 
+
+# Herald
 # Cohorte 
-import cohorte.composer
-import cohorte.monitor
-
 # Standard library
-import logging
-import threading
-import json, time, os, uuid
-import hashlib
-
-
 try:
     import Cookie
 except ImportError:
@@ -47,7 +46,6 @@ except ImportError:
     import urlparse
 
 # cohorte plutform debug agent and api
-import debug
 
 _logger = logging.getLogger("debug.debug")
 
@@ -121,7 +119,7 @@ class DebugAPI(object):
         self._composer_top = None
         self._isolates = []
         
-        #properties
+        # properties
         self._username = None
         self._password = None
         
@@ -173,7 +171,7 @@ class DebugAPI(object):
             else:
                 in_data = urlparse.parse_qs(query, keep_blank_values=True)
 
-        #print(json.dumps(in_data, sort_keys=False, indent=4, separators=(',', ': ')))
+        # print(json.dumps(in_data, sort_keys=False, indent=4, separators=(',', ': ')))
         return (path, parts, in_data)
 
     def prepare_response(self, request, action):
@@ -219,7 +217,7 @@ class DebugAPI(object):
         out_data["auth"] = {
             "session-id": session_id,
             "session-user": self._sessions[session_id]["user"],
-            "session-timeout": self._sessions_timeout,            
+            "session-timeout": self._sessions_timeout,
             }        
                         
     def get_api_info(self, request, response, in_data, out_data):
