@@ -326,7 +326,7 @@ def main(args=None):
     # Data dir
     # issue 87 if the path data-dir is a relative path -> we locate the path of data regarding the COHORTE_BASE
     param_node_data_dir = args.node_data_dir
-    if args.node_data_dir != None and not args.node_data_dir.startswith(os.sep):
+    if param_node_data_dir != None and not os.path.isabs(param_node_data_dir):
         param_node_data_dir = COHORTE_BASE + os.sep + param_node_data_dir
     NODE_DATA_DIR = set_configuration_value(
         param_node_data_dir,
