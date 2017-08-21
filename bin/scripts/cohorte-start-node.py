@@ -144,6 +144,7 @@ def main(args=None):
                        help="Configuration file to use for starting cohorte "
                             "node. By default the conf/run.js file is used if "
                             "available")
+  
 
     group.add_argument("--update-config", action="store_true", default=False,
                        dest="update_config_file",
@@ -323,8 +324,12 @@ def main(args=None):
     os.environ['COHORTE_ROOT'] = os.environ.get('COHORTE_HOME')
 
     # Data dir
+    # issue 87 if the path data-dir is a relative path -> we locate the path of data regarding the COHORTE_BASE
+    param_node_data_dir = args.node_data_dir
+    if args.node_data_dir != None and not args.node_data_dir.startswith(os.sep):
+        param_node_data_dir = COHORTE_BASE + os.sep + param_node_data_dir
     NODE_DATA_DIR = set_configuration_value(
-        args.node_data_dir,
+        param_node_data_dir,
         get_external_config(external_config, "data-dir"),
         os.path.join(COHORTE_BASE, "data"))
 
