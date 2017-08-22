@@ -637,8 +637,38 @@ def main(args=None):
 
     # MOD_OG_20170404 - close log
     out_logfile.close()
-    import cohorte.boot.boot as boot
-    return boot.main(boot_args)
+    
+    # if not the same python interpreter 
+    import subprocess
+    try:
+        p = subprocess.Popen(
+            [PYTHON_INTERPRETER] + interpreter_args + boot_args,
+            stdin=None, stdout=None, stderr=None, shell=False)
+    except Exception as ex:
+        print("Error starting node:", ex)
+        logging.exception("Error starting node: %s -- interpreter = %s",
+                          ex, PYTHON_INTERPRETER)
+        result_code = 1
+    else:
+        try:
+            p.wait()
+        except KeyboardInterrupt as ex1:
+            print("Node stopped by user!")
+            result_code = 0
+        except Exception as ex:
+            print("Error waiting for the node to stop:", ex)
+            result_code = 1
+
+        # stopping XMPP bot process
+        if p:
+            try:
+                p.terminate()
+            except OSError:
+                pass
+
+    return result_code
+   # import cohorte.boot.boot as boot
+   # return boot.main(boot_args)
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.WARNING)
