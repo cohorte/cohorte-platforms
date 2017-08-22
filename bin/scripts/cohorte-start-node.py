@@ -32,7 +32,6 @@ import os
 import platform
 import shutil
 import sys
-import sys
 
 import common
 
@@ -229,7 +228,9 @@ def main(args=None):
     parser.add_argument("--console", action="store",
                     dest="install_shell_console",
                     help="If True, the shell console will be started")
-
+    parser.add_argument("--env", action="append",
+                    dest="env_isolate",
+                    help="environment property to propagate to isolates")
     # Parse arguments
     args, boot_args = parser.parse_known_args(args)
     COHORTE_BASE = args.base_absolute_path
@@ -323,6 +324,14 @@ def main(args=None):
     # export Cohorte Root
     os.environ['COHORTE_ROOT'] = os.environ.get('COHORTE_HOME')
 
+
+    # environment property to propagate 
+    env_isolate = args.env_isolate 
+    if env_isolate != None and isinstance(env_isolate, list):
+        for prop in env_isolate:
+            boot_args.append("--env")
+            boot_args.append(prop)
+
     # Data dir
     # issue 87 if the path data-dir is a relative path -> we locate the path of data regarding the COHORTE_BASE
     param_node_data_dir = args.node_data_dir
@@ -362,7 +371,7 @@ def main(args=None):
     # Generate webadmin and shell configs of the cohorte (main) isolate
     # of this node
     common.generate_boot_forker(COHORTE_BASE, HTTP_PORT, SHELL_PORT)
-
+  
     # Log
     try:
         shutil.rmtree(os.path.join(COHORTE_BASE, 'var'))
