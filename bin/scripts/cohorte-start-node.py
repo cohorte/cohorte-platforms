@@ -32,7 +32,6 @@ import os
 import platform
 import shutil
 import sys
-import sys
 
 import common
 
@@ -229,7 +228,9 @@ def main(args=None):
     parser.add_argument("--console", action="store",
                     dest="install_shell_console",
                     help="If True, the shell console will be started")
-
+    parser.add_argument("--env", action="append",
+                    dest="env_isolate",
+                    help="environment property to propagate to isolates")
     # Parse arguments
     args, boot_args = parser.parse_known_args(args)
     COHORTE_BASE = args.base_absolute_path
@@ -323,6 +324,14 @@ def main(args=None):
     # export Cohorte Root
     os.environ['COHORTE_ROOT'] = os.environ.get('COHORTE_HOME')
 
+
+    # environment property to propagate 
+    env_isolate = args.env_isolate 
+    if env_isolate != None and isinstance(env_isolate, list):
+        for prop in env_isolate:
+            boot_args.append("--env")
+            boot_args.append(prop)
+
     # Data dir
     # issue 87 if the path data-dir is a relative path -> we locate the path of data regarding the COHORTE_BASE
     param_node_data_dir = args.node_data_dir
@@ -362,7 +371,7 @@ def main(args=None):
     # Generate webadmin and shell configs of the cohorte (main) isolate
     # of this node
     common.generate_boot_forker(COHORTE_BASE, HTTP_PORT, SHELL_PORT)
-
+  
     # Log
     try:
         shutil.rmtree(os.path.join(COHORTE_BASE, 'var'))
@@ -637,8 +646,38 @@ def main(args=None):
 
     # MOD_OG_20170404 - close log
     out_logfile.close()
-    import cohorte.boot.boot as boot
-    return boot.main(boot_args)
+    
+    # if not the same python interpreter 
+    import subprocess
+    try:
+        p = subprocess.Popen(
+            [PYTHON_INTERPRETER] + interpreter_args + boot_args,
+            stdin=None, stdout=None, stderr=None, shell=False)
+    except Exception as ex:
+        print("Error starting node:", ex)
+        logging.exception("Error starting node: %s -- interpreter = %s",
+                          ex, PYTHON_INTERPRETER)
+        result_code = 1
+    else:
+        try:
+            p.wait()
+        except KeyboardInterrupt as ex1:
+            print("Node stopped by user!")
+            result_code = 0
+        except Exception as ex:
+            print("Error waiting for the node to stop:", ex)
+            result_code = 1
+
+        # stopping XMPP bot process
+        if p:
+            try:
+                p.terminate()
+            except OSError:
+                pass
+
+    return result_code
+   # import cohorte.boot.boot as boot
+   # return boot.main(boot_args)
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.WARNING)
