@@ -11,9 +11,9 @@ PYTHON DEPENDENCIES
 
 JAVA DEPENDENCIES
 
-- org.cohorte.utilities:org.cohorte.utilities:1.0.9
+- org.cohorte.utilities:org.cohorte.utilities:1.0.13
 - org.cohorte.jabsorb:org.cohorte.jabsorb:1.1.0
 - org.cohorte.remote:cohorte-remote-services:1.2.1
-- org.cohorte.herald:cohorte-herald:1.0.0
-- org.cohorte.runtime:cohorte-runtime:1.1.0   
+- org.cohorte.herald:cohorte-herald:1.0.1
+- org.cohorte.runtime:cohorte-runtime:1.2.0-SNAPSHOT   
 - ipojo 1.12.1
