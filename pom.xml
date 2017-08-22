@@ -74,68 +74,71 @@
 	</dependencies>
 
 	<build>
-		<plugins>
-			<plugin>
-				<artifactId>maven-clean-plugin</artifactId>
-				<version>2.6</version>
-				<configuration>
-					<filesets>
-						<fileset>
-							<directory>repo</directory>
-							<includes>
-								<include>**/org.cohorte.*</include>
-								<include>**/org.jabsorb.*</include>
-								<include>**/org.psem2m*</include>
-								<include>**/cohorte/**</include>
-								<include>**/herald/**</include>
-								<include>**/jpype/**</include>
-								<include>**/jpypex/**</include>
-								<include>**/jsonrpclib/**</include>
-								<include>**/pelix/**</include>
-								<include>**/requests/**</include>
-								<include>**/sleekxmpp/**</include>
-								<include>**/_jpype*</include>
-							</includes>
-							<excludes>
-								<exclude>**/felix/**</exclude>
-								<exclude>**/webadmin/**</exclude>
-								<exclude>org.eclipse.osgi_3.7.2.v20120110-1415.jar</exclude>
-								<exclude>README</exclude>
-							</excludes>
-							<followSymlinks>false</followSymlinks>
-						</fileset>
-					</filesets>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>2.10</version>
-				<executions>
-					<execution>
-						<id>src-dependencies</id>
-						<phase>package</phase>
-						<goals>
-							<!-- use copy-dependencies instead if you don't want to explode the 
-								sources -->
-							<goal>unpack-dependencies</goal>
-						</goals>
-						<configuration>
-							<classifier>sources</classifier>
-							<failOnMissingClassifierArtifact>false</failOnMissingClassifierArtifact>
-							<outputDirectory>${project.build.directory}/sources</outputDirectory>
-							<includeGroupIds>
-								org.cohorte.utilities,
-								org.cohorte.jabsorb,
-								org.cohorte.remote,
-								org.cohorte.herald,
-								org.cohorte.runtime
-							</includeGroupIds>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-clean-plugin</artifactId>
+					<version>2.6</version>
+					<configuration>
+						<filesets>
+							<fileset>
+								<directory>repo</directory>
+								<includes>
+									<include>**/org.cohorte.*</include>
+									<include>**/org.jabsorb.*</include>
+									<include>**/org.psem2m*</include>
+									<include>**/cohorte/**</include>
+									<include>**/herald/**</include>
+									<include>**/jpype/**</include>
+									<include>**/jpypex/**</include>
+									<include>**/jsonrpclib/**</include>
+									<include>**/pelix/**</include>
+									<include>**/requests/**</include>
+									<include>**/sleekxmpp/**</include>
+									<include>**/_jpype*</include>
+								</includes>
+								<excludes>
+									<exclude>**/felix/**</exclude>
+									<exclude>**/webadmin/**</exclude>
+									<exclude>org.eclipse.osgi_3.7.2.v20120110-1415.jar</exclude>
+									<exclude>README</exclude>
+								</excludes>
+								<followSymlinks>false</followSymlinks>
+							</fileset>
+						</filesets>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<version>2.10</version>
+					<executions>
+						<execution>
+							<id>src-dependencies</id>
+							<phase>package</phase>
+							<goals>
+								<!-- use copy-dependencies instead if you don't want to explode the 
+									sources -->
+								<goal>unpack-dependencies</goal>
+							</goals>
+							<configuration>
+								<classifier>sources</classifier>
+								<failOnMissingClassifierArtifact>false</failOnMissingClassifierArtifact>
+								<outputDirectory>${project.build.directory}/sources</outputDirectory>
+								<includeGroupIds>
+									org.cohorte.utilities,
+									org.cohorte.jabsorb,
+									org.cohorte.remote,
+									org.cohorte.herald,
+									org.cohorte.runtime
+								</includeGroupIds>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 
 	<profiles>
@@ -144,6 +147,14 @@
 			<id>full</id>
 			<build>
 				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-clean-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+					</plugin>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-dependency-plugin</artifactId>
@@ -255,6 +266,14 @@
 				<plugins>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-clean-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-dependency-plugin</artifactId>
 						<version>2.9</version>
 						<executions>
@@ -364,6 +383,14 @@
 				<plugins>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-clean-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-dependency-plugin</artifactId>
 						<version>2.9</version>
 						<executions>
@@ -470,6 +497,14 @@
 			<id>windows</id>
 			<build>
 				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-clean-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+					</plugin>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-dependency-plugin</artifactId>
@@ -584,6 +619,14 @@
 			<build>
 				<plugins>
 					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-clean-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+					</plugin>
+					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>exec-maven-plugin</artifactId>
 						<version>1.2.1</version>
@@ -663,6 +706,14 @@
 			<id>java</id>
 			<build>
 				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-clean-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+					</plugin>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-dependency-plugin</artifactId>
