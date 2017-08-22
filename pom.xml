@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-	Copyright 2014-2017 Cohorte Technologies (ex. isandlaTech)  http://cohorte.tech
-
-	Licensed under the Apache License, Version 2.0 (the "License"); you may 
-	not use this file
-	except in compliance with the License. You may obtain a copy of the License
-	at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable
-	law or agreed to in writing, software distributed under the License is distributed
-	on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
-	express or implied. See the License for the specific language governing 
-	permissions
-	and limitations under the License.
--->
+<!-- Copyright 2014-2017 Cohorte Technologies (ex. isandlaTech) http://cohorte.tech 
+	Licensed under the Apache License, Version 2.0 (the "License"); you may not 
+	use this file except in compliance with the License. You may obtain a copy 
+	of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
+	by applicable law or agreed to in writing, software distributed under the 
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
+	OF ANY KIND, either express or implied. See the License for the specific 
+	language governing permissions and limitations under the License. -->
 
 <project
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
@@ -28,7 +23,13 @@
 
 	<properties>
 		<timestamp>${maven.build.timestamp}</timestamp>
-        <maven.build.timestamp.format>yyyyMMdd-HHmmss</maven.build.timestamp.format>
+		<maven.build.timestamp.format>yyyyMMdd-HHmmss</maven.build.timestamp.format>
+		<tycho-version>0.22.0</tycho-version>
+		<jabsorb-version>1.1.0</jabsorb-version>
+		<cohorte-utilities-version>1.0.13</cohorte-utilities-version>
+		<cohorte-remote-version>1.2.1</cohorte-remote-version>
+		<cohorte-runtime-version>1.2.0-SNAPSHOT</cohorte-runtime-version>
+		<cohorte-herald-version>1.0.1</cohorte-herald-version>
 	</properties>
 
 	<dependencies>
@@ -36,21 +37,21 @@
 		<dependency>
 			<groupId>org.cohorte.utilities</groupId>
 			<artifactId>org.cohorte.utilities</artifactId>
-			<version>1.0.13</version>
+			<version>${cohorte-utilities-version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<!-- cohorte-jabsorb -->
 		<dependency>
 			<groupId>org.cohorte.jabsorb</groupId>
 			<artifactId>org.jabsorb.ng</artifactId>
-			<version>1.1.0</version>
+			<version>${jabsorb-version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<!-- cohorte-remote -->
 		<dependency>
 			<groupId>org.cohorte.remote</groupId>
 			<artifactId>cohorte-remote-package</artifactId>
-			<version>1.2.1</version>
+			<version>${cohorte-remote-version}</version>
 			<type>pom</type>
 			<scope>provided</scope>
 		</dependency>
@@ -58,7 +59,7 @@
 		<dependency>
 			<groupId>org.cohorte.runtime</groupId>
 			<artifactId>cohorte-runtime-package</artifactId>
-			<version>1.2.0-SNAPSHOT</version>
+			<version>${cohorte-runtime-version}</version>
 			<type>pom</type>
 			<scope>provided</scope>
 		</dependency>
@@ -66,7 +67,7 @@
 		<dependency>
 			<groupId>org.cohorte.herald</groupId>
 			<artifactId>cohorte-herald-package</artifactId>
-			<version>1.0.1</version>
+			<version>${cohorte-herald-version}</version>
 			<type>pom</type>
 			<scope>provided</scope>
 		</dependency>
@@ -92,11 +93,11 @@
 								<include>**/jsonrpclib/**</include>
 								<include>**/pelix/**</include>
 								<include>**/requests/**</include>
-								<include>**/sleekxmpp/**</include>				
+								<include>**/sleekxmpp/**</include>
 								<include>**/_jpype*</include>
 							</includes>
 							<excludes>
-								<exclude>**/felix/**</exclude>	
+								<exclude>**/felix/**</exclude>
 								<exclude>**/webadmin/**</exclude>
 								<exclude>org.eclipse.osgi_3.7.2.v20120110-1415.jar</exclude>
 								<exclude>README</exclude>
@@ -105,35 +106,36 @@
 						</fileset>
 					</filesets>
 				</configuration>
-			</plugin>	
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
 				<version>2.10</version>
 				<executions>
-				<execution>
-					<id>src-dependencies</id>
-					<phase>package</phase>
-					<goals>
-					<!-- use copy-dependencies instead if you don't want to explode the sources -->
-					<goal>unpack-dependencies</goal>
-					</goals>
-					<configuration>
-						<classifier>sources</classifier>
-						<failOnMissingClassifierArtifact>false</failOnMissingClassifierArtifact>
-						<outputDirectory>${project.build.directory}/sources</outputDirectory>
-						<includeGroupIds>
-							org.cohorte.utilities,
-							org.cohorte.jabsorb,
-							org.cohorte.remote,
-							org.cohorte.herald,
-							org.cohorte.runtime
-						</includeGroupIds>
-					</configuration>
-				</execution>
+					<execution>
+						<id>src-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<!-- use copy-dependencies instead if you don't want to explode the 
+								sources -->
+							<goal>unpack-dependencies</goal>
+						</goals>
+						<configuration>
+							<classifier>sources</classifier>
+							<failOnMissingClassifierArtifact>false</failOnMissingClassifierArtifact>
+							<outputDirectory>${project.build.directory}/sources</outputDirectory>
+							<includeGroupIds>
+								org.cohorte.utilities,
+								org.cohorte.jabsorb,
+								org.cohorte.remote,
+								org.cohorte.herald,
+								org.cohorte.runtime
+							</includeGroupIds>
+						</configuration>
+					</execution>
 				</executions>
-			</plugin>					
-		</plugins>		
+			</plugin>
+		</plugins>
 	</build>
 
 	<profiles>
@@ -191,7 +193,7 @@
 								</configuration>
 							</execution>
 						</executions>
-					</plugin>					
+					</plugin>
 					<plugin>
 						<artifactId>maven-assembly-plugin</artifactId>
 						<version>2.4.1</version>
@@ -220,25 +222,25 @@
 						<version>1.8</version>
 						<executions>
 							<execution>
-							<id>attach-artifacts</id>
-							<phase>package</phase>
-							<goals>
-								<goal>attach-artifact</goal>
-							</goals>
-							<configuration>
-								<artifacts>
-									<artifact>
-										<file>conf/version.js</file>
-										<type>js</type>
-										<classifier>full-distribution-version</classifier>
-									</artifact>
-									<artifact>
-										<file>CHANGELOG.txt</file>
-										<type>txt</type>
-										<classifier>changelog</classifier>
-									</artifact>
-								</artifacts>
-							</configuration>
+								<id>attach-artifacts</id>
+								<phase>package</phase>
+								<goals>
+									<goal>attach-artifact</goal>
+								</goals>
+								<configuration>
+									<artifacts>
+										<artifact>
+											<file>conf/version.js</file>
+											<type>js</type>
+											<classifier>full-distribution-version</classifier>
+										</artifact>
+										<artifact>
+											<file>CHANGELOG.txt</file>
+											<type>txt</type>
+											<classifier>changelog</classifier>
+										</artifact>
+									</artifacts>
+								</configuration>
 							</execution>
 						</executions>
 					</plugin>
@@ -300,7 +302,7 @@
 								</configuration>
 							</execution>
 						</executions>
-					</plugin>					
+					</plugin>
 					<plugin>
 						<artifactId>maven-assembly-plugin</artifactId>
 						<version>2.4.1</version>
@@ -329,25 +331,25 @@
 						<version>1.8</version>
 						<executions>
 							<execution>
-							<id>attach-artifacts</id>
-							<phase>package</phase>
-							<goals>
-								<goal>attach-artifact</goal>
-							</goals>
-							<configuration>
-								<artifacts>
-									<artifact>
-										<file>conf/version.js</file>
-										<type>js</type>
-										<classifier>macosx-distribution-version</classifier>
-									</artifact>
-									<artifact>
-										<file>CHANGELOG.txt</file>
-										<type>txt</type>
-										<classifier>changelog</classifier>
-									</artifact>
-								</artifacts>
-							</configuration>
+								<id>attach-artifacts</id>
+								<phase>package</phase>
+								<goals>
+									<goal>attach-artifact</goal>
+								</goals>
+								<configuration>
+									<artifacts>
+										<artifact>
+											<file>conf/version.js</file>
+											<type>js</type>
+											<classifier>macosx-distribution-version</classifier>
+										</artifact>
+										<artifact>
+											<file>CHANGELOG.txt</file>
+											<type>txt</type>
+											<classifier>changelog</classifier>
+										</artifact>
+									</artifacts>
+								</configuration>
 							</execution>
 						</executions>
 					</plugin>
@@ -437,25 +439,25 @@
 						<version>1.8</version>
 						<executions>
 							<execution>
-							<id>attach-artifacts</id>
-							<phase>package</phase>
-							<goals>
-								<goal>attach-artifact</goal>
-							</goals>
-							<configuration>
-								<artifacts>
-									<artifact>
-										<file>conf/version.js</file>
-										<type>js</type>
-										<classifier>linux-distribution-version</classifier>
-									</artifact>
-									<artifact>
-										<file>CHANGELOG.txt</file>
-										<type>txt</type>
-										<classifier>changelog</classifier>
-									</artifact>
-								</artifacts>
-							</configuration>
+								<id>attach-artifacts</id>
+								<phase>package</phase>
+								<goals>
+									<goal>attach-artifact</goal>
+								</goals>
+								<configuration>
+									<artifacts>
+										<artifact>
+											<file>conf/version.js</file>
+											<type>js</type>
+											<classifier>linux-distribution-version</classifier>
+										</artifact>
+										<artifact>
+											<file>CHANGELOG.txt</file>
+											<type>txt</type>
+											<classifier>changelog</classifier>
+										</artifact>
+									</artifacts>
+								</configuration>
 							</execution>
 						</executions>
 					</plugin>
@@ -518,30 +520,12 @@
 							</execution>
 						</executions>
 					</plugin>
-					<!--
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>exec-maven-plugin</artifactId>
-						<version>1.2.1</version>
-						<executions>
-							<execution>
-								<id>prepare</id>
-								<phase>generate-sources</phase>
-								<goals>
-									<goal>exec</goal>
-								</goals>
-								<configuration>
-									<executable>cmd</executable>
-									<arguments>
-										<argument>/c</argument>
-										<argument>build\scripts\prepare.bat</argument>
-									</arguments>
-									<workingDirectory>${basedir}</workingDirectory>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-					-->
+					<!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>exec-maven-plugin</artifactId> 
+						<version>1.2.1</version> <executions> <execution> <id>prepare</id> <phase>generate-sources</phase> 
+						<goals> <goal>exec</goal> </goals> <configuration> <executable>cmd</executable> 
+						<arguments> <argument>/c</argument> <argument>build\scripts\prepare.bat</argument> 
+						</arguments> <workingDirectory>${basedir}</workingDirectory> </configuration> 
+						</execution> </executions> </plugin> -->
 					<plugin>
 						<artifactId>maven-assembly-plugin</artifactId>
 						<version>2.4.1</version>
@@ -569,25 +553,25 @@
 						<version>1.8</version>
 						<executions>
 							<execution>
-							<id>attach-artifacts</id>
-							<phase>package</phase>
-							<goals>
-								<goal>attach-artifact</goal>
-							</goals>
-							<configuration>
-								<artifacts>
-									<artifact>
-										<file>conf/version.js</file>
-										<type>js</type>
-										<classifier>windows-distribution-version</classifier>
-									</artifact>
-									<artifact>
-										<file>CHANGELOG.txt</file>
-										<type>txt</type>
-										<classifier>changelog</classifier>
-									</artifact>
-								</artifacts>
-							</configuration>
+								<id>attach-artifacts</id>
+								<phase>package</phase>
+								<goals>
+									<goal>attach-artifact</goal>
+								</goals>
+								<configuration>
+									<artifacts>
+										<artifact>
+											<file>conf/version.js</file>
+											<type>js</type>
+											<classifier>windows-distribution-version</classifier>
+										</artifact>
+										<artifact>
+											<file>CHANGELOG.txt</file>
+											<type>txt</type>
+											<classifier>changelog</classifier>
+										</artifact>
+									</artifacts>
+								</configuration>
 							</execution>
 						</executions>
 					</plugin>
@@ -598,7 +582,7 @@
 			<!-- Python distribution -->
 			<id>python</id>
 			<build>
-				<plugins>	
+				<plugins>
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>exec-maven-plugin</artifactId>
@@ -649,25 +633,25 @@
 						<version>1.8</version>
 						<executions>
 							<execution>
-							<id>attach-artifacts</id>
-							<phase>package</phase>
-							<goals>
-								<goal>attach-artifact</goal>
-							</goals>
-							<configuration>
-								<artifacts>
-									<artifact>
-										<file>conf/version.js</file>
-										<type>js</type>
-										<classifier>python-distribution-version</classifier>
-									</artifact>
-									<artifact>
-										<file>CHANGELOG.txt</file>
-										<type>txt</type>
-										<classifier>changelog</classifier>
-									</artifact>
-								</artifacts>
-							</configuration>
+								<id>attach-artifacts</id>
+								<phase>package</phase>
+								<goals>
+									<goal>attach-artifact</goal>
+								</goals>
+								<configuration>
+									<artifacts>
+										<artifact>
+											<file>conf/version.js</file>
+											<type>js</type>
+											<classifier>python-distribution-version</classifier>
+										</artifact>
+										<artifact>
+											<file>CHANGELOG.txt</file>
+											<type>txt</type>
+											<classifier>changelog</classifier>
+										</artifact>
+									</artifacts>
+								</configuration>
 							</execution>
 						</executions>
 					</plugin>
@@ -709,6 +693,103 @@
 				</plugins>
 			</build>
 		</profile>
+		<profile>
+			<id>generate_local_p2</id>
+			<!-- should compile before, should not call clean -->
+			<build>
+				<plugins>
+					<!-- Prepare P2 repo sources -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.7</version>
+						<executions>
+							<execution>
+								<id>prepare-source-bundles</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<target name="copy bundles from repo">
+										<copy todir="${basedir}/target/p2/sources/plugins">
+											<fileset dir="${basedir}/repo">
+												<include name="*.jar" />
+											</fileset>
+											<fileset dir="${basedir}/repo/felix">
+												<include name="*.jar" />
+											</fileset>
+										</copy>
+										<copy file="${basedir}/p2/local/category.xml" todir="${basedir}/target/p2/local" />
+									</target>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<!-- Construct P2 repo -->
+					<plugin>
+						<groupId>org.eclipse.tycho.extras</groupId>
+						<artifactId>tycho-p2-extras-plugin</artifactId>
+						<version>${tycho-version}</version>
+						<executions>
+							<execution>
+								<phase>prepare-package</phase>
+								<goals>
+									<goal>publish-features-and-bundles</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<sourceLocation>${basedir}/target/p2/sources</sourceLocation>
+							<artifactRepositoryLocation>${basedir}/target/p2/local</artifactRepositoryLocation>
+							<metadataRepositoryLocation>${basedir}/target/p2/local</metadataRepositoryLocation>
+							<compress>false</compress>
+							<append>true</append>
+							<publishArtifacts>true</publishArtifacts>
+						</configuration>
+					</plugin>
+
+				</plugins>
+
+			</build>
+		</profile>
+		<profile>
+			<id>generate_update_site</id>
+			<modules>
+				<module>p2</module>
+			</modules>
+		</profile>
+		<profile>
+			<id>upload_update_site</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.2.1</version>
+						<executions>
+							<execution>
+								<id>prepare</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>bash</executable>
+									<arguments>
+										<argument>p2/upload.sh</argument>
+										<argument>${NEXUS_USER}</argument>
+										<argument>${NEXUS_PASS}</argument>
+										<argument>${project.version}</argument>
+									</arguments>
+									<workingDirectory>${basedir}</workingDirectory>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 	</profiles>
 
 	<licenses>
@@ -729,44 +810,44 @@
 		<url>https://github.com/isandlaTech/cohorte-platforms/issues</url>
 	</issueManagement>
 
-    <repositories>
-        <repository>
-            <id>cohorte.snapshots</id>
-            <name>Cohorte Snapshot Repository</name>
-            <url>http://nrm.cohorte.tech/repository/cohorte-snapshots</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>cohorte.releases</id>
-            <name>Cohorte Releases Repository</name>
-            <url>http://nrm.cohorte.tech/repository/cohorte-releases</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-    <distributionManagement>
-        <repository>
-            <id>cohorte-nexus</id>
-            <name>Cohorte Releases Repository</name>
-            <url>http://nrm.cohorte.tech/repository/cohorte-releases/</url>
-            <layout>default</layout>
-        </repository>
-        <snapshotRepository>
-            <id>cohorte-nexus</id>
-            <name>Cohorte Snapshots Repository</name>
-            <url>http://nrm.cohorte.tech/repository/cohorte-snapshots/</url>
-            <uniqueVersion>true</uniqueVersion>
-            <layout>default</layout>
-        </snapshotRepository>
-    </distributionManagement>
+	<repositories>
+		<repository>
+			<id>cohorte.snapshots</id>
+			<name>Cohorte Snapshot Repository</name>
+			<url>http://nrm.cohorte.tech/repository/cohorte-snapshots</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>cohorte.releases</id>
+			<name>Cohorte Releases Repository</name>
+			<url>http://nrm.cohorte.tech/repository/cohorte-releases</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+	<distributionManagement>
+		<repository>
+			<id>cohorte-nexus</id>
+			<name>Cohorte Releases Repository</name>
+			<url>http://nrm.cohorte.tech/repository/cohorte-releases/</url>
+			<layout>default</layout>
+		</repository>
+		<snapshotRepository>
+			<id>cohorte-nexus</id>
+			<name>Cohorte Snapshots Repository</name>
+			<url>http://nrm.cohorte.tech/repository/cohorte-snapshots/</url>
+			<uniqueVersion>true</uniqueVersion>
+			<layout>default</layout>
+		</snapshotRepository>
+	</distributionManagement>
 
 </project>

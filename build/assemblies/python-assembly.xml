@@ -17,6 +17,7 @@
          </includes>
          <useDefaultExcludes>false</useDefaultExcludes>
          <excludes>
+         	<exclude>p2/**</exclude>
             <exclude>build/**</exclude>
             <exclude>target/**</exclude> 
             <exclude>repo/felix/**</exclude>    
