@@ -13,6 +13,8 @@ dist=$1
 version_full=$2
 version_num=$(echo $2 | cut -d\- -f 1)
 version_stage=$(echo $2 | cut -d\- -f 2)
+git_branch=$(git branch | grep \* | cut -d ' ' -f2)
+git_commit=$(git rev-parse HEAD)
 stage=release
 if test "$version_stage" == "SNAPSHOT"; then
 	stage="dev"
@@ -22,6 +24,8 @@ echo "	\"distribution\" : \"cohorte-${dist}-distribution\","	>> conf/version.js
 echo "	\"stage\" : \"${stage}\","								>> conf/version.js
 echo "	\"version\" : \"${version_num}\","						>> conf/version.js
 echo "	\"timestamp\" : \"${timestamp}\""						>> conf/version.js
+echo "	\"git_branch\" : \"${git_branch}\""						>> conf/version.js
+echo "	\"git_commit\" : \"${git_commit}\""						>> conf/version.js
 echo "}"														>> conf/version.js
 
 # install JPype
