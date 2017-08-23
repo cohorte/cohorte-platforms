@@ -72,11 +72,11 @@ def get_external_config(parsed_conf_file, conf_name):
                 # Different key name
                 return parsed_conf_file["node"].get("name")
             # return parsed_conf_file["node"].get(conf_name)
-
+        # # TODO add env in the run maybe
         if conf_name in ("top-composer", "auto-start", "composition-file",
                          "http-port", "shell-port", "use-cache",
                          "recomposition-delay", "interpreter", "console",
-                         "data-dir"):
+                         "data-dir", "verbose", "debug"):
             if "node" in parsed_conf_file:
                 conf_value = parsed_conf_file["node"].get(conf_name)
                 if conf_value is None:  #
@@ -179,6 +179,15 @@ def main(args=None):
                        dest="is_top_composer",
                        help="Flag indicating that this node is a Top Composer")
 
+    group.add_argument("-v", "--verbose", action="store_true",
+                       dest="is_verbose", default=False,
+                       help="Flag to activate verbose mode")
+
+    group.add_argument("-d", "--debug", action="store_true",
+                       dest="is_debug", default=False,
+                       help="Flag activate the debug mode")
+
+
     group.add_argument("--composition-file", action="store",
                        dest="composition_file",
                        help="Composition file (by default 'composition.js'). "
@@ -231,6 +240,7 @@ def main(args=None):
     parser.add_argument("--console", action="store",
                     dest="install_shell_console",
                     help="If True, the shell console will be started")
+    
     parser.add_argument("--env", action="append",
                     dest="env_isolate",
                     help="environment property to propagate to isolates")
@@ -345,6 +355,23 @@ def main(args=None):
         get_external_config(external_config, "data-dir"),
         os.path.join(COHORTE_BASE, "data"))
 
+    # retrieve verbose flag from run.js or command line 
+    VERBOSE = set_configuration_value(
+        args.is_verbose,
+        get_external_config(external_config, "verbose"), False)
+    
+    # retrieve debug flag from run.js or command line 
+    DEBUG = set_configuration_value(
+        args.is_debug,
+        get_external_config(external_config, "debug"), False)
+
+
+    if VERBOSE:
+        boot_args.append("-v")
+        
+    if DEBUG:
+        boot_args.append("-d")
+        
     # configure application id
     APPLICATION_ID = set_configuration_value(
         args.app_id,
@@ -498,7 +525,9 @@ def main(args=None):
             "recomposition-delay": RECOMPOSITION_DELAY,
             "interpreter": PYTHON_INTERPRETER,
             "console": INSTALL_SHELL_CONSOLE,
-            "data-dir": NODE_DATA_DIR}
+            "data-dir": NODE_DATA_DIR,
+            "verbose": VERBOSE,
+            "debug": DEBUG}
 
         if IS_TOP_COMPOSER:
             configuration["node"]["auto-start"] = AUTO_START
