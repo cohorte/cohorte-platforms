@@ -842,7 +842,7 @@
 										<argument>${DOCKER_USER}</argument>
 										<argument>${DOCKER_PASS}</argument>										
 									</arguments>
-									<workingDirectory>${basedir}</workingDirectory>
+									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
 							</execution>
 						</executions>
@@ -873,7 +873,7 @@
 										<argument>${DOCKER_USER}</argument>
 										<argument>${DOCKER_PASS}</argument>										
 									</arguments>
-									<workingDirectory>${basedir}</workingDirectory>
+									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
 							</execution>
 						</executions>
@@ -904,7 +904,7 @@
 										<argument>${DOCKER_USER}</argument>
 										<argument>${DOCKER_PASS}</argument>										
 									</arguments>
-									<workingDirectory>${basedir}</workingDirectory>
+									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
 							</execution>
 						</executions>
