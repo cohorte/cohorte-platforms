@@ -19,6 +19,7 @@
          <useDefaultExcludes>false</useDefaultExcludes>
          <excludes>
             <exclude>p2/**</exclude>
+            <exclude>docker/**</exclude>
             <exclude>build/**</exclude>
             <exclude>target/**</exclude>           
             <exclude>pom.xml</exclude>

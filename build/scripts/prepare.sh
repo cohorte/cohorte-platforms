@@ -23,8 +23,8 @@ echo "{"      													> conf/version.js
 echo "	\"distribution\" : \"cohorte-${dist}-distribution\","	>> conf/version.js
 echo "	\"stage\" : \"${stage}\","								>> conf/version.js
 echo "	\"version\" : \"${version_num}\","						>> conf/version.js
-echo "	\"timestamp\" : \"${timestamp}\""						>> conf/version.js
-echo "	\"git_branch\" : \"${git_branch}\""						>> conf/version.js
+echo "	\"timestamp\" : \"${timestamp}\","						>> conf/version.js
+echo "	\"git_branch\" : \"${git_branch}\","						>> conf/version.js
 echo "	\"git_commit\" : \"${git_commit}\""						>> conf/version.js
 echo "}"														>> conf/version.js
 

@@ -20,6 +20,7 @@
          <excludes>
          	<exclude>p2/**</exclude>
             <exclude>build/**</exclude>
+            <exclude>docker/**</exclude>
             <exclude>target/**</exclude>                   
             <exclude>pom.xml</exclude>
             <exclude>DEPENDENCIES.txt</exclude>
