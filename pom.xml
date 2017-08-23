@@ -799,7 +799,24 @@
 						<version>1.2.1</version>
 						<executions>
 							<execution>
-								<id>prepare</id>
+								<id>delete_existing_raw_repo</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>sh</executable>
+									<arguments>
+										<argument>delete.sh</argument>
+										<argument>${NEXUS_USER}</argument>
+										<argument>${NEXUS_PASS}</argument>
+										<argument>cohorte-p2-${project.version}</argument>
+									</arguments>
+									<workingDirectory>${basedir}/p2/nexus</workingDirectory>
+								</configuration>
+							</execution>
+							<execution>
+								<id>create_raw_repo</id>
 								<phase>generate-sources</phase>
 								<goals>
 									<goal>exec</goal>
@@ -807,12 +824,29 @@
 								<configuration>
 									<executable>bash</executable>
 									<arguments>
-										<argument>p2/upload.sh</argument>
+										<argument>create.sh</argument>
 										<argument>${NEXUS_USER}</argument>
 										<argument>${NEXUS_PASS}</argument>
-										<argument>${project.version}</argument>
+										<argument>cohorte-p2-${project.version}</argument>
 									</arguments>
-									<workingDirectory>${basedir}</workingDirectory>
+									<workingDirectory>${basedir}/p2/nexus</workingDirectory>
+								</configuration>
+							</execution>
+							<execution>
+								<id>upload</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>bash</executable>
+									<arguments>
+										<argument>upload.sh</argument>
+										<argument>${NEXUS_USER}</argument>
+										<argument>${NEXUS_PASS}</argument>
+										<argument>cohorte-p2-${project.version}</argument>
+									</arguments>
+									<workingDirectory>${basedir}/p2</workingDirectory>
 								</configuration>
 							</execution>
 						</executions>
