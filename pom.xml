@@ -851,6 +851,35 @@
 			</build>
 		</profile>
 		<profile>
+			<id>generate_docker_base_image_from_jenkins</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.2.1</version>
+						<executions>
+							<execution>
+								<id>prepare</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>ssh</executable>
+									<arguments>
+										<argument>root@forge.cohorte.tech</argument>
+										<argument>"cd /var/volumes/jenkins/workspace/cohorte/cohorte-platforms/docker; bash build_base.sh ${DOCKER_USER} ${DOCKER_PASS}"</argument>
+									</arguments>
+									<workingDirectory>${basedir}/docker</workingDirectory>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
 			<id>generate_docker_runtime_image</id>
 			<build>
 				<plugins>
@@ -882,6 +911,35 @@
 			</build>
 		</profile>
 		<profile>
+			<id>generate_docker_runtime_image_from_jenkins</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.2.1</version>
+						<executions>
+							<execution>
+								<id>prepare</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>ssh</executable>
+									<arguments>
+										<argument>root@forge.cohorte.tech</argument>
+										<argument>"cd /var/volumes/jenkins/workspace/cohorte/cohorte-platforms/docker; bash build_runtime.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS}"</argument>										
+									</arguments>
+									<workingDirectory>${basedir}/docker</workingDirectory>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
 			<id>generate_docker_node_image</id>
 			<build>
 				<plugins>
@@ -903,6 +961,35 @@
 										<argument>${project.version}</argument>
 										<argument>${DOCKER_USER}</argument>
 										<argument>${DOCKER_PASS}</argument>										
+									</arguments>
+									<workingDirectory>${basedir}/docker</workingDirectory>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>generate_docker_node_image_from_jenkins</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.2.1</version>
+						<executions>
+							<execution>
+								<id>prepare</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>ssh</executable>
+									<arguments>
+										<argument>root@forge.cohorte.tech</argument>
+										<argument>"cd /var/volumes/jenkins/workspace/cohorte/cohorte-platforms/docker; bash build_node.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS}"</argument>										
 									</arguments>
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
