@@ -372,6 +372,8 @@ def show_installed_dist_info(dist):
     print("    - version      : " + dist["version"])
     print("    - stage        : " + dist["stage"])
     print("    - timestamp    : " + dist["timestamp"])
+    print("    - git branch   : " + dist["git_branch"])
+    print("    - git commit   : " + dist["git_commit"])
     print("    - location     : " + os.environ.get('COHORTE_HOME'))
     print("")
     print("-----------------------------------------------------------------------")

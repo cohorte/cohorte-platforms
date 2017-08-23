@@ -24,8 +24,11 @@
 	<properties>
 		<timestamp>${maven.build.timestamp}</timestamp>
 		<maven.build.timestamp.format>yyyyMMdd-HHmmss</maven.build.timestamp.format>
+		
 		<tycho-version>0.22.0</tycho-version>
+		
 		<jabsorb-version>1.1.0</jabsorb-version>
+		
 		<cohorte-utilities-version>1.0.13</cohorte-utilities-version>
 		<cohorte-remote-version>1.2.1</cohorte-remote-version>
 		<cohorte-runtime-version>1.2.0-SNAPSHOT</cohorte-runtime-version>
@@ -150,15 +153,11 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-clean-plugin</artifactId>
-					</plugin>
+					</plugin>					
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-dependency-plugin</artifactId>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-dependency-plugin</artifactId>
-						<version>2.9</version>
+						<version>2.10</version>
 						<executions>
 							<execution>
 								<id>copy-dependencies</id>
@@ -267,15 +266,11 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-clean-plugin</artifactId>
-					</plugin>
+					</plugin>					
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-dependency-plugin</artifactId>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-dependency-plugin</artifactId>
-						<version>2.9</version>
+						<version>2.10</version>
 						<executions>
 							<execution>
 								<id>copy-dependencies</id>
@@ -384,15 +379,11 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-clean-plugin</artifactId>
-					</plugin>
+					</plugin>					
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-dependency-plugin</artifactId>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-dependency-plugin</artifactId>
-						<version>2.9</version>
+						<version>2.10</version>
 						<executions>
 							<execution>
 								<id>copy-dependencies</id>
@@ -500,15 +491,11 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-clean-plugin</artifactId>
-					</plugin>
+					</plugin>					
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-dependency-plugin</artifactId>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-dependency-plugin</artifactId>
-						<version>2.9</version>
+						<version>2.10</version>
 						<executions>
 							<execution>
 								<id>copy-dependencies</id>
@@ -621,11 +608,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-clean-plugin</artifactId>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-dependency-plugin</artifactId>
-					</plugin>
+					</plugin>					
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>exec-maven-plugin</artifactId>
@@ -709,15 +692,11 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-clean-plugin</artifactId>
-					</plugin>
+					</plugin>					
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-dependency-plugin</artifactId>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-dependency-plugin</artifactId>
-						<version>2.9</version>
+						<version>2.10</version>
 						<executions>
 							<execution>
 								<id>copy-dependencies</id>
@@ -832,6 +811,98 @@
 										<argument>${NEXUS_USER}</argument>
 										<argument>${NEXUS_PASS}</argument>
 										<argument>${project.version}</argument>
+									</arguments>
+									<workingDirectory>${basedir}</workingDirectory>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>generate_docker_base_image</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.2.1</version>
+						<executions>
+							<execution>
+								<id>prepare</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>bash</executable>
+									<arguments>
+										<argument>docker/build_base.sh</argument>
+										<argument>${DOCKER_USER}</argument>
+										<argument>${DOCKER_PASS}</argument>										
+									</arguments>
+									<workingDirectory>${basedir}</workingDirectory>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>generate_docker_runtime_image</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.2.1</version>
+						<executions>
+							<execution>
+								<id>prepare</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>sh</executable>
+									<arguments>
+										<argument>docker/build_runtime.sh</argument>
+										<argument>${project.version}</argument>
+										<argument>${DOCKER_USER}</argument>
+										<argument>${DOCKER_PASS}</argument>										
+									</arguments>
+									<workingDirectory>${basedir}</workingDirectory>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>generate_docker_node_image</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.2.1</version>
+						<executions>
+							<execution>
+								<id>prepare</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>bash</executable>
+									<arguments>
+										<argument>docker/build_node.sh</argument>
+										<argument>${project.version}</argument>
+										<argument>${DOCKER_USER}</argument>
+										<argument>${DOCKER_PASS}</argument>										
 									</arguments>
 									<workingDirectory>${basedir}</workingDirectory>
 								</configuration>
