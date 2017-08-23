@@ -121,6 +121,9 @@ def main(args=None):
     if not args:
         args = sys.argv[1:]
 
+    # save environment variable to reapply it while call boot.py to prevent side effect
+    boot_environ = os.environ.copy()
+
     # Test if the COHORTE_HOME environment variable is set. If not exit
     COHORTE_HOME = os.environ.get('COHORTE_HOME')
     if not COHORTE_HOME:
@@ -611,7 +614,7 @@ def main(args=None):
             print ("""  - The version of your python interpretor "{vers}" is less than "3.4.0".\n
   - You have to upgrade your python interpretor to a version between 3.4.0 and 3.5.0.\n""".format(vers=PYTHON_VERSION))
             return 3   
-        elif (LooseVersion("3.5.0") <= LooseVersion(PYTHON_VERSION)):
+        elif (LooseVersion("3.7.0") <= LooseVersion(PYTHON_VERSION)):
             print ("""  - The version of your python interpretor "{vers}" is equal or greater than  "3.5.0".\n
   - You have to downgrade your python interpretor to a version between 3.4.0 and 3.5.0.\n""".format(vers=PYTHON_VERSION))
             return 3   
@@ -646,38 +649,11 @@ def main(args=None):
 
     # MOD_OG_20170404 - close log
     out_logfile.close()
-    
-    # if not the same python interpreter 
-    import subprocess
-    try:
-        p = subprocess.Popen(
-            [PYTHON_INTERPRETER] + interpreter_args + boot_args,
-            stdin=None, stdout=None, stderr=None, shell=False)
-    except Exception as ex:
-        print("Error starting node:", ex)
-        logging.exception("Error starting node: %s -- interpreter = %s",
-                          ex, PYTHON_INTERPRETER)
-        result_code = 1
-    else:
-        try:
-            p.wait()
-        except KeyboardInterrupt as ex1:
-            print("Node stopped by user!")
-            result_code = 0
-        except Exception as ex:
-            print("Error waiting for the node to stop:", ex)
-            result_code = 1
+   
 
-        # stopping XMPP bot process
-        if p:
-            try:
-                p.terminate()
-            except OSError:
-                pass
-
-    return result_code
-   # import cohorte.boot.boot as boot
-   # return boot.main(boot_args)
+    import cohorte.boot.boot as boot
+    # change executable to run the correct script in isolate starter
+    return boot.main(boot_args)
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.WARNING)
