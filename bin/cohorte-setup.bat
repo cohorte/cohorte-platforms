@@ -11,4 +11,4 @@ if "%PYTHON_INTERPRETER%"=="" (
 	set PYTHON_INTERPRETER=python
 )
 
-"%PYTHON_INTERPRETER%" "%COHORTE_HOME%\bin\scripts\cohorte-setup.py" %*
+"%PYTHON_INTERPRETER%" "%COHORTE_HOME%\bin\scripts\cohorte_setup.py" %*
