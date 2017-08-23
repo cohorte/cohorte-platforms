@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -- Content-Encoding: UTF-8 --
-# encoding: utf-8
 """
 Script for starting COHORTE node.
 
@@ -26,19 +25,19 @@ Script for starting COHORTE node.
 
 from __future__ import print_function
 
+# Standard Library
 import argparse
-import json
 import logging
 import os
-import platform
-import shutil
 import sys
+import shutil
+import json
+import subprocess
+import platform
 
+# cohorte scripts
 import common
 
-
-# Standard Library
-# cohorte scripts
 # Documentation strings format
 __docformat__ = "restructuredtext en"
 
@@ -84,7 +83,7 @@ def get_external_config(parsed_conf_file, conf_name):
         if conf_name == "app-id":
             if "app-id" in parsed_conf_file:
                 return parsed_conf_file["app-id"]
-            elif "application-id" in parsed_conf_file:  # compatibility with cohorte 1.0.0
+            elif "application-id" in parsed_conf_file:     # compatibility with cohorte 1.0.0
                 return parsed_conf_file["application-id"]  #
 
         if conf_name == "node-name":
@@ -92,16 +91,17 @@ def get_external_config(parsed_conf_file, conf_name):
                 # Different key name
                 return parsed_conf_file["node"].get("name")
             # return parsed_conf_file["node"].get(conf_name)
+
         if conf_name in ("top-composer", "auto-start", "composition-file",
                          "http-port", "shell-port", "use-cache",
                          "recomposition-delay", "interpreter", "console",
-                         "data-dir", "verbose", "debug"):
+                         "data-dir"):
             if "node" in parsed_conf_file:
                 conf_value = parsed_conf_file["node"].get(conf_name)
-                if conf_value is None:  #
-                    if conf_name in "http-port":  # compatibility with cohorte 1.0.0
-                        return parsed_conf_file["node"].get("web-admin")  #
-                    if conf_name in "shell-port":  #
+                if conf_value is None:                                      #
+                    if conf_name in "http-port":                            # compatibility with cohorte 1.0.0
+                        return parsed_conf_file["node"].get("web-admin")    #
+                    if conf_name in "shell-port":                           #
                         return parsed_conf_file["node"].get("shell-admin")  #
                 else:
                     return conf_value
@@ -110,7 +110,7 @@ def get_external_config(parsed_conf_file, conf_name):
             for key, value in parsed_conf_file["env"].items():
                 envs.append("{0}={1}".format(key, value))
             return envs
-        
+
         if conf_name == "transport":
             if "transport" in parsed_conf_file:
                 return parsed_conf_file["transport"]
@@ -261,9 +261,9 @@ def main(args=None):
                        help="HTTP IP version to use (4 or 6)")
 
     parser.add_argument("--console", action="store",
-                    dest="install_shell_console",
+                    dest="install_shell_console", 
                     help="If True, the shell console will be started")
-    
+
     parser.add_argument("--env", action="append",
                     dest="env_isolate",
                     help="environment property to propagate to isolates")
@@ -294,8 +294,8 @@ def main(args=None):
 
     # startup config file
     config_file = args.config_file
-    if not os.path.isfile(config_file):  # compatibility with cohorte 1.0.0
-        config_file = "run.js"  #
+    if not os.path.isfile(config_file):      # compatibility with cohorte 1.0.0
+        config_file = "run.js"               #
 
     if args.show_config_file:
         # show the content of the startup configuration file and exit.
@@ -337,19 +337,19 @@ def main(args=None):
     # useing cache
     USE_CACHE = set_configuration_value(
             args.use_cache,
-            get_external_config(external_config, "use-cache"), False)
+            get_external_config( external_config, "use-cache"), False)
     os.environ['COHORTE_USE_CACHE'] = str(USE_CACHE)
 
     # recomposition delay
     RECOMPOSITION_DELAY = set_configuration_value(
             args.recomposition_delay,
-            get_external_config(external_config, "recomposition-delay"), 120)
+            get_external_config( external_config, "recomposition-delay"), 120)
     os.environ['cohorte.recomposition.delay'] = str(RECOMPOSITION_DELAY)
 
     # python interpreter
     PYTHON_INTERPRETER = set_configuration_value(
             args.interpreter,
-            get_external_config(external_config, "interpreter"), "python")
+            get_external_config( external_config, "interpreter"), "python")
     os.environ['PYTHON_INTERPRETER'] = str(PYTHON_INTERPRETER)
     # export Node name
     NODE_NAME = set_configuration_value(
@@ -367,7 +367,7 @@ def main(args=None):
     os.environ['COHORTE_ROOT'] = os.environ.get('COHORTE_HOME')
 
 
-    # environment property to propagate 
+    # environment property to propagate
     env_isolate = args.env_isolate if args.env_isolate != None else get_external_config(external_config, "env")
     if env_isolate != None and isinstance(env_isolate, list):
         for prop in env_isolate:
@@ -384,12 +384,12 @@ def main(args=None):
         get_external_config(external_config, "data-dir"),
         os.path.join(COHORTE_BASE, "data"))
 
-    # retrieve verbose flag from run.js or command line 
+    # retrieve verbose flag from run.js or command line
     VERBOSE = set_configuration_value(
         args.is_verbose,
         get_external_config(external_config, "verbose"), False)
-    
-    # retrieve debug flag from run.js or command line 
+
+    # retrieve debug flag from run.js or command line
     DEBUG = set_configuration_value(
         args.is_debug,
         get_external_config(external_config, "debug"), False)
@@ -397,10 +397,10 @@ def main(args=None):
 
     if VERBOSE:
         boot_args.append("-v")
-        
+
     if DEBUG:
         boot_args.append("-d")
-        
+
     # configure application id
     APPLICATION_ID = set_configuration_value(
         args.app_id,
@@ -430,7 +430,7 @@ def main(args=None):
     # Generate webadmin and shell configs of the cohorte (main) isolate
     # of this node
     common.generate_boot_forker(COHORTE_BASE, HTTP_PORT, SHELL_PORT)
-  
+
     # Log
     try:
         shutil.rmtree(os.path.join(COHORTE_BASE, 'var'))
@@ -458,7 +458,7 @@ def main(args=None):
         # handle auto-start flag
         AUTO_START = set_configuration_value(
             args.auto_start,
-            get_external_config(external_config, "auto-start"), True)
+            get_external_config( external_config, "auto-start"), True)
 
         common.generate_top_composer_config(COHORTE_BASE, COMPOSITION_FILE,
                                             AUTO_START)
@@ -533,7 +533,7 @@ def main(args=None):
                                 XMPP_JID, XMPP_PASS)
         # all-xmpp.js
         #
-    # else:        
+    #else:        
 
     # update configuration if not exists
     CONFIG_FILE = config_file
