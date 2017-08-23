@@ -869,7 +869,7 @@
 									<executable>ssh</executable>
 									<arguments>
 										<argument>root@forge.cohorte.tech</argument>
-										<argument>"cd /var/volumes/jenkins/workspace/cohorte/cohorte-platforms/docker; bash build_base.sh ${DOCKER_USER} ${DOCKER_PASS}"</argument>
+										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/docker/build_base.sh ${DOCKER_USER} ${DOCKER_PASS}</argument>
 									</arguments>
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
@@ -929,7 +929,7 @@
 									<executable>ssh</executable>
 									<arguments>
 										<argument>root@forge.cohorte.tech</argument>
-										<argument>"cd /var/volumes/jenkins/workspace/cohorte/cohorte-platforms/docker; bash build_runtime.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS}"</argument>										
+										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/docker/build_runtime.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS}</argument>
 									</arguments>
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
@@ -989,7 +989,7 @@
 									<executable>ssh</executable>
 									<arguments>
 										<argument>root@forge.cohorte.tech</argument>
-										<argument>"cd /var/volumes/jenkins/workspace/cohorte/cohorte-platforms/docker; bash build_node.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS}"</argument>										
+										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/docker/build_node.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS}</argument>
 									</arguments>
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
