@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -- Content-Encoding: UTF-8 --
+# encoding: utf-8
 """
 Script for starting COHORTE node.
 
@@ -59,6 +60,25 @@ def parse_config_file(config_file):
 def get_external_config(parsed_conf_file, conf_name):
     """
     Returns the value of the wanted startup configuration.
+
+    {
+        "node": {
+            "name":"node-activup_distance",
+            "kind-of-isolates":"python-only",
+            "top-composer": true,
+            "console": true,
+            "use-cache":false,
+            "interpreter":"python",
+            "shell-port": 16000,
+            "http-port": 9000
+        },
+        "app-id": "activeup-distance-app",
+        "cohorte-version": "1.2.0",
+        "transport-http": {
+            "http-ipv": 4
+        },
+        "transport": []
+    }
     """
     if parsed_conf_file is not None and conf_name is not None:
         if conf_name == "app-id":
@@ -72,7 +92,6 @@ def get_external_config(parsed_conf_file, conf_name):
                 # Different key name
                 return parsed_conf_file["node"].get("name")
             # return parsed_conf_file["node"].get(conf_name)
-        # # TODO add env in the run maybe
         if conf_name in ("top-composer", "auto-start", "composition-file",
                          "http-port", "shell-port", "use-cache",
                          "recomposition-delay", "interpreter", "console",
@@ -86,7 +105,12 @@ def get_external_config(parsed_conf_file, conf_name):
                         return parsed_conf_file["node"].get("shell-admin")  #
                 else:
                     return conf_value
-
+        if conf_name == "env" and "env" in parsed_conf_file:
+            envs = []
+            for key, value in parsed_conf_file["env"].items():
+                envs.append("{0}={1}".format(key, value))
+            return envs
+        
         if conf_name == "transport":
             if "transport" in parsed_conf_file:
                 return parsed_conf_file["transport"]
@@ -121,9 +145,6 @@ def main(args=None):
     if not args:
         args = sys.argv[1:]
 
-    # save environment variable to reapply it while call boot.py to prevent side effect
-    boot_environ = os.environ.copy()
-
     # Test if the COHORTE_HOME environment variable is set. If not exit
     COHORTE_HOME = os.environ.get('COHORTE_HOME')
     if not COHORTE_HOME:
@@ -146,7 +167,6 @@ def main(args=None):
                        help="Configuration file to use for starting cohorte "
                             "node. By default the conf/run.js file is used if "
                             "available")
-  
 
     group.add_argument("--update-config", action="store_true", default=False,
                        dest="update_config_file",
@@ -171,6 +191,9 @@ def main(args=None):
 
     group.add_argument("-n", "--node", action="store",
                        dest="node_name", help="Node name")
+
+    group.add_argument("-k", "--kind-of-isolates", action="store",
+                       dest="kind_of_isolates", help="Kind of Isolate : ['python-only' | 'python-java']")
 
     group.add_argument("--data-dir", action="store",
                        dest="node_data_dir", help="Node Data Dir")
@@ -334,12 +357,18 @@ def main(args=None):
         os.path.basename(os.path.normpath(COHORTE_BASE)))
     os.environ['COHORTE_NODE_NAME'] = NODE_NAME
 
+    # export kind of isolates :  "python-only" or "python-java"
+    KIND_OF_ISOLATES = set_configuration_value(
+        args.kind_of_isolates,
+        get_external_config(external_config, "kind-of-isolates"), "python-java")
+    os.environ['KIND_OF_ISOLATES'] = KIND_OF_ISOLATES
+
     # export Cohorte Root
     os.environ['COHORTE_ROOT'] = os.environ.get('COHORTE_HOME')
 
 
     # environment property to propagate 
-    env_isolate = args.env_isolate 
+    env_isolate = args.env_isolate if args.env_isolate != None else get_external_config(external_config, "env")
     if env_isolate != None and isinstance(env_isolate, list):
         for prop in env_isolate:
             boot_args.append("--env")
@@ -550,10 +579,7 @@ def main(args=None):
             return 0
         
     # get python interpreter version (to be used by cohorte)
-
-   
     PYTHON_VERSION = "{0}.{1}.{2}".format(sys.version_info[0], sys.version_info[1], sys.version_info[2])
-    
     # get cohorte_home version
     conf_dir = os.path.join(COHORTE_HOME, "conf")
     with open(os.path.join(conf_dir, "version.js")) as version_file:
@@ -581,8 +607,11 @@ def main(args=None):
 
           HTTP PORT : {http_port}
          SHELL PORT : {shell_port}
-""".format(appid=APPLICATION_ID, node_name=os.environ.get('COHORTE_NODE_NAME'),
-           transports=",".join(TRANSPORT_MODES), is_top=IS_TOP_COMPOSER,
+""".format(appid=APPLICATION_ID,
+           node_name=os.environ.get('COHORTE_NODE_NAME'),
+           kind_of_isolates=os.environ.get('KIND_OF_ISOLATES'),
+           transports=",".join(TRANSPORT_MODES),
+           is_top=IS_TOP_COMPOSER,
            http_port=HTTP_PORT, shell_port=SHELL_PORT)
 
     if IS_TOP_COMPOSER:
@@ -598,6 +627,8 @@ def main(args=None):
        COHORTE BASE : {base}
        COHORTE DATA : {data}
  PYTHON INTERPRETER : {python} ({python_version})
+        PYTHON PATH : {pythonpath}
+  OS PATH SEPARATOR : {ospathsep}
            LOG FILE : {logfile}
            
 """.format(home=COHORTE_HOME, base=os.environ['COHORTE_BASE'],
@@ -605,7 +636,9 @@ def main(args=None):
            logfile=os.environ.get('COHORTE_LOGFILE'),
            python=PYTHON_INTERPRETER,
            python_version=PYTHON_VERSION,
-           cohorte_version=COHORTE_VERSION)
+           cohorte_version=COHORTE_VERSION,
+           pythonpath="\n\t\t\t".join(os.getenv('PYTHONPATH').split(os.pathsep)),
+           ospathsep=os.pathsep)
 
     print(msg1)
 
@@ -615,48 +648,33 @@ def main(args=None):
     out_logfile.write(msg1)
     
 
- 	#  MOD_OG_20170404 - use the distutils.version standard lib to check the cversion of python
- 	# if cohorte has to launch one or more java isolate (java distribution) => check python version > 3.4   
-    if version["distribution"] not in ("cohorte-python-distribution"):
-    
-        # MOD_OG_20170404 - dump the java version
-        # get java interpreter version (to be used by cohorte)
-        # - java version "1.8.0_92"
-        # - Java(TM) SE Runtime Environment (build 1.8.0_92-b14)
-        # - Java HotSpot(TM) 64-Bit Server VM (build 25.92-b14, mixed mode)
-        # wJavaHome = os.environ.get('JAVA_HOME')
-        # wJavaCmd = wJavaHome + "/bin/java.exe"
-        # the shell process still has to wait for the background process to finish.
-        # wJavaOutput = subprocess.Popen([wJavaCmd, "-version"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True).communicate()[0].decode("utf-8") 
-        # wJavaOutputLines= wJavaOutput.split("\r\n")
-        # msg2 = """       JAVA VERSION : {0}
-        #              {1}
-        #              {2}\n""".format(wJavaOutputLines[0],wJavaOutputLines[1],wJavaOutputLines[2])
-        # print(msg2)
-        # write msg2 to log file
-        # out_logfile.write(msg2)
-        
-        # distutils.version  in PEP 386 available since 2009
-        from distutils.version import LooseVersion, StrictVersion
-    
-        if (LooseVersion("3.4.0") > LooseVersion(PYTHON_VERSION)):
-            print ("""  - The version of your python interpretor "{vers}" is less than "3.4.0".\n
-  - You have to upgrade your python interpretor to a version between 3.4.0 and 3.5.0.\n""".format(vers=PYTHON_VERSION))
-            return 3   
-        elif (LooseVersion("3.7.0") <= LooseVersion(PYTHON_VERSION)):
-            print ("""  - The version of your python interpretor "{vers}" is equal or greater than  "3.5.0".\n
-  - You have to downgrade your python interpretor to a version between 3.4.0 and 3.5.0.\n""".format(vers=PYTHON_VERSION))
-            return 3   
-        else:
-            msg3 = """  - The version of your python interpretor "{vers}" is ok to launch Java isolates.""".format(vers=PYTHON_VERSION)
-            print(msg3)
-            out_logfile.write(msg3 + "\n")
+    msg2 = ""
+    if version["distribution"] not in ("cohorte-python-distribution") and KIND_OF_ISOLATES != "python-only":
+        # java distribution
+        # => should have python 3.4
+        python_version_tuple = tuple(map(int, (PYTHON_VERSION.split("."))))
+        if python_version_tuple < (3, 4):
+            msg2 = """
+            As all the isolates of the node aren't Python ones, you should have Python 3.4 to launch Java isolates !
 
-         
-        # MOD_OG_20170404 - dump infos
-        msg3 = """  - Adjust jpype implementation depending on platform system."""
-        print(msg3)
-        out_logfile.write(msg3 + "\n")
+            If your node has only Python isolates, please download cohorte-python-distribution which requires
+            Python 2.7 or 3.4, or set the Kind of Isolates you want.
+            @lookat :  --kind-of-isolates=['python-only' | 'python-java']
+
+            It you have Python 3.4 installed on your machine and its Python 2.x which is used,
+            set the "setintrepreter" argument when starting your node.
+            @lookat : --interpreter <PATH_TO_PYTHON34> """
+            print(msg2)
+            # write to log file
+            with open(str(os.environ.get('COHORTE_LOGFILE')), "w") as log_file:
+                log_file.write(msg1 + msg2)
+            return 3
+        elif python_version_tuple > (3, 4):
+            msg2 = """
+            You should have Python 3.4 to launch Java isolates!
+            Your Python version is not yet supported!"""
+
+        # change jpype implementation depending on platform system
         common.setup_jpype(COHORTE_HOME)        
 
 
@@ -672,13 +690,16 @@ def main(args=None):
     
     # MOD_OG_20170404 - dump infos
     # Dump command
-    msg4 = """  - call boot.py with args: {args}""".format(args=[ boot_args])
-    print(msg4)
-    out_logfile.write(msg4 + "\n")
+    msg3 = """  - call boot.py with args: {args}""".format(args=[ boot_args])
+    print(msg3)
+
+    # write to log file
+    with open(str(os.environ.get('COHORTE_LOGFILE')), "w") as log_file:
+        log_file.write(msg1 + msg2 + msg3)
 
     # MOD_OG_20170404 - close log
     out_logfile.close()
-   
+
 
     import cohorte.boot.boot as boot
     # change executable to run the correct script in isolate starter

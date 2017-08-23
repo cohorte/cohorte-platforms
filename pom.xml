@@ -838,7 +838,7 @@
 								<configuration>
 									<executable>bash</executable>
 									<arguments>
-										<argument>docker/build_base.sh</argument>
+										<argument>build_base.sh</argument>
 										<argument>${DOCKER_USER}</argument>
 										<argument>${DOCKER_PASS}</argument>										
 									</arguments>
@@ -868,7 +868,7 @@
 								<configuration>
 									<executable>sh</executable>
 									<arguments>
-										<argument>docker/build_runtime.sh</argument>
+										<argument>build_runtime.sh</argument>
 										<argument>${project.version}</argument>
 										<argument>${DOCKER_USER}</argument>
 										<argument>${DOCKER_PASS}</argument>										
@@ -899,7 +899,7 @@
 								<configuration>
 									<executable>bash</executable>
 									<arguments>
-										<argument>docker/build_node.sh</argument>
+										<argument>build_node.sh</argument>
 										<argument>${project.version}</argument>
 										<argument>${DOCKER_USER}</argument>
 										<argument>${DOCKER_PASS}</argument>										
