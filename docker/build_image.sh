@@ -28,14 +28,9 @@ then
                 if [ "$#" -ge 5 ]
                 then
                         echo -e "\x1B[1;32mPushing to Docker Hub...\x1B[0m"
-                        docker login -u $4 -p $5 $6
-                        if [[ $DOCKER_TAG == *SNAPSHOT ]] || [[ $DOCKER_TAG == *snapshot ]]
-                        then
-                                docker push $DOCKER_FULL_NAME_DEV
-                        else
-                                docker push $DOCKER_FULL_NAME
-                                docker push $DOCKER_FULL_NAME_LATEST
-                        fi
+                        docker login -u $4 -p $5 $6                        
+                        docker push $DOCKER_FULL_NAME
+                        docker push $DOCKER_FULL_NAME_LATEST                        
 
                 else
                         echo -e "\x1B[1;32m[WARN] You have not provided your Docker Hub user/pass. Images are not pushed to the Hub!\x1B[0m"
