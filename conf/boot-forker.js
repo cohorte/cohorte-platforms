@@ -33,6 +33,8 @@
 	 * Isolate starters
 	 */
 	{
+		"name" : "cohorte.forker.starters.environment"
+	},{
 		"name" : "cohorte.forker.starters.cohorte_boot"
 	}, {
 		"name" : "cohorte.forker.starters.exe"
