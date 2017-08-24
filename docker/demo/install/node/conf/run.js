@@ -1,6 +1,7 @@
 {
     "app-id" : "demo",
-    "transport": [],
+    "transport": [ "http" ],
+    "transport-http" : { "http-ipv": 4 },
     "cohorte-version": "1.3.0",
     "node": {
         "top-composer": true,
