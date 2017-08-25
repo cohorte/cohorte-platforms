@@ -1,1 +1,1 @@
-sleep 15s
+sleep 30s
