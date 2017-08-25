@@ -12,3 +12,4 @@ pelix/
 requests/
 sleekxmpp/
 !webadmin/
+!java/org.cohorte.utilities.config*
