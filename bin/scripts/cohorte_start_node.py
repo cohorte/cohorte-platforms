@@ -669,7 +669,7 @@ def main(args=None):
             with open(str(os.environ.get('COHORTE_LOGFILE')), "w") as log_file:
                 log_file.write(msg1 + msg2)
             return 3
-        elif python_version_tuple > (3, 4):
+        elif python_version_tuple > (3, 4, 99):
             msg2 = """
             You should have Python 3.4 to launch Java isolates!
             Your Python version is not yet supported!"""
@@ -690,7 +690,7 @@ def main(args=None):
     
     # MOD_OG_20170404 - dump infos
     # Dump command
-    msg3 = """  - call boot.py with args: {args}""".format(args=[ boot_args])
+    msg3 = """\n  - call boot.py with args: {args}""".format(args=[ boot_args])
     print(msg3)
 
     # write to log file
