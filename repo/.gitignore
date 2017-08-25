@@ -4,6 +4,7 @@ org.jabsorb.ng-*
 _jpype*
 cohorte/
 herald/
+java/
 jpype/
 jpypex/
 jsonrpclib/

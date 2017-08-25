@@ -160,21 +160,81 @@
 						<version>2.10</version>
 						<executions>
 							<execution>
-								<id>copy-dependencies</id>
+								<id>cohorte-utilities</id>
 								<phase>generate-sources</phase>
 								<goals>
 									<goal>copy-dependencies</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>repo</outputDirectory>
+									<outputDirectory>repo/java/utilities</outputDirectory>
 									<overWriteReleases>false</overWriteReleases>
 									<overWriteSnapshots>true</overWriteSnapshots>
 									<excludeTypes>pom</excludeTypes>
 									<includeGroupIds>
-										org.cohorte.utilities,
-										org.cohorte.jabsorb,
-										org.cohorte.remote,
-										org.cohorte.herald,
+										org.cohorte.utilities
+									</includeGroupIds>
+								</configuration>
+							</execution>
+							<execution>
+								<id>jabsorb</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>copy-dependencies</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>repo/java/jabsorb</outputDirectory>
+									<overWriteReleases>false</overWriteReleases>
+									<overWriteSnapshots>true</overWriteSnapshots>
+									<excludeTypes>pom</excludeTypes>
+									<includeGroupIds>										
+										org.cohorte.jabsorb
+									</includeGroupIds>
+								</configuration>
+							</execution>
+							<execution>
+								<id>cohorte-remote</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>copy-dependencies</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>repo/java/remote</outputDirectory>
+									<overWriteReleases>false</overWriteReleases>
+									<overWriteSnapshots>true</overWriteSnapshots>
+									<excludeTypes>pom</excludeTypes>
+									<includeGroupIds>										
+										org.cohorte.remote
+									</includeGroupIds>
+								</configuration>
+							</execution>
+							<execution>
+								<id>cohorte-herald</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>copy-dependencies</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>repo/java/herald</outputDirectory>
+									<overWriteReleases>false</overWriteReleases>
+									<overWriteSnapshots>true</overWriteSnapshots>
+									<excludeTypes>pom</excludeTypes>
+									<includeGroupIds>										
+										org.cohorte.herald
+									</includeGroupIds>
+								</configuration>
+							</execution>
+							<execution>
+								<id>cohorte-runtime</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>copy-dependencies</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>repo/java/runtime</outputDirectory>
+									<overWriteReleases>false</overWriteReleases>
+									<overWriteSnapshots>true</overWriteSnapshots>
+									<excludeTypes>pom</excludeTypes>
+									<includeGroupIds>										
 										org.cohorte.runtime
 									</includeGroupIds>
 								</configuration>
