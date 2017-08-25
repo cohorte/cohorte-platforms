@@ -1093,6 +1093,65 @@
 				</plugins>
 			</build>
 		</profile>
+		<profile>
+			<id>test_demo_container_from_jenkins</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.2.1</version>
+						<executions>
+							<execution>
+								<id>deploy</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>ssh</executable>
+									<arguments>
+										<argument>root@forge.cohorte.tech</argument>
+										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/tests/deploy_demo.sh</argument>
+									</arguments>
+									<workingDirectory>${basedir}/tests</workingDirectory>
+								</configuration>
+							</execution>
+							<execution>
+								<id>wait</id>
+								<phase>compile</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>ssh</executable>
+									<arguments>
+										<argument>root@forge.cohorte.tech</argument>
+										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/tests/wait_demo.sh</argument>
+									</arguments>
+									<workingDirectory>${basedir}/tests</workingDirectory>
+								</configuration>
+							</execution>
+							<execution>
+								<id>test</id>
+								<phase>test</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>ssh</executable>
+									<arguments>
+										<argument>root@forge.cohorte.tech</argument>
+										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/tests/test_demo.sh</argument>
+									</arguments>
+									<workingDirectory>${basedir}/tests</workingDirectory>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 	</profiles>
 
 	<licenses>

@@ -20,6 +20,7 @@
          	  <exclude>p2/**</exclude>
             <exclude>docker/**</exclude>
             <exclude>build/**</exclude>
+            <exclude>tests/**</exclude>
             <exclude>target/**</exclude> 
             <exclude>repo/felix/**</exclude>    
             <exclude>repo/org.eclipse.osgi_3.7.2.v20120110-1415.jar</exclude>       

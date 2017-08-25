@@ -21,6 +21,7 @@
             <exclude>p2/**</exclude>
             <exclude>docker/**</exclude>
             <exclude>build/**</exclude>
+            <exclude>tests/**</exclude>
             <exclude>target/**</exclude>           
             <exclude>pom.xml</exclude>
             <exclude>DEPENDENCIES.txt</exclude>
