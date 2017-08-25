@@ -24,6 +24,7 @@
             <exclude>target/**</exclude>           
             <exclude>pom.xml</exclude>
             <exclude>DEPENDENCIES.txt</exclude>
+            <exclude>requirements.txt</exclude>
             <exclude>**/__pycache__/**</exclude>
             <exclude>**/*.DS_Store</exclude>
             <exclude>**/.git</exclude>
