@@ -1,6 +1,0 @@
-test/conf/*
-test/var/*
-!test/conf/composition.js
-!test/conf/run.js
-*.pyc
-runtime/install/**
