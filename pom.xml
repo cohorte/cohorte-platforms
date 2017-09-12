@@ -145,6 +145,16 @@
 	</build>
 
 	<profiles>
+			
+		<profile>
+			<!-- Cohorte felix p2 -->
+			<id>cohorte_felix</id>
+			<modules>
+				<module>maven/cohorte_p2_felix/</module>
+			</modules>
+		</profile>
+	
+	
 		<profile>
 			<!-- Full Distribution -->
 			<id>full</id>
