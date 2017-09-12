@@ -54,7 +54,7 @@
 						</goals>
 						<configuration>
 							<target name="copy felix jar to plugins">		
-								<copy todir="${basedir}/plugins">	
+								<copy todir="${basedir}/sources/plugins">	
 								    <fileset dir="../../repo/felix/">
 								    	<include name="*.jar"/>
 								    </fileset>	
@@ -77,7 +77,7 @@
 					</execution>
 				</executions>
 				<configuration>
-					<sourceLocation>${basedir}/plugins</sourceLocation>
+					<sourceLocation>${basedir}/sources</sourceLocation>
 					<artifactRepositoryLocation>${basedir}/target</artifactRepositoryLocation>
 					<metadataRepositoryLocation>${basedir}/target</metadataRepositoryLocation>
 					<compress>false</compress>
