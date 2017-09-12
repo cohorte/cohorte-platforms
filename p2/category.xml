@@ -66,6 +66,9 @@
    <bundle id="org.cohorte.utilities" version="1.0.14">
       <category name="utilities"/>
    </bundle>
+   <bundle id="org.cohorte.slf4j-OCIL" version="1.0.0-qualifier">
+      <category name="isolates"/>
+   </bundle>
    <bundle id="org.jabsorb.ng" version="1.1.0">
       <category name="others"/>
    </bundle>
@@ -114,7 +117,6 @@
    <bundle id="slf4j.api" version="1.7.25">
       <category name="felix"/>
    </bundle>
- 
    <bundle id="log4j" version="1.2.16">
       <category name="felix"/>
    </bundle>
