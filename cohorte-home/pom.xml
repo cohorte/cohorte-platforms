@@ -145,14 +145,7 @@
 	</build>
 
 	<profiles>
-			
-		<profile>
-			<!-- Cohorte felix p2 -->
-			<id>cohorte_felix</id>
-			<modules>
-				<module>org.cohorte.felix.p2</module>
-			</modules>
-		</profile>
+	
 	
 	
 		<profile>
@@ -631,7 +624,7 @@
 									<executable>ssh</executable>
 									<arguments>
 										<argument>root@forge.cohorte.tech</argument>
-										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/docker/build_base.sh ${DOCKER_USER} ${DOCKER_PASS}</argument>
+										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_base.sh ${DOCKER_USER} ${DOCKER_PASS}</argument>
 									</arguments>
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
@@ -691,7 +684,7 @@
 									<executable>ssh</executable>
 									<arguments>
 										<argument>root@forge.cohorte.tech</argument>
-										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/docker/build_runtime.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS}</argument>
+										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_runtime.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS}</argument>
 									</arguments>
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
@@ -751,7 +744,7 @@
 									<executable>ssh</executable>
 									<arguments>
 										<argument>root@forge.cohorte.tech</argument>
-										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/docker/build_node.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS}</argument>
+										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_node.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS}</argument>
 									</arguments>
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
@@ -811,7 +804,7 @@
 									<executable>ssh</executable>
 									<arguments>
 										<argument>root@forge.cohorte.tech</argument>
-										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/docker/build_demo.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS}</argument>
+										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_demo.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS}</argument>
 									</arguments>
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
@@ -840,7 +833,7 @@
 									<executable>ssh</executable>
 									<arguments>
 										<argument>root@forge.cohorte.tech</argument>
-										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/tests/deploy_demo.sh</argument>
+										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/cohorte-home/tests/deploy_demo.sh</argument>
 										<argument>/var/volumes/jenkins/.ssh/id_rsa</argument>
 									</arguments>
 									<workingDirectory>${basedir}/tests</workingDirectory>
@@ -856,7 +849,7 @@
 									<executable>ssh</executable>
 									<arguments>
 										<argument>root@forge.cohorte.tech</argument>
-										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/tests/wait_demo.sh</argument>
+										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/cohorte-home/tests/wait_demo.sh</argument>
 									</arguments>
 									<workingDirectory>${basedir}/tests</workingDirectory>
 								</configuration>
@@ -871,7 +864,7 @@
 									<executable>ssh</executable>
 									<arguments>
 										<argument>root@forge.cohorte.tech</argument>
-										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/tests/test_demo.sh</argument>
+										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/cohorte-home/tests/test_demo.sh</argument>
 									</arguments>
 									<workingDirectory>${basedir}/tests</workingDirectory>
 								</configuration>
