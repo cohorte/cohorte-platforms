@@ -63,7 +63,7 @@
    <bundle id="org.cohorte.shell.remote" version="1.2.0.qualifier">
       <category name="shell"/>
    </bundle>
-   <bundle id="org.cohorte.utilities" version="1.0.13">
+   <bundle id="org.cohorte.utilities" version="1.0.14">
       <category name="utilities"/>
    </bundle>
    <bundle id="org.jabsorb.ng" version="1.1.0">
