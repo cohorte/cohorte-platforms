@@ -40,30 +40,7 @@
 					</execution>
 				</executions>
 			</plugin>	
-			<!-- create source/plugin directory for the p2 construction from repo/felix directory -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.7</version>
-				<executions>
-					<execution>
-						<id>copy-files</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>run</goal>
-						</goals>
-						<configuration>
-							<target name="copy felix jar to plugins">		
-								<copy todir="${basedir}/sources/plugins">	
-								    <fileset dir="../../repo/felix/">
-								    	<include name="*.jar"/>
-								    </fileset>	
-								</copy>						
-							</target>									
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>	            
+		           
 			<plugin>
 				<groupId>org.eclipse.tycho.extras</groupId>
 				<artifactId>tycho-p2-extras-plugin</artifactId>

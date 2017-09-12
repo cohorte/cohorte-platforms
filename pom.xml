@@ -150,7 +150,7 @@
 			<!-- Cohorte felix p2 -->
 			<id>cohorte_felix</id>
 			<modules>
-				<module>maven/cohorte_p2_felix/</module>
+				<module>org.cohorte.felix.p2</module>
 			</modules>
 		</profile>
 	
