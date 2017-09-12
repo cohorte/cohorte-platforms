@@ -1,0 +1,3 @@
+#!/bin/bash
+
+python "$COHORTE_HOME/bin/scripts/cohorte_update.py" $*

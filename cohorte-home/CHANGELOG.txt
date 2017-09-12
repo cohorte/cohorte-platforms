@@ -1,0 +1,126 @@
+Changes form the 1.2.1 to 1.3.0 build: ${timestamp}
+------------------------------------------------------
+
+
+
+Changes form the 1.2.0 to 1.2.1 (released on July 7th, 2017)
+------------------------------------------------------
+
+** Improvements
+	* Cohorte-Platform
+		- Enhance setup_jpype to support win32 bits [#90]
+		- Enhance output informations showed when starting a Node
+	* Updating dependencies
+		- Cohorte-Utilities from 1.0.6 to 1.0.9
+		
+** Bug Fix
+	* Cohorte-Platform
+		- Case sensetive problem when installing jpype
+
+
+Changes form the 1.1.2 to 1.2.0
+-------------------------------
+
+** New Feature
+	* New official Cohorte Docker image
+	* Cohorte-Runtime : new Local Discovery 
+
+** Improvements
+	* Cohorte-Platform
+		- having only one distribution of Cohorte for all platforms [#85]
+		- controlling the used Python Interpreter version when having Java Isolates [#7]
+	* Webadmin
+		- supporting basic authentification
+		- adding Herald Tab that shows the isolate accesses and directory content [#80]
+		- implementing Logs Tab for Java isolates
+		- adding "Composition" menu that shows the application's composition		
+		- several improvements on the dashboard page
+	* Cohorte-Runtime
+		- Adding Forker's HTTP Port to OSGi java framework properties
+	* Cohorte-Herald
+		- new multicast discovery paquets format 
+		- option to avoid discover local peers (of the same node)
+	* Updating dependencies
+		- Cohorte-Utilities from 1.0.4 to 1.0.6
+		- Cohorte-Runtime from 1.0.3 to 1.1.0
+		- Cohorte-Herald from 0.0.5 to 1.0.0
+		- Pelix/iPOPO from 0.6.3 to 0.6.4
+		- Apache Felix:
+			> updated commons-logging from 1.1.1-0003-SNAPSHOT to 1.2
+			> updated org.apache.felix.bundlerepository from 1.6.6 to 2.0.6		
+			> updated org.apache.felix.framework from 4.2.1 to 5.4.0
+			> updated org.apache.felix.gogo.command from 0.12.0 to 0.16.0
+			> updated org.apache.felix.gogo.runtime from 0.10.0 to 0.16.2
+			> updated org.apache.felix.http.jetty from 2.2.1-SNAPSHOT to 3.2.0
+			> added   org.apache.felix.http.servlet-api 1.1.1			
+			> removed org.apache.servicemix.bundles.commons-httpclient 3.1			
+			> added   org.apache.httpcomponents.httpclient 4.5.2
+			> added   org.apache.httpcomponents.httpcore 4.4.4
+
+** Bug Fix
+	* Cohorte-Runtime
+		- Java isolates are not started if no vm_args configuration was given [#79]
+		- Normalize paths coming from PYTHONPATH [isandlatech/cohorte-runtime#34]
+
+Changes form the 1.1.1 to 1.1.2
+-------------------------------
+
+** Bug Fix
+	* Consider OSGi framework user-provided extra packages [isandlaTech/cohorte-runtime#36]
+	* Do not start Fragment bundles in OSGi [isandlaTech/cohorte-runtime#35]
+
+** Improvements
+	* Consider COHORTE_BASE environment variable while running a node	
+
+Changes form the 1.1.0 to 1.1.1
+-------------------------------
+
+** New Feature
+	* Allow the user to choose a directory where components can write persistent data [#67]
+	* Choosing to which group the service is exported [#68]
+
+** Improvements
+	* Several README.ms documentation file were added to cohorte-runtime packages
+	* Added the "shells" and "pids" shell commands in Java isolates
+	* Better conformance to PEP-8 for the node management scripts
+
+** Bug Fix
+	* Concurrent modification in iPOJO Agent, causing the IsolateComposer to stop [isandlaTech/cohorte-runtime#31]
+	* Relative imports in Python [isandlaTech/cohorte-runtime#25]
+	* Correct several bugs on cohorte-update utility [#37][#48][#52][#62]
+	* Cohorte cannot find required artifacts and stops starting the isolate [#59]
+	* Corrected top composer status [#53]
+	* HeraldRPCExporter between two Java components sends infinitly error messages [#49]
+	* Corrected the behaviour of PYTHONPATH on Windows [#70]
+	* Corrected the value of "cohorte.node.data.dir" in "boot-common.js" on Windows [#72]
+
+
+Changes form the 1.0.0 to 1.1.0
+-------------------------------
+
+** New Feature
+	* New "proxy" HTTP Service interface for each Node Composer [#34]
+	* New "debug" REST API [#33] (Java is not yet supported)
+	* New "cohorte-update" shell command [#29]
+	* New "Activity log" tab on Webadmin that tracks Cohorte's isolates activity [#21]
+	* New "Composition" tab on Webadmin that shows the application's composition specification [#21]
+
+** Improvements
+	* Move 'run.js' of a Cohorte Node to 'conf/run.js' [#11]
+	* Enhance 'cohorte-create-node' options [#39]
+	* Changing names of some of Node run configurations [#36]
+	* Changing Herald Messages format to include meta-data in content when transporting the message [cohorte-herald/issues#15]
+	* Webadmin is now accessible from /webadmin path and uses "debug" REST API to show detailed information about isolates
+	* Start cohorte node with console if and only if --console argument is given [#31]
+	* Updating dependencies versions [#14]
+		- Cohorte-Runtime 1.0.1
+		- Using iPOPO 0.6.2
+		- Using Cohorte-Utilities 1.0.3
+		- Using iPOJO 1.12.1
+	* Show the main isolate "cohorte.internals.forker" on webadmin [isandlaTech/cohorte-runtime#14]
+	* Set the default recomposition delay to 120 [#15]
+
+** Bug Fix
+	* Fixing some stopping errors [#35] (3) (4)
+	* Fixing synchronisation problem: XMPP transport blocked on disconnected [isandlaTech/cohorte-herald/issues#14]
+	* Isolate is duplicated when another node is stopped [#16]

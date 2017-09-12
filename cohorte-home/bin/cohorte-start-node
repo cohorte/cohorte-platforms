@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# Default Python interpreter to use (Python 3)
+PYTHON_INTERPRETER=${PYTHON_INTERPRETER:="python3"}
+$PYTHON_INTERPRETER "$COHORTE_HOME/bin/scripts/cohorte_start_node.py" -c $*

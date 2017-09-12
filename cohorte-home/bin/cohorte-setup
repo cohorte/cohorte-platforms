@@ -1,0 +1,4 @@
+#!/bin/bash
+
+python "$COHORTE_HOME/bin/scripts/cohorte_setup.py" $*
+echo "[INFO] Jpype installed."
