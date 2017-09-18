@@ -78,8 +78,7 @@ cp -r build/extra/windows/* repo
 fi
 
 # Install dependencies
-#pip install --upgrade --index-url=$INDEX_URL --trusted-host=$PIP_HOST -r requirements.txt
-pip install --upgrade --trusted-host=$PIP_HOST -r requirements.txt
+pip install --upgrade --index-url=$INDEX_URL --trusted-host=$PIP_HOST -r requirements.txt
 
 # Copy dependencies to repo
 
