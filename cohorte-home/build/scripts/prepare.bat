@@ -3,7 +3,7 @@ REM Python preparation file
 echo [INFO] Preparing Python dependencies...
 
 REM Variables
-set INDEX_URL=http://forge.cohorte-technologies.com:7080/jenkins/cohorte/+simple/
+set INDEX_URL=http://forge.cohorte.tech:7080/jenkins/cohorte/+simple/
 set VENV_NAME=tmp_venv
 set PATH=%WORKSPACE%/%VENV_NAME%/bin;%PATH%
 
@@ -15,7 +15,7 @@ REM Activate it
 call %VENV_NAME%\Scripts\activate.bat
 
 REM Install test and deployment tools
-set PIP_HOST=forge.cohorte-technologies.com
+set PIP_HOST=forge.cohorte.tech
 pip install --upgrade --index-url=%INDEX_URL% --trusted-host=%PIP_HOST% pip setuptools || exit /b 2
 pip install --upgrade --index-url=%INDEX_URL% --trusted-host=%PIP_HOST% wheel || exit /b 2
 pip install --upgrade --index-url=%INDEX_URL% --trusted-host=%PIP_HOST% nose || exit /b 2
