@@ -46,14 +46,14 @@ fi
 
 # Set up the virtual environment
 VENV_NAME=tmp_venv
-INDEX_URL=http://forge.cohorte-technologies.com:7080/jenkins/cohorte/+simple/
+INDEX_URL=http://forge.cohorte.tech:7080/jenkins/cohorte/+simple/
 rm -fr $VENV_NAME
 virtualenv $VENV_NAME -p python3 || return 1
 PATH=$WORKSPACE/$VENV_NAME/bin:$PATH
 . $VENV_NAME/bin/activate
 
 # Install test and deployment tools
-PIP_HOST=forge.cohorte-technologies.com
+PIP_HOST=forge.cohorte.tech
 #--trusted-host $PIP_HOST
 pip --version
 pip install --force --upgrade --index-url=$INDEX_URL pip==8.1.2 setuptools  #|| return 2
