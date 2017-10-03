@@ -2,15 +2,23 @@
 echo "--- Boot of Cohorte Container..."
 #./opt/init.sh
 # check what kind of init we have. init.sh or init.py 
+PWD=`pwd`
+echo "current dir $PWD"
 
-if[ -f ./opt/init.sh ]; then
-	echo "run /opt/init.sh $@"
-	sh ./opt/init.sh "$@"
-elif [-f ./opt/init.py ]; then
-	echo "run python /opt/init.py $@"
+# execute shell 
+echo "execute dependencies if we need a new dependency in the docker container"
+for deps in init_container_*.sh ; do
+	echo "call sh $deps $*"
+	sh $deps $*
+done
 
-	python ./opt/init.py "$@"
-fi 
+echo "run python init_container_*.py $*"
+# for all init container call by alphabetical order in
+for init in init_container_*.py ; do
+	echo "call python3 $init $* "
+	python3 $init $*
+done
+
 
 
 ./usr/lib/systemd/systemd --system

@@ -20,8 +20,11 @@ RUN mkdir -p $COHORTE_DATA
 COPY ./install/run_service /opt
 COPY ./install/boot.sh /opt
 COPY ./install/cohorte.service ./etc/systemd/system/cohorte.service
+COPY ./install/get-pip.py /tmp/
 
-RUN chmod +x /opt/init.sh
+# install pip 
+RUN python3 /tmp/get-pip.py 
+
 RUN chmod +x /opt/boot.sh
 
 RUN systemctl enable cohorte.service
