@@ -18,7 +18,6 @@ ENV COHORTE_DATA /opt/data
 RUN mkdir -p $COHORTE_BASE
 RUN mkdir -p $COHORTE_DATA
 COPY ./install/run_service /opt
-COPY ./install/init.sh /opt
 COPY ./install/boot.sh /opt
 COPY ./install/cohorte.service ./etc/systemd/system/cohorte.service
 
