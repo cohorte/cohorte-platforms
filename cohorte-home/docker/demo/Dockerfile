@@ -18,5 +18,3 @@ RUN ls -l /opt
 RUN ls -l /opt/node
 
 EXPOSE 8090 8091 8092 8093
-
-CMD ./opt/boot.sh
