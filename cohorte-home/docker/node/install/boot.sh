@@ -26,4 +26,4 @@ done
 
 
 
-./usr/lib/systemd/systemd --system
+/usr/lib/systemd/systemd --system
