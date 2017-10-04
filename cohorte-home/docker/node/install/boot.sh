@@ -5,6 +5,10 @@ echo "--- Boot of Cohorte Container..."
 PWD=`pwd`
 echo "current dir $PWD"
 
+if [ -f /opt/init.sh ]; then
+	sh /opt/init.sh
+fi
+
 # execute shell 
 echo "execute dependencies if we need a new dependency in the docker container"
 for deps in init_container_*.sh ; do

@@ -24,6 +24,7 @@ COPY ./install/get-pip.py /tmp/
 
 # install pip 
 RUN python3 /tmp/get-pip.py 
+RUN pip3
 
 RUN chmod +x /opt/boot.sh
 
