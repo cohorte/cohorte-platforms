@@ -31,6 +31,8 @@ RUN chmod +x /opt/boot.sh
 
 RUN systemctl enable cohorte.service
 
+ENTRYPOINT ["/opt/boot.sh"]
+
 RUN ls -l /opt
 
 VOLUME [ "/opt/node" ]

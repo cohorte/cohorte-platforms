@@ -4,6 +4,7 @@ echo "--- Boot of Cohorte Container..."
 # check what kind of init we have. init.sh or init.py 
 PWD=`pwd`
 echo "current dir $PWD"
+cd /opt
 
 if [ -f /opt/init.sh ]; then
 	sh /opt/init.sh

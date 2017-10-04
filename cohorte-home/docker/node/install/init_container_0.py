@@ -19,12 +19,14 @@ import jsoncomment;
 _logger = logging.getLogger(__name__)
 
 
-def write_json_from_file(a_json_parser, a_str, a_file_name):
+def write_file(a_str, a_file_name):
     """
     read a json file comment and return a dictionnary 
     """
     # check if the str is still a correct commnted json 
-   
+    _logger.info("backup files {} to {}".format(a_file_name, a_file_name + ".origin"))
+    shutil.copy(a_file_name, a_file_name + ".origin")
+
     with open(a_file_name, 'w') as obj_file:
         obj_file.write(a_str)
     _logger.info("write isolate configuration files {}".format(a_file_name))
@@ -84,10 +86,7 @@ def main(args=None):
             _logger.info("read composition file in order to retreieve the isolate name and add vm_args if necessary")
             for isolate_name in get_list_isolate():
                 
-                _logger.info("backup isolate configuration files {} to {}".format(isolate_name, isolate_name + ".origin"))
                 
-                # # save orgin file 
-                shutil.copy(isolate_name, isolate_name + ".origin")
                 w_isolate_json = get_json_from_file(w_parser, isolate_name)
                 _logger.info("update isolate configuration files {}".format(isolate_name))
 
@@ -98,7 +97,7 @@ def main(args=None):
                      ' Modify by init_container_0.py, add jacoco agent in vm_args '\
                      '*/';
                     w_str = w_str + json.dumps(w_isolate_json, indent=4)
-                    write_json_from_file(w_parser, w_str, isolate_name)
+                    write_file(w_str, isolate_name)
             
         else:
             print("do nothin, not relevant argument")
