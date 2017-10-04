@@ -92,12 +92,14 @@ def main(args=None):
 
                 if "vm_args" in w_isolate_json:
                     w_isolate_json["vm_args"].append(javaagent);
-                    # # add comment 
-                    w_str = '/*'\
-                     ' Modify by init_container_0.py, add jacoco agent in vm_args '\
-                     '*/';
-                    w_str = w_str + json.dumps(w_isolate_json, indent=4)
-                    write_file(w_str, isolate_name)
+                else:
+                     w_isolate_json["vm_args"] = [javaagent]
+                # # add comment 
+                w_str = '/*'\
+                 ' Modify by init_container_0.py, add jacoco agent in vm_args '\
+                 '*/';
+                w_str = w_str + json.dumps(w_isolate_json, indent=4)
+                write_file(w_str, isolate_name)
             
         else:
             print("do nothin, not relevant argument")
