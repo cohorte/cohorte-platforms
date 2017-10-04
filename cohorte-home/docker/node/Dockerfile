@@ -21,10 +21,11 @@ COPY ./install/run_service /opt
 COPY ./install/boot.sh /opt
 COPY ./install/cohorte.service ./etc/systemd/system/cohorte.service
 COPY ./install/get-pip.py /tmp/
+COPY ./install/init_* /opt
 
 # install pip 
 RUN python3 /tmp/get-pip.py 
-RUN pip3
+RUN pip3 install jsoncomment
 
 RUN chmod +x /opt/boot.sh
 
