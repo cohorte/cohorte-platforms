@@ -10,6 +10,8 @@ import argparse;
 import glob;
 import json;
 import logging
+import os;
+import re;
 import shutil;
 import sys;
 
@@ -18,14 +20,51 @@ import jsoncomment;
 
 _logger = logging.getLogger(__name__)
 
+regexp_replace_var = re.compile("\\$\\{(.+?)\\}", re.MULTILINE)
 
-def write_file(a_str, a_file_name):
+def replace_vars(params, contents):
+    """
+    replace variable like ${myvar} by the value in the map if the key myvar exists else by an empty string
+    @param params : a dictionnary 
+    @param content : content with variable to be replace 
+    @return a string with variable identified by k from the query string by the value 
+    """
+    if isinstance(contents, str):
+        contents = [contents]
+    replace_contents = []
+
+    if params != None:
+        for content in contents:
+            replace_content = content
+            for init_match in regexp_replace_var.findall(content):
+                default = None
+                if "=" in init_match:
+                    default = init_match[init_match.index('=') + 1:]
+                    match = init_match[:init_match.index('=')]
+                    _logger.info("variable value={}, default={}".format(match, default))
+
+                if match in params:
+                    _logger.info("value {} replace by {}".format(init_match, params[match]))
+                    replace_content = replace_content.replace("${" + init_match + "}", params[match])
+                elif default is not None:
+                    _logger.info("value {} replace by {}".format(init_match, default))
+                    replace_content = replace_content.replace("${" + init_match + "}", default)
+                else:
+                    _logger.info("value {} replace by {}".format(init_match, ""))
+                    replace_content = replace_content.replace("${" + init_match + "}", "")
+            replace_contents.append(replace_content)
+    return replace_contents
+
+
+
+def write_file(a_str, a_file_name, with_backup):
     """
     read a json file comment and return a dictionnary 
     """
     # check if the str is still a correct commnted json 
-    _logger.info("backup files {} to {}".format(a_file_name, a_file_name + ".origin"))
-    shutil.copy(a_file_name, a_file_name + ".origin")
+    if with_backup:
+        _logger.info("backup files {} to {}".format(a_file_name, a_file_name + ".origin"))
+        shutil.copy(a_file_name, a_file_name + ".origin")
 
     with open(a_file_name, 'w') as obj_file:
         obj_file.write(a_str)
@@ -68,13 +107,13 @@ def main(args=None):
     parser.add_argument("--jacocoagent", action="store", default=None,
                        dest="jacocoagent",
                        help="set jacoco agent property")
-    
+    w_list_isolate = get_list_isolate();
     args, boot_args = parser.parse_known_args(args)
     javaagent = None
     javaagent_format = "-javaagent:{pathjar}=output={output},address={address},port={port},includes={includes}"
     if args != None:
         if args.jacoco:
-            javaagent = javaagent_format.format(pathjar="/opt/cohorte/extra/jacoco/jacocoagent.jar", output="tcpserver", address="*", port="6300", includes="com.cohorte.*:org.cohorte.*", classdumpdir="/opt/node/data/classdumpdir")
+            javaagent = javaagent_format.format(pathjar="/opt/cohorte/extra/jacoco/jacocoagent.jar", output="tcpserver", address="*", port="6300", includes="com.cohorte.*:org.cohorte.*")
             _logger.info("-jacoco true is setted, construct automatic javaagent={}".format(javaagent))
         elif args.jacocoagent != None:
             # use 
@@ -84,7 +123,7 @@ def main(args=None):
         if javaagent is not None:
             w_parser = jsoncomment.JsonComment(json)
             _logger.info("read composition file in order to retreieve the isolate name and add vm_args if necessary")
-            for isolate_name in get_list_isolate():
+            for isolate_name in w_list_isolate:
                 
                 
                 w_isolate_json = get_json_from_file(w_parser, isolate_name)
@@ -99,14 +138,27 @@ def main(args=None):
                  ' Modify by init_container_0.py, add jacoco agent in vm_args '\
                  '*/';
                 w_str = w_str + json.dumps(w_isolate_json, indent=4)
-                write_file(w_str, isolate_name)
+                write_file(w_str, isolate_name, true)
             
         else:
             print("do nothin, not relevant argument")
  
             # find in conf all isolat    
-    else:
-        print("do nothin, no argument received")
+    
+    for isolate_name in w_list_isolate:
+        real_name = isolate_name.replace("isolate_", "")[:-3]
+              # manager initialization of current.properties , current.properties.mdl
+        filename_path_mdl = "{}/install.properties.mdl".format(real_name)
+        filename_path = "{}/install.properties".format(real_name)
+    
+        with open(filename_path_mdl) as a_properties_file:
+            lines = a_properties_file.readlines()
+       
+        new_content = "\n".join(replace_vars(os.environ, lines))
+        new_content = "# generated by init_container_0_iotPack" + new_content
         
+        write_file(new_content, filename_path, False)
+    print("do nothin, no argument received")
+    
 if __name__ == "__main__":
     sys.exit(main())
