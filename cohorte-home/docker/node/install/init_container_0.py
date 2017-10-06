@@ -138,7 +138,7 @@ def main(args=None):
                  ' Modify by init_container_0.py, add jacoco agent in vm_args '\
                  '*/';
                 w_str = w_str + json.dumps(w_isolate_json, indent=4)
-                write_file(w_str, isolate_name, true)
+                write_file(w_str, isolate_name, True)
             
         else:
             print("do nothin, not relevant argument")
