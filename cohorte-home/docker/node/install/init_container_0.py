@@ -71,7 +71,7 @@ def main(args=None):
     
     args, boot_args = parser.parse_known_args(args)
     javaagent = None
-    javaagent_format = "-javaagent:{pathjar}=output={output},address={address},port={port},includes={includes},classdumpdir={classdumpdir}"
+    javaagent_format = "-javaagent:{pathjar}=output={output},address={address},port={port},includes={includes}"
     if args != None:
         if args.jacoco:
             javaagent = javaagent_format.format(pathjar="/opt/cohorte/extra/jacoco/jacocoagent.jar", output="tcpserver", address="*", port="6300", includes="com.cohorte.*:org.cohorte.*", classdumpdir="/opt/node/data/classdumpdir")
