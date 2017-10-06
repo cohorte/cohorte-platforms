@@ -107,7 +107,6 @@ def main(args=None):
     parser.add_argument("--jacocoagent", action="store", default=None,
                        dest="jacocoagent",
                        help="set jacoco agent property")
-    w_list_isolate = get_list_isolate();
     args, boot_args = parser.parse_known_args(args)
     javaagent = None
     javaagent_format = "-javaagent:{pathjar}=output={output},address={address},port={port},includes={includes}"
@@ -123,7 +122,7 @@ def main(args=None):
         if javaagent is not None:
             w_parser = jsoncomment.JsonComment(json)
             _logger.info("read composition file in order to retreieve the isolate name and add vm_args if necessary")
-            for isolate_name in w_list_isolate:
+            for isolate_name in get_list_isolate():
                 
                 
                 w_isolate_json = get_json_from_file(w_parser, isolate_name)
@@ -144,8 +143,8 @@ def main(args=None):
             print("do nothin, not relevant argument")
  
             # find in conf all isolat    
-    
-    for isolate_name in w_list_isolate:
+
+    for isolate_name in get_list_isolate():
         real_name = isolate_name.replace("isolate_", "")[:-3]
               # manager initialization of current.properties , current.properties.mdl
         filename_path_mdl = "{}/install.properties.mdl".format(real_name)
