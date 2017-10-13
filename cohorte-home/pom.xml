@@ -600,6 +600,31 @@
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
 							</execution>
+							
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.2.1</version>
+						<executions>
+							
+							<execution>
+								<id>prepare</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>bash</executable>
+									<arguments>
+										<argument>build_base-arm64v8.sh</argument>
+										<argument>${DOCKER_USER}</argument>
+										<argument>${DOCKER_PASS}</argument>										
+									</arguments>
+									<workingDirectory>${basedir}/docker</workingDirectory>
+								</configuration>
+							</execution>
 						</executions>
 					</plugin>
 				</plugins>
@@ -629,6 +654,30 @@
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
 							</execution>
+							
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.2.1</version>
+						<executions>
+						
+							<execution>
+								<id>prepare</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>ssh</executable>
+									<arguments>
+										<argument>root@forge.cohorte.tech</argument>
+										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_base-arm64v8.sh ${DOCKER_USER} ${DOCKER_PASS}</argument>
+									</arguments>
+									<workingDirectory>${basedir}/docker</workingDirectory>
+								</configuration>
+							</execution>
 						</executions>
 					</plugin>
 				</plugins>
@@ -653,6 +702,32 @@
 									<executable>sh</executable>
 									<arguments>
 										<argument>build_runtime.sh</argument>
+										<argument>${project.version}</argument>
+										<argument>${DOCKER_USER}</argument>
+										<argument>${DOCKER_PASS}</argument>										
+									</arguments>
+									<workingDirectory>${basedir}/docker</workingDirectory>
+								</configuration>
+							</execution>
+							
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.2.1</version>
+						<executions>
+							
+							<execution>
+								<id>prepare</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>sh</executable>
+									<arguments>
+										<argument>build_runtime-arm64v8.sh</argument>
 										<argument>${project.version}</argument>
 										<argument>${DOCKER_USER}</argument>
 										<argument>${DOCKER_PASS}</argument>										
@@ -689,6 +764,30 @@
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
 							</execution>
+						
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.2.1</version>
+						<executions>
+							
+							<execution>
+								<id>prepare</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>ssh</executable>
+									<arguments>
+										<argument>root@forge.cohorte.tech</argument>
+										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_runtime-arm64v8.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS}</argument>
+									</arguments>
+									<workingDirectory>${basedir}/docker</workingDirectory>
+								</configuration>
+							</execution>
 						</executions>
 					</plugin>
 				</plugins>
@@ -713,6 +812,32 @@
 									<executable>bash</executable>
 									<arguments>
 										<argument>build_node.sh</argument>
+										<argument>${project.version}</argument>
+										<argument>${DOCKER_USER}</argument>
+										<argument>${DOCKER_PASS}</argument>										
+									</arguments>
+									<workingDirectory>${basedir}/docker</workingDirectory>
+								</configuration>
+							</execution>
+							
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.2.1</version>
+						<executions>
+							
+							<execution>
+								<id>prepare-arm</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>bash</executable>
+									<arguments>
+										<argument>build_node-arm64v8.sh</argument>
 										<argument>${project.version}</argument>
 										<argument>${DOCKER_USER}</argument>
 										<argument>${DOCKER_PASS}</argument>										
@@ -745,6 +870,30 @@
 									<arguments>
 										<argument>root@forge.cohorte.tech</argument>
 										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_node.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS}</argument>
+									</arguments>
+									<workingDirectory>${basedir}/docker</workingDirectory>
+								</configuration>
+							</execution>
+							
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.2.1</version>
+						<executions>
+							
+							<execution>
+								<id>prepare</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>ssh</executable>
+									<arguments>
+										<argument>root@forge.cohorte.tech</argument>
+										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_node-arm64v8.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS}</argument>
 									</arguments>
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
