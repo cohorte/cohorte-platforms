@@ -14,9 +14,9 @@ DOCKER_REGISTRY="dr.cohorte.tech"
 
 echo -e "\x1B[1;32m[INFO] Building Image [$DOCKER_REPOSITORY:$DOCKER_TAG] located on [$DIRECTORY]\x1B[0m"
 
-mkdir -p $DIR/runtime/install
-rm -rf $DIR/runtime/install/*
+mkdir -p $DIR/runtime-arm64v8/install
+rm -rf $DIR/runtime-arm64v8/install/*
 
-cp $DIR/../target/cohorte-*-distribution.tar.gz $DIR/runtime/install/cohorte.tar.gz
+cp $DIR/../target/cohorte-*-distribution.tar.gz $DIR/runtime-arm64v8/install/cohorte.tar.gz
 
 bash $DIR/build_image.sh "$DIRECTORY" "$DOCKER_REPOSITORY" "$DOCKER_TAG" "$DOCKER_USER" "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
