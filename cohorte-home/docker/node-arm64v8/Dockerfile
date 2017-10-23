@@ -17,11 +17,11 @@ ENV COHORTE_DATA /opt/data
 
 RUN mkdir -p $COHORTE_BASE
 RUN mkdir -p $COHORTE_DATA
-COPY ../node/install/run_service /opt
-COPY ../node/install/boot.sh /opt
-COPY ../node/install/cohorte.service ./etc/systemd/system/cohorte.service
-COPY ../node/install/get-pip.py /tmp/
-COPY ../node/install/init_* /opt
+COPY ./install/run_service /opt
+COPY ./install/boot.sh /opt
+COPY ./install/cohorte.service ./etc/systemd/system/cohorte.service
+COPY ./install/get-pip.py /tmp/
+COPY ./install/init_* /opt
 
 # install pip 
 RUN python3 /tmp/get-pip.py 

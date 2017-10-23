@@ -24,6 +24,7 @@ DOCKER_REGISTRY="dr.cohorte.tech"
 
 # download get-pip 
 cd $DIR/node/install/
+cp $DIR/node/install $DIRECTORY/install
 wget https://bootstrap.pypa.io/get-pip.py
 
 

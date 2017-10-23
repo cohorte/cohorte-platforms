@@ -12,7 +12,7 @@ ENV REFRESHED_AT 20170707_1130
 
 ENV COHORTE_HOME /opt/cohorte 
 
-COPY ../runtime/install/cohorte.tar.gz ./opt/cohorte.tar.gz
+COPY ./install/cohorte.tar.gz ./opt/cohorte.tar.gz
 
 RUN cd ./opt ; tar xvf cohorte.tar.gz
 RUN rm -f ./opt/cohorte.tar.gz
