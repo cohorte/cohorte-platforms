@@ -1,4 +1,4 @@
-FROM cohorte/base-arm64v8:1.0 
+FROM cohorte/base-arm64v8:latest
 
 #-----------------------------------------------------------------------------
 # Cohorte Runtime image.
