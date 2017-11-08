@@ -1,0 +1,10 @@
+#!/bin/bash
+if test -z "$COHORTE_HOME"
+then
+  echo
+  echo "[ERROR] the system environment variable COHORTE_HOME is not defined!"
+  echo
+  exit
+fi
+
+bash $COHORTE_HOME/bin/cohorte-start-node --base $(pwd) $*

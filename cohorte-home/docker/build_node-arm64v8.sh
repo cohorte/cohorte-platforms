@@ -23,7 +23,8 @@ DOCKER_PASSWORD=$3
 DOCKER_REGISTRY="dr.cohorte.tech"
 
 # download get-pip 
-cp $DIR/node/install $DIRECTORY/install
+
+cp -r $DIR/node/install $DIRECTORY/install
 cd $DIRECTORY
 wget https://bootstrap.pypa.io/get-pip.py
 

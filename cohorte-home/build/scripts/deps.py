@@ -43,8 +43,8 @@ import os
 
 import pip
 import pip.index
-import pip.req
 import pip.pep425tags
+import pip.req
 
 
 # Environment variable to fake distutils get_platform() result
@@ -143,8 +143,7 @@ def main(argv=None):
     # Parse arguments
     parser = argparse.ArgumentParser(description="Package download utility")
     parser.add_argument("--index", metavar="URL", dest="index_url",
-                        default="http://forge.isandlatech.com:3080/devpi/"
-                                "jenkins/cohorte/+simple/",
+                        default="http://forge.cohorte.tech:7080/devpi/jenkins/cohorte/+simple/",
                         help="The PyPI index URL to use")
     parser.add_argument("--package", metavar="NAME", dest="package",
                         required=True, help="Name of the package to install")

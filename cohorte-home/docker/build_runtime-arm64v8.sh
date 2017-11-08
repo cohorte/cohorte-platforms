@@ -19,4 +19,6 @@ rm -rf $DIR/runtime-arm64v8/install/*
 
 cp $DIR/../target/cohorte-*-distribution.tar.gz $DIR/runtime-arm64v8/install/cohorte.tar.gz
 
+cp -r $DIR/../build/extra/arm64v8 $DIR/runtime-arm64v8/install/
+
 bash $DIR/build_image.sh "$DIRECTORY" "$DOCKER_REPOSITORY" "$DOCKER_TAG" "$DOCKER_USER" "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"

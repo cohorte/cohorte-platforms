@@ -1,0 +1,13 @@
+[Unit]
+Description=Cohorte Node Container Service
+Requires=network.target
+After=dhcpcd.service
+
+[Service]
+Type=forking
+WorkingDirectory=/opt/node
+ExecStart=/opt/run_service
+TimeoutSec=300
+
+[Install]
+WantedBy=multi-user.target

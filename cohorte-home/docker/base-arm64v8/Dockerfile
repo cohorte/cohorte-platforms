@@ -39,8 +39,9 @@ RUN apt-get update
 # installer d'autres outils
 RUN apt-get  install -y vim wget tar netcat-openbsd
 #RUN apt-get  install -y epel-release
-RUN apt-get  install -y python3.4 python3
-
+RUN apt-get  install -y python3.4 python3 python
+# to have systemctl command
+RUN apt-get install -y systemd
 # Installer Java 8 (Oracle)
 # inspired from: https://hub.docker.com/r/cooniur/java/
 RUN mkdir -p $JAVA_HOME
