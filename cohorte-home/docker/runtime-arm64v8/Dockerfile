@@ -12,12 +12,8 @@ ENV REFRESHED_AT 20170707_1130
 
 ENV COHORTE_HOME /opt/cohorte 
 
-COPY ./install/cohorte.tar.gz /opt/cohorte.tar.gz
+COPY ./install/cohorte-* /opt/cohorte
 
-RUN cd /opt ; tar xvf cohorte.tar.gz
-RUN rm -f /opt/cohorte.tar.gz
-RUN ls -l /opt
-RUN mv -f /opt/cohorte-* /opt/cohorte
 RUN ls -l /opt
 RUN cd ${COHORTE_HOME}
 

@@ -17,7 +17,13 @@ echo -e "\x1B[1;32m[INFO] Building Image [$DOCKER_REPOSITORY:$DOCKER_TAG] locate
 mkdir -p $DIR/runtime-arm64v8/install
 rm -rf $DIR/runtime-arm64v8/install/*
 
+
+
 cp $DIR/../target/cohorte-*-distribution.tar.gz $DIR/runtime-arm64v8/install/cohorte.tar.gz
+cd $DIR/runtime-arm64v8/install/
+tar xzvf cohorte.tar.gz
+
+
 
 cp -r $DIR/../build/extra/arm64v8 $DIR/runtime-arm64v8/install/
 

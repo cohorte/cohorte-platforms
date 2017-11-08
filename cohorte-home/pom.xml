@@ -959,6 +959,28 @@
 							</execution>
 						</executions>
 					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.2.1</version>
+						<executions>
+							<execution>
+								<id>prepare</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>ssh</executable>
+									<arguments>
+										<argument>root@forge.cohorte.tech</argument>
+										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_demo-arm64v8.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS}</argument>
+									</arguments>
+									<workingDirectory>${basedir}/docker</workingDirectory>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
 				</plugins>
 			</build>
 		</profile>
