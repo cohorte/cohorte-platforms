@@ -14,10 +14,8 @@ ENV COHORTE_HOME /opt/cohorte
 
 COPY ./install/cohorte-* /opt/cohorte
 
-RUN ls -l /opt
 RUN cd ${COHORTE_HOME}
 
 
-RUN ls -l /opt/cohorte/extra/linux/
 RUN sh ${COHORTE_HOME}/setup.sh
 RUN sh ${COHORTE_HOME}/bin/cohorte-version
