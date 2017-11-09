@@ -1025,7 +1025,7 @@
 								</configuration>
 							</execution>
 							<execution>
-								<id>test</id>
+								<id>test-x86</id>
 								<phase>test</phase>
 								<goals>
 									<goal>exec</goal>
@@ -1034,7 +1034,22 @@
 									<executable>ssh</executable>
 									<arguments>
 										<argument>root@forge.cohorte.tech</argument>
-										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/cohorte-home/tests/test_demo.sh</argument>
+										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/cohorte-home/tests/test_demo.sh CohortePlatform_Demo.postman_collection.json api-dev.cohorte.tech</argument>
+									</arguments>
+									<workingDirectory>${basedir}/tests</workingDirectory>
+								</configuration>
+							</execution>
+							<execution>
+								<id>test-arm</id>
+								<phase>test</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>ssh</executable>
+									<arguments>
+										<argument>root@forge.cohorte.tech</argument>
+										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/cohorte-home/tests/test_demo.sh CohortePlatform_Demo.postman_collection.json api-dev-arm.cohorte.tech</argument>
 									</arguments>
 									<workingDirectory>${basedir}/tests</workingDirectory>
 								</configuration>

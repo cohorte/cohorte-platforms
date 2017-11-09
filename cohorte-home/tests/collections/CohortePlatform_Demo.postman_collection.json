@@ -21,7 +21,7 @@
 				}
 			],
 			"request": {
-				"url": "http://api-dev.cohorte.tech:19000",
+				"url": "http://{{host}}:19000",
 				"method": "GET",
 				"header": [],
 				"body": {},
@@ -43,7 +43,7 @@
 				}
 			],
 			"request": {
-				"url": "http://api-dev.cohorte.tech:18090/",
+				"url": "http://{{host}}:18090/",
 				"method": "GET",
 				"header": [],
 				"body": {},
@@ -65,7 +65,7 @@
 				}
 			],
 			"request": {
-				"url": "http://api-dev.cohorte.tech:19000/p/components1/",
+				"url": "http://{{host}}:19000/p/components1/",
 				"method": "GET",
 				"header": [],
 				"body": {},
@@ -87,7 +87,7 @@
 				}
 			],
 			"request": {
-				"url": "http://api-dev.cohorte.tech:19000/p/components2/",
+				"url": "http://{{host}}:19000/p/components2/",
 				"method": "GET",
 				"header": [],
 				"body": {},
@@ -109,7 +109,7 @@
 				}
 			],
 			"request": {
-				"url": "http://api-dev.cohorte.tech:18093",
+				"url": "http://{{host}}:18093",
 				"method": "GET",
 				"header": [],
 				"body": {},
