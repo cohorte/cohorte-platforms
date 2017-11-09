@@ -13,7 +13,7 @@
 ##
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-DIRECTORY="$DIR/node-arm64v8"
+DIRECTORY="/root/node-arm64v8"
 DOCKER_REPOSITORY="cohorte/node-arm64v8"
 
 DOCKER_TAG=$1
