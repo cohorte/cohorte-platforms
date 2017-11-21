@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-DIRECTORY="/root/demo-arm64v8"
+DIRECTORY="/root/docker/demo-arm64v8"
 DOCKER_REPOSITORY="cohorte/demo-arm64v8"
 
 DOCKER_TAG=$1
