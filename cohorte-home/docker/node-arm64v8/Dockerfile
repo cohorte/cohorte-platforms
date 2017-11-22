@@ -23,6 +23,8 @@ COPY ./install/cohorte.service ./etc/systemd/system/cohorte.service
 COPY ./install/get-pip.py /tmp/
 COPY ./install/init_* /opt
 
+RUN chmod +x /opt/init*.sh
+
 # install pip 
 RUN python3 /tmp/get-pip.py 
 RUN pip3 install jsoncomment

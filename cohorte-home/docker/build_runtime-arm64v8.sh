@@ -30,5 +30,6 @@ cp $DIR/../target/cohorte-*-distribution.tar.gz $DIR/runtime-arm64v8/install/coh
 
 echo -e "\x1B[1;32m[INFO] Building Image [$DOCKER_REPOSITORY:$DOCKER_TAG] located on [$DIRECTORY]\x1B[0m"
 echo "scp -vr -o StrictHostKeyChecking=no -i $ID_RSA $DIR/runtime-arm64v8 root@$DOCKER_ARM_HOST:/root/docker/runtime-arm64v8"
+ssh -o StrictHostKeyChecking=no -i $ID_RSA  root@$DOCKER_ARM_HOST 'rm -r /root/docker/runtime-arm64v8' 
 scp -r -o StrictHostKeyChecking=no -i $ID_RSA $DIR/runtime-arm64v8 root@$DOCKER_ARM_HOST:/root/docker/runtime-arm64v8
 ssh -o StrictHostKeyChecking=no -i $ID_RSA  root@$DOCKER_ARM_HOST 'cat | bash /dev/stdin' "$DIRECTORY $DOCKER_REPOSITORY $DOCKER_TAG $DOCKER_USER $DOCKER_PASSWORD $DOCKER_REGISTRY" < $DIR/build_image.sh 
