@@ -11,7 +11,7 @@ ENV REFRESHED_AT 20170824_1623
 # Installation commands
 
 COPY ./install/node /opt/node
-COPY ./install/init.sh /opt
+COPY ./install/init_*.sh /opt/
 RUN chmod +x /opt/init.sh
 
 RUN ls -l /opt
