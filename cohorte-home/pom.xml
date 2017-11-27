@@ -986,7 +986,7 @@
 							</execution>
 							
 							<execution>
-								<id>prepare</id>
+								<id>prepare-arm</id>
 								<phase>generate-sources</phase>
 								<goals>
 									<goal>exec</goal>
