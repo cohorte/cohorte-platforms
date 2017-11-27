@@ -1,0 +1,292 @@
+[
+    {
+        "Id": "a1cabb60b0995c520d09c461b639467d750b2118d61e3c7715b50f3d5a572808",
+        "Created": "2017-10-06T00:05:49.405287418Z",
+        "Path": "/opt/boot.sh",
+        "Args": [
+            "--jacoco"
+        ],
+        "State": {
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 10189,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2017-10-06T00:05:52.337279858Z",
+            "FinishedAt": "0001-01-01T00:00:00Z"
+        },
+        "Image": "sha256:7fa8ca7a79ffd5bba77f4650a1978acf4a8bfa89d74a51b9c9da9545fd661500",
+        "ResolvConfPath": "/var/lib/docker/containers/a1cabb60b0995c520d09c461b639467d750b2118d61e3c7715b50f3d5a572808/resolv.conf",
+        "HostnamePath": "/var/lib/docker/containers/a1cabb60b0995c520d09c461b639467d750b2118d61e3c7715b50f3d5a572808/hostname",
+        "HostsPath": "/var/lib/docker/containers/a1cabb60b0995c520d09c461b639467d750b2118d61e3c7715b50f3d5a572808/hosts",
+        "LogPath": "/var/lib/docker/containers/a1cabb60b0995c520d09c461b639467d750b2118d61e3c7715b50f3d5a572808/a1cabb60b0995c520d09c461b639467d750b2118d61e3c7715b50f3d5a572808-json.log",
+        "Name": "/iotpack_dev",
+        "RestartCount": 0,
+        "Driver": "aufs",
+        "MountLabel": "",
+        "ProcessLabel": "",
+        "AppArmorProfile": "",
+        "ExecIDs": null,
+        "HostConfig": {
+            "Binds": [
+                "/sys/fs/cgroup:/sys/fs/cgroup"
+            ],
+            "ContainerIDFile": "",
+            "LogConfig": {
+                "Type": "json-file",
+                "Config": {}
+            },
+            "NetworkMode": "default",
+            "PortBindings": {
+                "6300/tcp": [
+                    {
+                        "HostIp": "",
+                        "HostPort": "6300"
+                    }
+                ],
+                "8080/tcp": [
+                    {
+                        "HostIp": "",
+                        "HostPort": "8080"
+                    }
+                ],
+                "9000/tcp": [
+                    {
+                        "HostIp": "",
+                        "HostPort": "9000"
+                    }
+                ]
+            },
+            "RestartPolicy": {
+                "Name": "always",
+                "MaximumRetryCount": 0
+            },
+            "AutoRemove": false,
+            "VolumeDriver": "",
+            "VolumesFrom": null,
+            "CapAdd": [
+                "SYS_ADMIN"
+            ],
+            "CapDrop": null,
+            "Dns": [],
+            "DnsOptions": [],
+            "DnsSearch": [],
+            "ExtraHosts": null,
+            "GroupAdd": null,
+            "IpcMode": "",
+            "Cgroup": "",
+            "Links": [
+                "/mongo_dev:/iotpack_dev/mongodb"
+            ],
+            "OomScoreAdj": 0,
+            "PidMode": "",
+            "Privileged": true,
+            "PublishAllPorts": false,
+            "ReadonlyRootfs": false,
+            "SecurityOpt": [
+                "label=disable"
+            ],
+            "UTSMode": "",
+            "UsernsMode": "",
+            "ShmSize": 67108864,
+            "Runtime": "runc",
+            "ConsoleSize": [
+                0,
+                0
+            ],
+            "Isolation": "",
+            "CpuShares": 0,
+            "Memory": 0,
+            "CgroupParent": "",
+            "BlkioWeight": 0,
+            "BlkioWeightDevice": null,
+            "BlkioDeviceReadBps": null,
+            "BlkioDeviceWriteBps": null,
+            "BlkioDeviceReadIOps": null,
+            "BlkioDeviceWriteIOps": null,
+            "CpuPeriod": 0,
+            "CpuQuota": 0,
+            "CpusetCpus": "",
+            "CpusetMems": "",
+            "Devices": [],
+            "DiskQuota": 0,
+            "KernelMemory": 0,
+            "MemoryReservation": 0,
+            "MemorySwap": 0,
+            "MemorySwappiness": -1,
+            "OomKillDisable": false,
+            "PidsLimit": 0,
+            "Ulimits": null,
+            "CpuCount": 0,
+            "CpuPercent": 0,
+            "IOMaximumIOps": 0,
+            "IOMaximumBandwidth": 0
+        },
+        "GraphDriver": {
+            "Name": "aufs",
+            "Data": null
+        },
+        "Mounts": [
+            {
+                "Source": "/sys/fs/cgroup",
+                "Destination": "/sys/fs/cgroup",
+                "Mode": "",
+                "RW": true,
+                "Propagation": "rprivate"
+            },
+            {
+                "Name": "768b1b9e089e4d1be95d0b36bb5b87635e96f62ccfaec74014b9ee22912b657a",
+                "Source": "/var/lib/docker/volumes/768b1b9e089e4d1be95d0b36bb5b87635e96f62ccfaec74014b9ee22912b657a/_data",
+                "Destination": "/opt/node",
+                "Driver": "local",
+                "Mode": "",
+                "RW": true,
+                "Propagation": ""
+            },
+            {
+                "Name": "8a4cb6a1329aad5d7a27b347ffd07c57c73ed617db259e45a4b23af0622f5a72",
+                "Source": "/var/lib/docker/volumes/8a4cb6a1329aad5d7a27b347ffd07c57c73ed617db259e45a4b23af0622f5a72/_data",
+                "Destination": "/var/log/journal",
+                "Driver": "local",
+                "Mode": "",
+                "RW": true,
+                "Propagation": ""
+            }
+        ],
+        "Config": {
+            "Hostname": "a1cabb60b099",
+            "Domainname": "",
+            "User": "",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "ExposedPorts": {
+                "6300/tcp": {},
+                "8000/tcp": {},
+                "8001/tcp": {},
+                "8002/tcp": {},
+                "8003/tcp": {},
+                "8004/tcp": {},
+                "8005/tcp": {},
+                "8006/tcp": {},
+                "8007/tcp": {},
+                "8008/tcp": {},
+                "8009/tcp": {},
+                "8010/tcp": {},
+                "8080/tcp": {},
+                "9000/tcp": {},
+                "9001/tcp": {}
+            },
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "IOT_SERVER_URL=https://api-dev.cohorte.tech",
+                "IOT_SERVER_REST_PATH=/services",
+                "IOT_DB_HOST=api-dev.cohorte.tech",
+                "IOT_DB_PORT=38240",
+                "IOT_COMPOSITION_FILE=composition.js",
+                "IOT_METEO_AUTO_START=true",
+                "IOT_QUALIF_AUTO_START=true",
+                "PATH=/opt/java/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "REFRESHED_AT=20170707_1130",
+                "JAVA_VERSION=8u40",
+                "JAVA_LONG_VERSION=8u40-b26",
+                "JAVA_HOME=/opt/java",
+                "container=docker",
+                "COHORTE_HOME=/opt/cohorte",
+                "COHORTE_BASE=/opt/node",
+                "COHORTE_DATA=/opt/data"
+            ],
+            "Cmd": [
+                "--jacoco"
+            ],
+            "Image": "dr.cohorte.tech/iotpack:latest",
+            "Volumes": {
+                "/opt/node": {},
+                "/sys/fs/cgroup": {},
+                "/var/log/journal": {}
+            },
+            "WorkingDir": "",
+            "Entrypoint": [
+                "/opt/boot.sh"
+            ],
+            "OnBuild": null,
+            "Labels": {
+                "license": "GPLv2",
+                "name": "CentOS Base Image",
+                "vendor": "CentOS"
+            }
+        },
+        "NetworkSettings": {
+            "Bridge": "",
+            "SandboxID": "6a7db47987461d5ae568a42ffbbe5c860cb7fe95318baaca3bf0725cfa01d770",
+            "HairpinMode": false,
+            "LinkLocalIPv6Address": "",
+            "LinkLocalIPv6PrefixLen": 0,
+            "Ports": {
+                "6300/tcp": [
+                    {
+                        "HostIp": "0.0.0.0",
+                        "HostPort": "6300"
+                    }
+                ],
+                "8000/tcp": null,
+                "8001/tcp": null,
+                "8002/tcp": null,
+                "8003/tcp": null,
+                "8004/tcp": null,
+                "8005/tcp": null,
+                "8006/tcp": null,
+                "8007/tcp": null,
+                "8008/tcp": null,
+                "8009/tcp": null,
+                "8010/tcp": null,
+                "8080/tcp": [
+                    {
+                        "HostIp": "0.0.0.0",
+                        "HostPort": "8080"
+                    }
+                ],
+                "9000/tcp": [
+                    {
+                        "HostIp": "0.0.0.0",
+                        "HostPort": "9000"
+                    }
+                ],
+                "9001/tcp": null
+            },
+            "SandboxKey": "/var/run/docker/netns/6a7db4798746",
+            "SecondaryIPAddresses": null,
+            "SecondaryIPv6Addresses": null,
+            "EndpointID": "51361e167578df7749a983b613e94d084bb8e43321b8b0b8025b389dd963bf30",
+            "Gateway": "172.17.0.1",
+            "GlobalIPv6Address": "",
+            "GlobalIPv6PrefixLen": 0,
+            "IPAddress": "172.17.0.5",
+            "IPPrefixLen": 16,
+            "IPv6Gateway": "",
+            "MacAddress": "02:42:ac:11:00:05",
+            "Networks": {
+                "bridge": {
+                    "IPAMConfig": null,
+                    "Links": null,
+                    "Aliases": null,
+                    "NetworkID": "abf19b5f5311296ff48574577187287f3514f29bd7f0f1bd536a705185b35753",
+                    "EndpointID": "51361e167578df7749a983b613e94d084bb8e43321b8b0b8025b389dd963bf30",
+                    "Gateway": "172.17.0.1",
+                    "IPAddress": "172.17.0.5",
+                    "IPPrefixLen": 16,
+                    "IPv6Gateway": "",
+                    "GlobalIPv6Address": "",
+                    "GlobalIPv6PrefixLen": 0,
+                    "MacAddress": "02:42:ac:11:00:05"
+                }
+            }
+        }
+    }
+]

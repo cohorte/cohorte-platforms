@@ -616,6 +616,22 @@
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
 							</execution>
+							<execution>
+								<id>prepare-arm</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>bash</executable>
+									<arguments>
+										<argument>build_base-device.sh</argument>
+										<argument>${DOCKER_USER}</argument>
+										<argument>${DOCKER_PASS}</argument>										
+									</arguments>
+									<workingDirectory>${basedir}/docker</workingDirectory>
+								</configuration>
+							</execution>
 						</executions>
 					</plugin>
 					
@@ -662,6 +678,23 @@
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
 							</execution>
+							
+							<execution>
+								<id>prepare</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>ssh</executable>
+									<arguments>
+										<argument>root@forge.cohorte.tech</argument>
+										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_base-device.sh ${DOCKER_USER} ${DOCKER_PASS}</argument>
+									</arguments>
+									<workingDirectory>${basedir}/docker</workingDirectory>
+								</configuration>
+							</execution>
+							
 						</executions>
 					</plugin>
 					
@@ -694,7 +727,7 @@
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
 							</execution>
-								<execution>
+							<execution>
 								<id>prepare-arm</id>
 								<phase>generate-sources</phase>
 								<goals>
@@ -704,6 +737,24 @@
 									<executable>sh</executable>
 									<arguments>
 										<argument>build_runtime-arm64v8.sh</argument>
+										<argument>${project.version}</argument>
+										<argument>${DOCKER_USER}</argument>
+										<argument>${DOCKER_PASS}</argument>										
+									</arguments>
+									<workingDirectory>${basedir}/docker</workingDirectory>
+								</configuration>
+							</execution>
+							
+							<execution>
+								<id>prepare</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>sh</executable>
+									<arguments>
+										<argument>build_runtime-device.sh</argument>
 										<argument>${project.version}</argument>
 										<argument>${DOCKER_USER}</argument>
 										<argument>${DOCKER_PASS}</argument>										
@@ -752,6 +803,21 @@
 									<arguments>
 										<argument>root@forge.cohorte.tech</argument>
 										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_runtime-arm64v8.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS} ${DOCKER_ARM_HOST} /var/volumes/jenkins/.ssh/id_rsa</argument>
+									</arguments>
+									<workingDirectory>${basedir}/docker</workingDirectory>
+								</configuration>
+							</execution>
+							<execution>
+								<id>prepare</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>ssh</executable>
+									<arguments>
+										<argument>root@forge.cohorte.tech</argument>
+										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_runtime-device.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS}</argument>
 									</arguments>
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
@@ -806,6 +872,24 @@
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
 							</execution>
+							
+							<execution>
+								<id>prepare</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>bash</executable>
+									<arguments>
+										<argument>build_node-device.sh</argument>
+										<argument>${project.version}</argument>
+										<argument>${DOCKER_USER}</argument>
+										<argument>${DOCKER_PASS}</argument>										
+									</arguments>
+									<workingDirectory>${basedir}/docker</workingDirectory>
+								</configuration>
+							</execution>
 						</executions>
 					</plugin>
 					
@@ -852,6 +936,22 @@
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
 							</execution>
+							
+							<execution>
+								<id>prepare</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>ssh</executable>
+									<arguments>
+										<argument>root@forge.cohorte.tech</argument>
+										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_node-device.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS} </argument>
+									</arguments>
+									<workingDirectory>${basedir}/docker</workingDirectory>
+								</configuration>
+							</execution>
 						</executions>
 					</plugin>
 					
@@ -877,6 +977,41 @@
 									<executable>bash</executable>
 									<arguments>
 										<argument>build_demo.sh</argument>
+										<argument>${project.version}</argument>
+										<argument>${DOCKER_USER}</argument>
+										<argument>${DOCKER_PASS}</argument>										
+									</arguments>
+									<workingDirectory>${basedir}/docker</workingDirectory>
+								</configuration>
+							</execution>
+							
+							<execution>
+								<id>prepare</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>bash</executable>
+									<arguments>
+										<argument>build_demo-arm64v8.sh</argument>
+										<argument>${project.version}</argument>
+										<argument>${DOCKER_USER}</argument>
+										<argument>${DOCKER_PASS}</argument>										
+									</arguments>
+									<workingDirectory>${basedir}/docker</workingDirectory>
+								</configuration>
+							</execution>
+							<execution>
+								<id>prepare</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>bash</executable>
+									<arguments>
+										<argument>build_demo-device.sh</argument>
 										<argument>${project.version}</argument>
 										<argument>${DOCKER_USER}</argument>
 										<argument>${DOCKER_PASS}</argument>										
@@ -924,6 +1059,22 @@
 									<arguments>
 										<argument>root@forge.cohorte.tech</argument>
 										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_demo-arm64v8.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS} ${DOCKER_ARM_HOST} /var/volumes/jenkins/.ssh/id_rsa</argument>
+									</arguments>
+									<workingDirectory>${basedir}/docker</workingDirectory>
+								</configuration>
+							</execution>
+							
+							<execution>
+								<id>prepare</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>ssh</executable>
+									<arguments>
+										<argument>root@forge.cohorte.tech</argument>
+										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_demo-device.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS}</argument>
 									</arguments>
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
