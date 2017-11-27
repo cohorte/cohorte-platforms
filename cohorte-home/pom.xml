@@ -617,7 +617,7 @@
 								</configuration>
 							</execution>
 							<execution>
-								<id>prepare-arm</id>
+								<id>prepare-device</id>
 								<phase>generate-sources</phase>
 								<goals>
 									<goal>exec</goal>
@@ -680,7 +680,7 @@
 							</execution>
 							
 							<execution>
-								<id>prepare</id>
+								<id>prepare-device</id>
 								<phase>generate-sources</phase>
 								<goals>
 									<goal>exec</goal>
@@ -746,7 +746,7 @@
 							</execution>
 							
 							<execution>
-								<id>prepare</id>
+								<id>prepare-device</id>
 								<phase>generate-sources</phase>
 								<goals>
 									<goal>exec</goal>
@@ -808,7 +808,7 @@
 								</configuration>
 							</execution>
 							<execution>
-								<id>prepare</id>
+								<id>prepare-device</id>
 								<phase>generate-sources</phase>
 								<goals>
 									<goal>exec</goal>
@@ -874,7 +874,7 @@
 							</execution>
 							
 							<execution>
-								<id>prepare</id>
+								<id>prepare-device</id>
 								<phase>generate-sources</phase>
 								<goals>
 									<goal>exec</goal>
@@ -938,7 +938,7 @@
 							</execution>
 							
 							<execution>
-								<id>prepare</id>
+								<id>prepare-device</id>
 								<phase>generate-sources</phase>
 								<goals>
 									<goal>exec</goal>
@@ -1003,7 +1003,7 @@
 								</configuration>
 							</execution>
 							<execution>
-								<id>prepare</id>
+								<id>prepare-device</id>
 								<phase>generate-sources</phase>
 								<goals>
 									<goal>exec</goal>
@@ -1065,7 +1065,7 @@
 							</execution>
 							
 							<execution>
-								<id>prepare</id>
+								<id>prepare-device</id>
 								<phase>generate-sources</phase>
 								<goals>
 									<goal>exec</goal>
