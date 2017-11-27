@@ -3,7 +3,7 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 echo $DIR
 
-DIRECTORY="/root/docker/runtime-devices"
+DIRECTORY="$DIR/runtime-devices"
 DOCKER_REPOSITORY="cohorte/runtime-devices"
 
 DOCKER_TAG=$1

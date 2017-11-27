@@ -13,7 +13,7 @@
 ##
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-DIRECTORY="/root/docker/node-devices"
+DIRECTORY="$DIR/node-devices"
 DOCKER_REPOSITORY="cohorte/node-devices"
 
 DOCKER_TAG=$1
