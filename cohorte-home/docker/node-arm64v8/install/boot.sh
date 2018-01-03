@@ -25,5 +25,5 @@ for init in init_container_*.py ; do
 done
 
 
-
-/lib/systemd/systemd --system
+exec /usr/sbin/init
+#/usr/lib/systemd/systemd --system

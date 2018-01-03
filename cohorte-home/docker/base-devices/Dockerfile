@@ -1,4 +1,4 @@
-FROM u
+FROM ubuntu:16.04
 
 #-----------------------------------------------------------------------------
 # Cohorte Base image X86 for cohorte device
@@ -22,8 +22,8 @@ MAINTAINER "Bassem Debbabi" <bassem.debbabi@cohorte-technologies.com>
 
 # force rebuilind all this Dockerfile by changing the date
 ENV REFRESHED_AT 20161013_1730
-ENV JAVA_VERSION 8u51
-ENV JAVA_LONG_VERSION 8u51
+ENV JAVA_VERSION 8u151
+ENV JAVA_LONG_VERSION 8u151-b12
 ENV JAVA_HOME /opt/java
 ENV PATH $JAVA_HOME/bin:$PATH
 
@@ -42,13 +42,14 @@ RUN apt-get  install -y vim wget tar netcat-openbsd
 RUN apt-get  install -y python3.4 python3 python
 # to have systemctl command
 RUN apt-get install -y systemd
+
 # Installer Java 8 (Oracle)
 # inspired from: https://hub.docker.com/r/cooniur/java/
 RUN mkdir -p $JAVA_HOME
 COPY ./jdk/* /opt/java/
+RUN chmod +x /opt/java/bin/*
    
-# Test de java
-RUN java -version
+
 # Test de java
 RUN java -version
 

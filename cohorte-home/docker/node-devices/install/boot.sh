@@ -26,4 +26,5 @@ done
 
 
 
-/lib/systemd/systemd --system
+exec /usr/sbin/init
+#/usr/lib/systemd/systemd --system
