@@ -4,6 +4,14 @@ This repository contains scripts allowing the generation of the different Cohort
 
 # How to build
 
+# How to Release
+
+- update dependencies versions (if needed)
+- update pom.xml version
+- update DEPENDENCIES.txt file to set new versions
+- update requirements.txt file to set new versions
+- update p2/category.xml file to set new versions
+
 ## Dependencies
 
 You should first compile all dependencies.
