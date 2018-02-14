@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.cohorte.platforms</groupId>
 		<artifactId>cohorte</artifactId>
-		<version>1.3.0-SNAPSHOT</version>
+		<version>1.3.0</version>
 	</parent>
 	<artifactId>org.cohorte.p2.generator</artifactId>
 
