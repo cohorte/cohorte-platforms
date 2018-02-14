@@ -29,9 +29,7 @@ import argparse
 import json
 import logging
 import os
-import platform
 import shutil
-import subprocess
 import sys
 
 import common
@@ -80,17 +78,18 @@ def get_external_config(parsed_conf_file, conf_name):
         "transport": []
     }
     """
+    parse_value = None
     if parsed_conf_file is not None and conf_name is not None:
         if conf_name == "app-id":
             if "app-id" in parsed_conf_file:
-                return parsed_conf_file["app-id"]
+                parse_value =  parsed_conf_file["app-id"]
             elif "application-id" in parsed_conf_file:  # compatibility with cohorte 1.0.0
-                return parsed_conf_file["application-id"]  #
+                parse_value =  parsed_conf_file["application-id"]  #
 
         if conf_name == "node-name":
             if "node" in parsed_conf_file:
                 # Different key name
-                return parsed_conf_file["node"].get("name")
+                parse_value =  parsed_conf_file["node"].get("name")
             # return parsed_conf_file["node"].get(conf_name)
 
         if conf_name in ("node-name", "kind-of-isolates", "top-composer", "auto-start",
@@ -100,30 +99,32 @@ def get_external_config(parsed_conf_file, conf_name):
                 conf_value = parsed_conf_file["node"].get(conf_name)
                 if conf_value is None:  #
                     if conf_name in "http-port":  # compatibility with cohorte 1.0.0
-                        return parsed_conf_file["node"].get("web-admin")  #
+                        parse_value =  parsed_conf_file["node"].get("web-admin")  #
                     if conf_name in "shell-port":  #
-                        return parsed_conf_file["node"].get("shell-admin")  #
+                        parse_value =  parsed_conf_file["node"].get("shell-admin")  #
                 else:
-                    return conf_value
+                    parse_value =  conf_value
         if conf_name == "env" and "env" in parsed_conf_file:
             envs = []
             for key, value in parsed_conf_file["env"].items():
                 envs.append("{0}={1}".format(key, value))
-            return envs
+            parse_value =  envs
 
         if conf_name == "transport":
             if "transport" in parsed_conf_file:
-                return parsed_conf_file["transport"]
+                parse_value =  parsed_conf_file["transport"]
 
         if conf_name.startswith("xmpp-"):
             if "transport-xmpp" in parsed_conf_file:
-                return parsed_conf_file["transport-xmpp"].get(conf_name)
+                parse_value =  parsed_conf_file["transport-xmpp"].get(conf_name)
 
         if conf_name.startswith("http-"):
             if "transport-http" in parsed_conf_file:
-                return parsed_conf_file["transport-http"].get(conf_name)
+                parse_value =  parsed_conf_file["transport-http"].get(conf_name)
+    
+    print("get_external_config key={0} , value_found={1} ".format(conf_name,parse_value))
 
-    return None
+    return parse_value
 
 
 def set_configuration_value(argument_value, parsed_conf_value, default_value):
@@ -413,7 +414,8 @@ def main(args=None):
         print("        use '--app-id' option to provide the application's ID "
               "or update your startup configuration file.")
         return 1
-
+    else:
+        os.environ["APPLICATION_ID"] = APPLICATION_ID
     # generate boot config file
     common.generate_boot_common(COHORTE_BASE, APPLICATION_ID, NODE_DATA_DIR)
 
@@ -669,7 +671,7 @@ def main(args=None):
             with open(str(os.environ.get('COHORTE_LOGFILE')), "w") as log_file:
                 log_file.write(msg1 + msg2)
             return 3
-        elif python_version_tuple > (3, 4, 99):
+        elif python_version_tuple > (3, 4):
             msg2 = """
             You should have Python 3.4 to launch Java isolates!
             Your Python version is not yet supported!"""
@@ -690,7 +692,7 @@ def main(args=None):
     
     # MOD_OG_20170404 - dump infos
     # Dump command
-    msg3 = """\n  - call boot.py with args: {args}""".format(args=[ boot_args])
+    msg3 = """  - call boot.py with args: {args}""".format(args=[ boot_args])
     print(msg3)
 
     # write to log file
