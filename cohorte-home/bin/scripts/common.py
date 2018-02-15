@@ -36,7 +36,6 @@ from stat import S_IROTH  # Read by others
 from stat import S_IRWXG  # Read, write, and execute by group
 from stat import S_IRWXU  # Read, write, and execute by owner
 
-
 # Documentation strings format
 __docformat__ = "restructuredtext en"
 
@@ -159,6 +158,9 @@ def generate_boot_forker(node_dir, http_port, shell_port):
 
     result = """{header}
 {{
+    "$merge":[
+        "${COHORTE_HOME}/conf/boot_forker.js"
+    ],
     "composition" : [
     {{
         "name" : "pelix-http-service",
@@ -382,6 +384,7 @@ def show_installed_dist_info(dist):
     COHORTE_HOME = dist["COHORTE_HOME"] if "COHORTE_HOME" in dist else "None"
 
     print(msg.format(distribution, version, stage, timestamp, git_branch, git_commit, COHORTE_HOME))
+
     
 def setup_jpype(cohorte_home):
     platform_name = platform.system()
@@ -428,7 +431,6 @@ def setup_jpype(cohorte_home):
                 source_jpype_file = os.path.join(extra_dir, str(platform_name).lower(), machine_type, jpype_file_name)
             
             shutil.copyfile(source_jpype_file, os.path.join(repo_dir, jpype_file_name))        
-            
 
         except OSError:
             pass

@@ -2,14 +2,22 @@
  * Start configuration for the monitor (Python version)
  */
 {
-	"import-files" : [ "python-common-http.js",
-	                   "composer/python-top.js",
-	                   "composer/python-node.js"],
+	"$merge" : [ 
+		"python-common-http.js",
+		"composer/python-top.js",
+		"composer/python-node.js"
+	],
 
 	/*
 	 * Monitor bundles
 	 */
 	"bundles" : [
+	/* include python top bundle */
+	{
+		"$include":{
+			"path":["composer/python-top.js#bundles[*]"],
+		}
+	},
 	/* Monitor core */
 	{
 		"name" : "cohorte.monitor.core"
@@ -36,6 +44,20 @@
 	 * Components
 	 */
 	"composition" : [
+	/* include python top composition */
+	{
+		"$include":{
+			"path":["composer/python-top.js#composition[*]"],
+			"condition" : "not ${run:node.top-composer}"
+		}
+	},
+	{
+		"$include":{
+			"path":["composer/python-top-composer.js#composition[*]"],
+			"condition" : "${run:node.top-composer}"
+		}
+	},
+		
 	/* Common components */
 	{
 		"name" : "pelix-http-service",

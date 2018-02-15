@@ -2,8 +2,10 @@
  * Start configuration for basic isolates (Python version)
  */
 {
-	"import-files" : [ "python-common-http.js",
-	                   "composer/python-isolate.js"],
+	"$merge" : [ 
+		"python-common-http.js",
+		"composer/python-isolate.js"
+	],
 	
 	/*
 	 * Monitor bundles

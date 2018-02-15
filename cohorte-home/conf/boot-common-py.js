@@ -5,9 +5,11 @@
 	/*
 	 * Import the common configuration
 	 */
-	"import-files" : [ "boot-common.js",
-                           "herald/python-core.js",
-                           "herald/python-transport.js" ],
+	"$merge" : [ 
+		"boot-common.js",
+        "herald/python-core.js",
+        "herald/python-transport.js" 
+    ],
 
 	/*
 	 * Bundles

@@ -5,7 +5,9 @@
 	/*
 	 * Import the common configuration for Java isolates
 	 */
-	"import-files" : "boot-java.js",
+	"$merge" : [
+		"boot-java.js"
+	],
 
 	/*
 	 * Bundles

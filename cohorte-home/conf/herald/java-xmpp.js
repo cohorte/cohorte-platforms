@@ -10,5 +10,10 @@
 	} ],
 
 	// Import the common component configuration
-	"import-files" : "all-xmpp.js"
+	"$merge" : [
+		"all-xmpp.js"
+	]
+	
+	
+	
 }

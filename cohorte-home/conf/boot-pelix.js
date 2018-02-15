@@ -5,7 +5,9 @@
 	/**
 	 * Import the common configuration for Python isolates
 	 */
-	"import-files" : "boot-common-py.js",
+	"$merge" : [
+		"boot-common-py.js"
+	],
 
 	/**
 	 * Isolate bundles

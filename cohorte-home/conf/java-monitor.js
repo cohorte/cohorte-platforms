@@ -5,7 +5,10 @@
 	/*
 	 * OSGi stuffs
 	 */
-	"import-files" : [ "java-osgi.js", "java-common-ui.js" ],
+	"$merge" : [ 
+		"java-osgi.js", 
+		"java-common-ui.js" 
+	],
 
 	/*
 	 * Java bundles

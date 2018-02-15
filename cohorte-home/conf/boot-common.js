@@ -34,6 +34,8 @@
 	 * The isolate properties
 	 */
 	"properties" : {
-		"psem2m.compatible" : false
+		"psem2m.compatible" : false,
+		"herald.application.id" : "${APP_ID}",
+	    "cohorte.node.data.dir" : "${COHORTE_DATA}"
 	}
 }

@@ -3,7 +3,7 @@
  */
 {
 	/* Common Python stack */
-	"import-files" : "boot-common.js",
+	"$merge" : [ "boot-common.js"],
 
 	/*
 	 * Bundles
@@ -21,7 +21,7 @@
 		"name" : "pelix-remote-shell",
 		"properties" : {
 			// Random shell port
-			"pelix.shell.port" : 0
+			"pelix.shell.port" : "${run:node.shell-port}"
 		}
 	},
 

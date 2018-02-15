@@ -5,8 +5,11 @@
 	/*
 	 * OSGi stuffs
 	 */
-	"import-files" : [ "java-osgi.js", "java-common.js",
-	                   "composer/java-isolate.js"],
+	"$merge" : [ 
+		"java-osgi.js", 
+		"java-common.js",
+	    "composer/java-isolate.js"
+	],
 
 	/*
 	 * Framework properties
