@@ -121,7 +121,6 @@ def get_external_config(parsed_conf_file, conf_name):
             if "transport-http" in parsed_conf_file:
                 parse_value = parsed_conf_file["transport-http"].get(conf_name)
     
-    print("get_external_config key={0} , value_found={1} ".format(conf_name, parse_value))
 
     return parse_value
 
@@ -459,8 +458,8 @@ def main(args=None):
             get_external_config(external_config, "auto-start"), True)
 
         # common.generate_top_composer_config(COHORTE_BASE, COMPOSITION_FILE,
-                                           # AUTO_START)
-   # else:
+        # AUTO_START)
+        # else:
         # common.delete_top_composer_config(COHORTE_BASE)
 
     # show console (or not)    
@@ -534,50 +533,52 @@ def main(args=None):
 
     # update configuration if not exists
     CONFIG_FILE = config_file
+
+    configuration = {}
+    actual_dist = common.get_installed_dist_info(COHORTE_HOME)
+    COHORTE_VERSION = actual_dist["version"]
+    configuration["cohorte-version"] = COHORTE_VERSION
+    if APPLICATION_ID:
+        configuration["app-id"] = APPLICATION_ID
+
+    configuration["node"] = {
+        "name": NODE_NAME,
+        "top-composer": IS_TOP_COMPOSER,
+        "http-port": HTTP_PORT,
+        "shell-port": SHELL_PORT,
+        "use-cache": USE_CACHE,
+        "recomposition-delay": RECOMPOSITION_DELAY,
+        "interpreter": PYTHON_INTERPRETER,
+        "console": INSTALL_SHELL_CONSOLE,
+        "data-dir": NODE_DATA_DIR,
+        "verbose": VERBOSE,
+        "debug": DEBUG}
+
+    if IS_TOP_COMPOSER:
+        configuration["node"]["auto-start"] = AUTO_START
+        configuration["node"]["composition-file"] = COMPOSITION_FILE
+
+    configuration["transport"] = TRANSPORT_MODES
+    if "xmpp" in TRANSPORT_MODES:
+        configuration["transport-xmpp"] = {
+            "xmpp-server": XMPP_SERVER,
+            "xmpp-port": XMPP_PORT,
+            "xmpp-user-jid": XMPP_JID,
+            "xmpp-user-password": XMPP_PASS
+        }
+    if "http" in TRANSPORT_MODES:
+        configuration["transport-http"] = {"http-ipv": HTTP_IPV}
+
     if not os.path.exists(CONFIG_FILE) or args.update_config_file:
-        configuration = {}
-        actual_dist = common.get_installed_dist_info(COHORTE_HOME)
-        COHORTE_VERSION = actual_dist["version"]
-        configuration["cohorte-version"] = COHORTE_VERSION
-        if APPLICATION_ID:
-            configuration["app-id"] = APPLICATION_ID
-
-        configuration["node"] = {
-            "name": NODE_NAME,
-            "top-composer": IS_TOP_COMPOSER,
-            "http-port": HTTP_PORT,
-            "shell-port": SHELL_PORT,
-            "use-cache": USE_CACHE,
-            "recomposition-delay": RECOMPOSITION_DELAY,
-            "interpreter": PYTHON_INTERPRETER,
-            "console": INSTALL_SHELL_CONSOLE,
-            "data-dir": NODE_DATA_DIR,
-            "verbose": VERBOSE,
-            "debug": DEBUG}
-
-        if IS_TOP_COMPOSER:
-            configuration["node"]["auto-start"] = AUTO_START
-            configuration["node"]["composition-file"] = COMPOSITION_FILE
-
-        configuration["transport"] = TRANSPORT_MODES
-        if "xmpp" in TRANSPORT_MODES:
-            configuration["transport-xmpp"] = {
-                "xmpp-server": XMPP_SERVER,
-                "xmpp-port": XMPP_PORT,
-                "xmpp-user-jid": XMPP_JID,
-                "xmpp-user-password": XMPP_PASS
-            }
-        if "http" in TRANSPORT_MODES:
-            configuration["transport-http"] = {"http-ipv": HTTP_IPV}
-
-        # set configuration run as environment vairable 
-        os.environ["run"] = configuration
 
         common.update_startup_file(CONFIG_FILE, configuration)
         print("[INFO] config file '" + CONFIG_FILE + "' updated! ")
         if args.update_config_file:
             return 0
         
+   # set configuration run as environment vairable 
+    os.environ["run"] = json.dumps(configuration)   
+    
     # get python interpreter version (to be used by cohorte)
     PYTHON_VERSION = "{0}.{1}.{2}".format(sys.version_info[0], sys.version_info[1], sys.version_info[2])
     # get cohorte_home version

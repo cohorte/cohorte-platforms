@@ -14,7 +14,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.cohorte.platforms</groupId>
 	<artifactId>cohorte</artifactId>
-	<version>1.3.0</version> <!-- MOD_BD_20180208 -->
+	<version>1.3.1</version> <!-- MOD_BD_20180208 -->
 	<packaging>pom</packaging>
 
 	<name>COHORTE Project ::: Platforms :: HOME </name>
@@ -31,7 +31,7 @@
 		<cohorte-utilities-version>1.0.19</cohorte-utilities-version>
 		<cohorte-remote-version>1.2.1</cohorte-remote-version>
 		<cohorte-herald-version>1.0.1</cohorte-herald-version>
-		<cohorte-runtime-version>1.2.0</cohorte-runtime-version>		
+		<cohorte-runtime-version>1.2.1</cohorte-runtime-version>		
 		<!-- ======================================================== -->
 	</properties>
 
