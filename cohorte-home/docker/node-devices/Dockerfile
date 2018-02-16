@@ -27,7 +27,7 @@ RUN chmod +x /opt/init*.sh
 
 # install pip 
 RUN python3 /tmp/get-pip.py 
-RUN pip3 install jsoncomment
+RUN pip3 install jsoncomment simpleeval
 
 RUN chmod +x /opt/boot.sh
 
