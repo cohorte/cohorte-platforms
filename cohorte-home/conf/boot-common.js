@@ -36,6 +36,6 @@
 	"properties" : {
 		"psem2m.compatible" : false,
 		"herald.application.id" : "${APP_ID}",
-	    "cohorte.node.data.dir" : "${COHORTE_DATA}"
+	    "cohorte.node.data.dir" : "${run:node.data-dir}"
 	}
 }

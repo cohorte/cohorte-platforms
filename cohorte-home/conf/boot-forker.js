@@ -83,6 +83,8 @@
 	/* Configuration of common components */
 	{
 		"name" : "pelix-http-service",
+		"factory" : "pelix.http.service.basic.factory",
+
 		"properties" : {
 			// Standard forker HTTP port
 			"pelix.http.port" : "${run:node.http-port}"
