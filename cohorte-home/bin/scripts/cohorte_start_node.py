@@ -120,7 +120,6 @@ def get_external_config(parsed_conf_file, conf_name):
         if conf_name.startswith("http-"):
             if "transport-http" in parsed_conf_file:
                 parse_value = parsed_conf_file["transport-http"].get(conf_name)
-    
 
     return parse_value
 
@@ -653,7 +652,7 @@ def main(args=None):
         # java distribution
         # => should have python 3.4
         python_version_tuple = tuple(map(int, (PYTHON_VERSION.split("."))))
-        if python_version_tuple < (3, 4):
+        if python_version_tuple < (3, 6):
             msg2 = """
             As all the isolates of the node aren't Python ones, you should have Python 3.4 to launch Java isolates !
 
@@ -669,7 +668,7 @@ def main(args=None):
             with open(str(os.environ.get('COHORTE_LOGFILE')), "w") as log_file:
                 log_file.write(msg1 + msg2)
             return 3
-        elif python_version_tuple > (3, 4):
+        elif python_version_tuple > (3, 6):
             msg2 = """
             You should have Python 3.4 to launch Java isolates!
             Your Python version is not yet supported!"""
