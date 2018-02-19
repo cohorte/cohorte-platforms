@@ -648,30 +648,15 @@ def main(args=None):
     out_logfile.write(msg1)
 
     msg2 = ""
+    # => should have python 3.6
+    python_version_tuple = tuple(map(int, (PYTHON_VERSION.split("."))))
+   
+    if not python_version_tuple > (3, 6):
+        msg2 = """
+        You should have Python 3.4 to launch  isolates!
+        Your Python version is not yet supported!"""
+            
     if version["distribution"] not in ("cohorte-python-distribution") and KIND_OF_ISOLATES != "python-only":
-        # java distribution
-        # => should have python 3.4
-        python_version_tuple = tuple(map(int, (PYTHON_VERSION.split("."))))
-        if python_version_tuple < (3, 6):
-            msg2 = """
-            As all the isolates of the node aren't Python ones, you should have Python 3.4 to launch Java isolates !
-
-            If your node has only Python isolates, please download cohorte-python-distribution which requires
-            Python 2.7 or 3.4, or set the Kind of Isolates you want.
-            @lookat :  --kind-of-isolates=['python-only' | 'python-java']
-
-            It you have Python 3.4 installed on your machine and its Python 2.x which is used,
-            set the "setintrepreter" argument when starting your node.
-            @lookat : --interpreter <PATH_TO_PYTHON34> """
-            print(msg2)
-            # write to log file
-            with open(str(os.environ.get('COHORTE_LOGFILE')), "w") as log_file:
-                log_file.write(msg1 + msg2)
-            return 3
-        elif python_version_tuple > (3, 6):
-            msg2 = """
-            You should have Python 3.4 to launch Java isolates!
-            Your Python version is not yet supported!"""
 
         # change jpype implementation depending on platform system
         common.setup_jpype(COHORTE_HOME)        

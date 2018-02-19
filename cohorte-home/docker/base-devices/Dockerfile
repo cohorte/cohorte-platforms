@@ -30,16 +30,22 @@ ENV PATH $JAVA_HOME/bin:$PATH
 # informer systemd qu'il s'execute sur un conteneur docker
 ENV container docker
 
+
 # installation du systemd au lieu du fakesystemd
 # ceci est necessaire pour pouvoir lancer mysql et openldap comme un service OS
 # avec les commandes "service" et "systemctl".
 RUN apt-get update
 
 
+RUN apt-get install -y software-properties-common python-software-properties
+RUN add-apt-repository -y ppa:jonathonf/python-3.6
+
+RUN apt-get update
+
 # installer d'autres outils
 RUN apt-get  install -y vim wget tar netcat-openbsd
 #RUN apt-get  install -y epel-release
-RUN apt-get  install -y python3.6 python3 python
+RUN apt-get  install -y python3.6  python
 # to have systemctl command
 RUN apt-get install -y systemd
 

@@ -27,8 +27,8 @@ MAINTAINER "Bassem Debbabi" <bassem.debbabi@cohorte-technologies.com>
 # force rebuilind all this Dockerfile by changing the date
 ENV REFRESHED_AT 20161013_1730
 
-ENV JAVA_VERSION 8u40
-ENV JAVA_LONG_VERSION 8u40-b26
+ENV JAVA_VERSION 8u161
+ENV JAVA_LONG_VERSION 8u161
 ENV JAVA_HOME /opt/java
 ENV PATH $JAVA_HOME/bin:$PATH
 
@@ -56,15 +56,12 @@ RUN yum -y install vim wget tar nc && yum clean all
 RUN yum install -y epel-release
 RUN yum install -y python36
 
+
 # Installer Java 8 (Oracle)
 # inspired from: https://hub.docker.com/r/cooniur/java/
-RUN mkdir -p $JAVA_HOME \
-    && wget --output-document=/tmp/java.tar.gz \
-        --no-cookies --no-check-certificate \
-        --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" \
-        "http://download.oracle.com/otn-pub/java/jdk/$JAVA_LONG_VERSION/server-jre-$JAVA_VERSION-linux-x64.tar.gz"
-RUN tar -xvf "/tmp/java.tar.gz" --directory="$JAVA_HOME" --strip-components 1
-RUN rm /tmp/java.tar.gz*
+RUN mkdir -p $JAVA_HOME
+COPY ./jdk/* /opt/java/
+RUN chmod +x /opt/java/bin/*
 
 # Test de java
 RUN java -version
