@@ -14,7 +14,7 @@ FROM centos:centos7.2.1511
 # - wget
 # - tar
 # - nc
-# - python 3.4
+# - python 3.6
 #
 # UPDATES:
 # - MOD_BD_20161013 moving from centos7.1.x to centos7.2.15.11 
@@ -54,7 +54,7 @@ rm -f /lib/systemd/system/anaconda.target.wants/*;
 # installer d'autres outils
 RUN yum -y install vim wget tar nc && yum clean all 
 RUN yum install -y epel-release
-RUN yum install -y python34
+RUN yum install -y python36
 
 # Installer Java 8 (Oracle)
 # inspired from: https://hub.docker.com/r/cooniur/java/
