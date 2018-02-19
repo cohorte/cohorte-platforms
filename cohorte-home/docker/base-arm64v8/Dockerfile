@@ -13,7 +13,7 @@ FROM arm64v8/debian
 # - wget
 # - tar
 # - nc
-# - python 3.4
+# - python 3.6
 #
 #-----------------------------------------------------------------------------
 
@@ -39,7 +39,7 @@ RUN apt-get update
 # installer d'autres outils
 RUN apt-get  install -y vim wget tar netcat-openbsd
 #RUN apt-get  install -y epel-release
-RUN apt-get  install -y python3.4 python3 python
+RUN apt-get  install -y python3.6 python3 python
 # to have systemctl command
 RUN apt-get install -y systemd
 # Installer Java 8 (Oracle)

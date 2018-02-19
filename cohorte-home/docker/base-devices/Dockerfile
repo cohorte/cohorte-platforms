@@ -6,14 +6,14 @@ FROM ubuntu:16.04
 # Contains: 
 # - ubuntu Xenial 
 # - Oracle JVM 8 
-# - Python 3.4
+# - Python 3.6
 #
 # Installed tools:
 # - vim
 # - wget
 # - tar
 # - nc
-# - python 3.4
+# - python 3.6
 #
 #-----------------------------------------------------------------------------
 
@@ -39,7 +39,7 @@ RUN apt-get update
 # installer d'autres outils
 RUN apt-get  install -y vim wget tar netcat-openbsd
 #RUN apt-get  install -y epel-release
-RUN apt-get  install -y python3.4 python3 python
+RUN apt-get  install -y python3.6 python3 python
 # to have systemctl command
 RUN apt-get install -y systemd
 
