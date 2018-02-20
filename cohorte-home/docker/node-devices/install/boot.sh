@@ -26,5 +26,7 @@ done
 
 
 
-exec /usr/sbin/init
+# for centos exec /usr/sbin/init
+# for ubuntu
+exec /sbin/init
 #/usr/lib/systemd/systemd --system

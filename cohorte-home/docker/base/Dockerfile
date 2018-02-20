@@ -20,6 +20,8 @@ FROM ubuntu:16.04
 # meta-data
 MAINTAINER "Bassem Debbabi" <bassem.debbabi@cohorte-technologies.com>
 
+
+RUN cp /sbin/init /sbin/init.real
 # force rebuilind all this Dockerfile by changing the date
 ENV REFRESHED_AT 20161013_1730
 ENV JAVA_VERSION 8u151
