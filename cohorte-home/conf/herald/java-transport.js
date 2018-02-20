@@ -1,5 +1,18 @@
 {
-	
+	"bundles" : [ 
+		{
+			"$include":{
+				"path":["java-http.js#bundles[*]"],
+				"condition": "'http' in '${run:transport}'" 
+			}
+		},
+		{
+			"$include":{
+				"path":["java-xmpp.js#bundles[*]"],
+				"condition": "'xmpp' in '${run:transport}'" 
+			}
+		} 
+	], 
 	/*
 	 * Components
 	 */

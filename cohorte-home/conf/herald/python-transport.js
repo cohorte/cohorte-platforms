@@ -1,6 +1,24 @@
 {
 	
 	/*
+	 * bundles
+	 */
+	"bundles" : [ 
+		{
+			"$include":{
+				"path":["python-http.js#bundles[*]"],
+				"condition": "'http' in '${run:transport}'" 
+			}
+		},
+		{
+			"$include":{
+				"path":["python-xmpp.js#bundles[*]"],
+				"condition": "'xmpp' in '${run:transport}'" 
+			}
+		} 
+	], 
+	
+	/*
 	 * Components
 	 */
 	"composition" : [ 
