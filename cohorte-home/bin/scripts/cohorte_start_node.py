@@ -651,7 +651,7 @@ def main(args=None):
     # => should have python 3.6
     python_version_tuple = tuple(map(int, (PYTHON_VERSION.split("."))))
    
-    if not python_version_tuple > (3, 6):
+    if not python_version_tuple >= (3, 4):
         msg2 = """
         You should have Python 3.4 to launch  isolates!
         Your Python version is not yet supported!"""
