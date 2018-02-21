@@ -36,7 +36,6 @@ from stat import S_IROTH  # Read by others
 from stat import S_IRWXG  # Read, write, and execute by group
 from stat import S_IRWXU  # Read, write, and execute by owner
 
-
 # Documentation strings format
 __docformat__ = "restructuredtext en"
 
@@ -122,7 +121,6 @@ def update_startup_file(config_file, configuration):
                   indent=4, separators=(',', ': '))
 
 
-
 def parse_version_file(version_file):
     """
     Parses the version file (conf/version.js).
@@ -166,6 +164,7 @@ def show_installed_dist_info(dist):
     COHORTE_HOME = dist["COHORTE_HOME"] if "COHORTE_HOME" in dist else "None"
 
     print(msg.format(distribution, version, stage, timestamp, git_branch, git_commit, COHORTE_HOME))
+
     
 def setup_jpype(cohorte_home):
     platform_name = platform.system()
@@ -176,7 +175,12 @@ def setup_jpype(cohorte_home):
     elif platform_name == 'Windows':
         jpype_file_name = "_jpype.pyd"
     elif platform_name == 'Linux':
-        jpype_file_name = "_jpype.cpython-34m.so"
+        # test the machine platform X86 or aarch to copy the correct one
+        if platform.machine() == "aarch64":
+            # arm 
+            jpype_file_name = "_jpype.cpython-35m-aarch64-linux-gnu.so"
+        else:
+            jpype_file_name = "_jpype.cpython-34m.so"
     
     jpype_file = os.path.join(repo_dir, jpype_file_name)
     if not os.path.exists(jpype_file):        
@@ -202,10 +206,11 @@ def setup_jpype(cohorte_home):
             if "32bit" in platform.architecture():
                 source_jpype_file = os.path.join(extra_dir, str(platform_name).lower(), "32", jpype_file_name)
             else:
-                source_jpype_file = os.path.join(extra_dir, str(platform_name).lower(), jpype_file_name)
+                # get architecture to diff intel from arm
+                machine_type = platform.machine().lower()
+                source_jpype_file = os.path.join(extra_dir, str(platform_name).lower(), machine_type, jpype_file_name)
             
             shutil.copyfile(source_jpype_file, os.path.join(repo_dir, jpype_file_name))        
-            
 
         except OSError:
             pass
