@@ -465,11 +465,9 @@
 									<target name="copy bundles from repo">
 										<copy todir="${basedir}/target/p2/sources/plugins">
 											<fileset dir="${basedir}/repo">
-												<include name="*.jar" />
+												<include name="**/*.jar" />
 											</fileset>
-											<fileset dir="${basedir}/repo/felix">
-												<include name="*.jar" />
-											</fileset>
+										
 										</copy>
 										<copy file="${basedir}/p2/local/category.xml" todir="${basedir}/target/p2/local" />
 									</target>
