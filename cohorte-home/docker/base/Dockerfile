@@ -39,15 +39,14 @@ ENV container docker
 RUN apt-get update
 
 
-RUN apt-get install -y software-properties-common python-software-properties
-RUN add-apt-repository -y ppa:jonathonf/python-3.6
 
 RUN apt-get update
 
 # installer d'autres outils
 RUN apt-get  install -y vim wget tar netcat-openbsd
 #RUN apt-get  install -y epel-release
-RUN apt-get  install -y python3.4  python
+RUN apt-get  install -y python3 python
+RUN ln -s 
 # to have systemctl command
 RUN apt-get install -y systemd
 

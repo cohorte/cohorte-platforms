@@ -29,6 +29,7 @@ import argparse
 import json
 import logging
 import os
+import platform
 import shutil
 import sys
 
@@ -650,10 +651,10 @@ def main(args=None):
     msg2 = ""
     # => should have python 3.6
     python_version_tuple = tuple(map(int, (PYTHON_VERSION.split("."))))
-   
-    if not python_version_tuple > (3, 4):
+    w_plateform = platform.system()
+    if w_plateform == "Windows" and not python_version_tuple > (3, 4) :
         msg2 = """
-        You should have Python 3.4 to launch  isolates!
+        You should have Python 3.4 to launch  isolates on windows !
         Your Python version is not yet supported!"""
             
     if version["distribution"] not in ("cohorte-python-distribution") and KIND_OF_ISOLATES != "python-only":
