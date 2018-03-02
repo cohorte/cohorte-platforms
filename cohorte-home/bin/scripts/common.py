@@ -29,12 +29,15 @@ Startup scripts common file.
 
 # Standard Library
 import json
+import logging
 import os
 import platform
 import shutil
 from stat import S_IROTH  # Read by others
 from stat import S_IRWXG  # Read, write, and execute by group
 from stat import S_IRWXU  # Read, write, and execute by owner
+import sys
+import time
 
 # Documentation strings format
 __docformat__ = "restructuredtext en"
@@ -166,6 +169,16 @@ def show_installed_dist_info(dist):
     print(msg.format(distribution, version, stage, timestamp, git_branch, git_commit, COHORTE_HOME))
 
     
+def copy_jpype(a_jpype_source_file, a_jpype_dest_file):
+    """ copy jpype regarding the platform"""
+    shutil.copyfile(a_jpype_source_file, a_jpype_dest_file)   
+
+     
+def control_jpype(a_jpype_dest_file):
+    """ control if jpype library has been copied """
+    return os.path.isfile(a_jpype_dest_file)
+
+    
 def setup_jpype(cohorte_home):
     platform_name = platform.system()
     # possible values: 'Linux', 'Windows', or 'Darwin'        
@@ -203,14 +216,38 @@ def setup_jpype(cohorte_home):
             shutil.copytree(os.path.join(extra_dir, "jpypex"),
                         os.path.join(repo_dir, "jpypex"))
             # MOD_BD_20170306 support win 32 bits
+            source_jpype_file = None
             if "32bit" in platform.architecture():
                 source_jpype_file = os.path.join(extra_dir, str(platform_name).lower(), "32", jpype_file_name)
             else:
                 # get architecture to diff intel from arm
-                machine_type = platform.machine().lower()
-                source_jpype_file = os.path.join(extra_dir, str(platform_name).lower(), machine_type, jpype_file_name)
-            
-            shutil.copyfile(source_jpype_file, os.path.join(repo_dir, jpype_file_name))        
+                if platform_name == 'Linux':
+                    machine_type = platform.machine().lower()
+                  
+                    source_jpype_file = os.path.join(extra_dir, str(platform_name).lower(), machine_type, jpype_file_name)
+                else:
+                    source_jpype_file = os.path.join(extra_dir, str(platform_name).lower(), jpype_file_name)
 
-        except OSError:
+            dest_jpype_file = os.path.join(repo_dir, jpype_file_name)
+            nb_try = 0
+            while nb_try < 3 and not control_jpype(dest_jpype_file):
+                copy_jpype(source_jpype_file, dest_jpype_file)
+                time.sleep(0.1)
+                nb_try = nb_try + 1
+            
+            if nb_try == 3 :
+                # jpype not copied we stop and og the error 
+                msgFailedJPype = """
+                =====================================================================================================
+                =                                                  ERROR 
+                = JPYPE LIBRARY NOT PRESENT IN COHORTE_HOME/repo 
+                = IMPOSSIBLE TO COPY THE FILE FROM {} 
+                = TO {} 
+                =====================================================================================================
+                """.format(source_jpype_file, dest_jpype_file)
+                print(msgFailedJPype)
+                sys.exit(1)
+                
+        except OSError as e:
+            print(e)
             pass
