@@ -206,7 +206,7 @@ def main(args=None):
                        help="Flag to activate verbose mode")
 
     group.add_argument("-d", "--debug", action="store_true",
-                       dest="is_debug", default=False,
+                       dest="is_debug", default=True,
                        help="Flag activate the debug mode")
 
     group.add_argument("--composition-file", action="store",
