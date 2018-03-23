@@ -1,4 +1,4 @@
-1.2.1
+211.2.1
 
 PYTHON DEPENDENCIES
 
@@ -11,7 +11,7 @@ PYTHON DEPENDENCIES
 
 JAVA DEPENDENCIES
 
-- org.cohorte.utilities:org.cohorte.utilities:1.0.19
+- org.cohorte.utilities:org.cohorte.utilities:1.0.21
 - org.cohorte.jabsorb:org.cohorte.jabsorb:1.1.0
 - org.cohorte.remote:cohorte-remote-services:1.2.1
 - org.cohorte.herald:cohorte-herald:1.0.1
