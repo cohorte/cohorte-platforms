@@ -28,7 +28,7 @@
 		<!-- ================ dependencies versions ================= -->
 		<!-- SHOULD ALSO UPDATE "requirements.txt" for python bundles -->
 		<jabsorb-version>1.1.0</jabsorb-version>		
-		<cohorte-utilities-version>1.0.20</cohorte-utilities-version>
+		<cohorte-utilities-version>1.0.21</cohorte-utilities-version>
 		<cohorte-remote-version>1.2.1</cohorte-remote-version>
 		<cohorte-herald-version>1.0.1</cohorte-herald-version>
 		<cohorte-runtime-version>1.2.1</cohorte-runtime-version>		
