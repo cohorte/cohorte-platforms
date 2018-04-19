@@ -10,10 +10,10 @@ cd $DIR/target
 
 for file in ./*
 do
-	curl -v --user "$USERNAME:$PASSWORD" --upload-file ${file} https://nrm.cohorte.tech/repository/felix-p2/${FELIX_VERSION}/${file}
+	curl -v --user "$USERNAME:$PASSWORD" --upload-file ${file} http://nexus:8081/repository/felix-p2/${FELIX_VERSION}/${file}
 done;
 
 for file in plugins/*
 do
-	curl -v --user "$USERNAME:$PASSWORD" --upload-file ${file} https://nrm.cohorte.tech/repository/felix-p2/${FELIX_VERSION}/${file}
+	curl -v --user "$USERNAME:$PASSWORD" --upload-file ${file} http://nexus:8081/repository/felix-p2/${FELIX_VERSION}/${file}
 done;
