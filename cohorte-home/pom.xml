@@ -1115,7 +1115,7 @@
 									<arguments>
 										<argument>root@forge.cohorte.tech</argument>
 										<argument>/var/volumes/jenkins/home/workspace/cohorte/cohorte-platforms/cohorte-home/tests/deploy_demo.sh</argument>
-										<argument>/var/volumes/jenkins/.ssh/id_rsa</argument>
+										<argument>/var/volumes/jenkins/home/.ssh/id_rsa</argument>
 									</arguments>
 									<workingDirectory>${basedir}/tests</workingDirectory>
 								</configuration>
