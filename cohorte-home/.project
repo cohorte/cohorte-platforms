@@ -3,6 +3,7 @@
 	<name>cohorte-home</name>
 	<comment></comment>
 	<projects>
+		<project>cohorte-runtime</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
