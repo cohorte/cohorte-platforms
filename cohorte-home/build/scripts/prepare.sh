@@ -46,7 +46,7 @@ fi
 
 # Set up the virtual environment
 VENV_NAME=tmp_venv
-INDEX_URL=http://devpi:3141/root/cohorte/+simple/
+INDEX_URL=http://devpi:3141/root/pypi/cohorte/+simple/
 rm -fr $VENV_NAME
 virtualenv $VENV_NAME -p python3 || return 1
 PATH=$WORKSPACE/$VENV_NAME/bin:$PATH
