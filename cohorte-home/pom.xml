@@ -610,7 +610,7 @@
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
 							</execution>
-							<execution>
+							<!--execution>
 								<id>prepare-arm</id>
 								<phase>generate-sources</phase>
 								<goals>
@@ -641,7 +641,7 @@
 									</arguments>
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
-							</execution>
+							</execution>-->
 						</executions>
 					</plugin>
 					
@@ -673,7 +673,7 @@
 								</configuration>
 							</execution>
 							
-							<execution>
+							<!--<execution>
 								<id>prepare-arm</id>
 								<phase>generate-sources</phase>
 								<goals>
@@ -703,7 +703,7 @@
 									</arguments>
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
-							</execution>
+							</execution>-->
 							
 						</executions>
 					</plugin>
@@ -1150,7 +1150,7 @@
 									<workingDirectory>${basedir}/tests</workingDirectory>
 								</configuration>
 							</execution>
-							<execution>
+							<!--<execution>
 								<id>test-arm</id>
 								<phase>test</phase>
 								<goals>
@@ -1164,7 +1164,7 @@
 									</arguments>
 									<workingDirectory>${basedir}/tests</workingDirectory>
 								</configuration>
-							</execution>
+							</execution>-->
 						</executions>
 					</plugin>
 				</plugins>
