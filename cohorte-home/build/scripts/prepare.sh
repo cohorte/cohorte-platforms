@@ -56,7 +56,7 @@ PATH=$WORKSPACE/$VENV_NAME/bin:$PATH
 PIP_HOST=devpi
 #--trusted-host $PIP_HOST
 pip --version
-pip install --force --upgrade --index-url=$INDEX_URL pip==8.1.2 setuptools  #|| return 2
+pip install --force --upgrade --index-url=$INDEX_URL setuptools  #|| return 2
 pip --version 
 pip install --upgrade --index-url=$INDEX_URL --trusted-host=$PIP_HOST wheel #|| return 2
 pip install --upgrade --index-url=$INDEX_URL --trusted-host=$PIP_HOST nose #|| return 2
