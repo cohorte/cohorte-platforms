@@ -13,7 +13,7 @@ FROM ubuntu:16.04
 # - wget
 # - tar
 # - nc
-# - python 3.6
+# - python 3.4
 #
 #-----------------------------------------------------------------------------
 
@@ -42,10 +42,26 @@ RUN apt-get update
 
 RUN apt-get update
 
-# installer d'autres outils
-RUN apt-get  install -y vim wget tar netcat-openbsd
+# installer d'autres outils and python3.4 for ubuntu 16.04 @see https://github.com/mhbashari/Install-Python3.4-on-Ubuntu-16.04
+RUN apt-get  install -y curl vim wget tar netcat-openbsd
 #RUN apt-get  install -y epel-release
-RUN apt-get  install -y python3 python
+RUN apt-get  remove -y python3 python
+RUN apt-get install -y build-essential checkinstall
+RUN apt-get install -y libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev
+RUN apt-get install -y libssl-dev openssl
+RUN apt install -y lzma lzma-dev liblzma-dev
+RUN wget https://www.python.org/ftp/python/3.4.4/Python-3.4.4.tgz
+RUN tar xzf Python-3.4.4.tgz
+RUN cd Python-3.4.4; ./configure --prefix=/opt/python3.4 --with-zlib-dir=/usr/local/lib/ --with-ensurepip=install
+RUN cd Python-3.4.4 ; make altinstall
+
+RUN ln -s /opt/python3.4/bin/python3.4 /usr/bin/python
+RUN ln -s /opt/python3.4/bin/python3.4 /usr/bin/python3
+RUN ln -s /opt/python3.4/bin/python3.4 /usr/bin/python3.4
+RUN ln -s /opt/python3.4/bin/pip3 /usr/bin/pip3
+RUN ln -s /opt/python3.4/bin/pip3 /usr/bin/pip
+
+RUN ln -s /opt/python3.4/bin/pip3.4 /usr/bin/pip3.4
 
 # to have systemctl command
 RUN apt-get install -y systemd
@@ -57,6 +73,11 @@ COPY ./jdk/* /opt/java/
 RUN chmod +x /opt/java/bin/*
    
 RUN systemctl disable getty@tty1.service
+RUN systemctl disable getty@tty2.service
+RUN systemctl disable getty@tty3.service
+RUN systemctl disable getty@tty4.service
+RUN systemctl disable getty@tty5.service
+RUN systemctl disable getty@tty6.service
 
 # Test de java
 RUN java -version
