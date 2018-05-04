@@ -46,7 +46,7 @@ RUN apt-get update
 RUN apt-get  install -y vim wget tar netcat-openbsd
 #RUN apt-get  install -y epel-release
 RUN apt-get  install -y python3 python
-RUN ln -s 
+
 # to have systemctl command
 RUN apt-get install -y systemd
 
@@ -56,6 +56,7 @@ RUN mkdir -p $JAVA_HOME
 COPY ./jdk/* /opt/java/
 RUN chmod +x /opt/java/bin/*
    
+RUN systemctl disable getty@tty1.service
 
 # Test de java
 RUN java -version
