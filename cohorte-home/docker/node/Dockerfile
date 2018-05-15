@@ -29,6 +29,9 @@ RUN pip3 install jsoncomment simpleeval
 
 RUN chmod +x /opt/boot.sh
 
+# dirty solution to solve agetty process to run 
+RUN  cp /bin/true /sbin/agetty
+
 RUN systemctl disable getty@tty1.service
 RUN systemctl stop getty@tty1.service
 RUN systemctl disable getty@tty2.service
