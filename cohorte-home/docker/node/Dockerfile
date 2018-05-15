@@ -29,6 +29,12 @@ RUN pip3 install jsoncomment simpleeval
 
 RUN chmod +x /opt/boot.sh
 
+RUN systemctl disable getty@tty1.service
+RUN systemctl disable getty@tty2.service
+RUN systemctl disable getty@tty3.service
+RUN systemctl disable getty@tty4.service
+RUN systemctl disable getty@tty5.service
+RUN systemctl disable getty@tty6.service
 RUN systemctl enable cohorte.service
 
 ENTRYPOINT ["/opt/boot.sh"]

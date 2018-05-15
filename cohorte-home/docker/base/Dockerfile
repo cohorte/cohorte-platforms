@@ -58,10 +58,9 @@ RUN cd Python-3.4.4 ; make altinstall
 RUN ln -s /opt/python3.4/bin/python3.4 /usr/bin/python
 RUN ln -s /opt/python3.4/bin/python3.4 /usr/bin/python3
 RUN ln -s /opt/python3.4/bin/python3.4 /usr/bin/python3.4
-RUN ln -s /opt/python3.4/bin/pip3 /usr/bin/pip3
-RUN ln -s /opt/python3.4/bin/pip3 /usr/bin/pip
-
-RUN ln -s /opt/python3.4/bin/pip3.4 /usr/bin/pip3.4
+RUN ln -s /opt/python3.4/bin/pip3.4 /usr/bin/pip3
+RUN ln -s /opt/python3.4/bin/pip3.4 /usr/bin/pip
+RUN ln -s /opt/python3.4/bin/pip3.4 /usr/bin/pip3.4s
 
 # to have systemctl command
 RUN apt-get install -y systemd
@@ -72,12 +71,7 @@ RUN mkdir -p $JAVA_HOME
 COPY ./jdk/* /opt/java/
 RUN chmod +x /opt/java/bin/*
    
-RUN systemctl disable getty@tty1.service
-RUN systemctl disable getty@tty2.service
-RUN systemctl disable getty@tty3.service
-RUN systemctl disable getty@tty4.service
-RUN systemctl disable getty@tty5.service
-RUN systemctl disable getty@tty6.service
+
 
 # Test de java
 RUN java -version
