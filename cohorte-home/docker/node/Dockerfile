@@ -26,11 +26,10 @@ RUN chmod +x /opt/init*.sh
 
 # install simpleeval and jsoncomment
 RUN pip3 install jsoncomment simpleeval
+RUN apt-get install -y psmisc
 
 RUN chmod +x /opt/boot.sh
 
-# dirty solution to solve agetty process to run 
-RUN  cp /bin/true /sbin/agetty
 
 RUN systemctl disable getty@tty1.service
 RUN systemctl stop getty@tty1.service
