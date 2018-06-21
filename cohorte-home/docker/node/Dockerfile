@@ -32,17 +32,11 @@ RUN chmod +x /opt/boot.sh
 
 
 RUN systemctl disable getty@tty1.service
-RUN systemctl stop getty@tty1.service
 RUN systemctl disable getty@tty2.service
-RUN systemctl stop getty@tty2.service
 RUN systemctl disable getty@tty3.service
-RUN systemctl stop getty@tty3.service
 RUN systemctl disable getty@tty4.service
-RUN systemctl stop getty@tty4.service
 RUN systemctl disable getty@tty5.service
-RUN systemctl stop getty@tty5.service
 RUN systemctl disable getty@tty6.service
-RUN systemctl stop getty@tty6.service
 RUN killall agetty
 
 RUN systemctl enable cohorte.service
