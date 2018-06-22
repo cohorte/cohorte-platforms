@@ -37,7 +37,6 @@ RUN systemctl disable getty@tty3.service
 RUN systemctl disable getty@tty4.service
 RUN systemctl disable getty@tty5.service
 RUN systemctl disable getty@tty6.service
-RUN killall agetty
 
 RUN systemctl enable cohorte.service
 
