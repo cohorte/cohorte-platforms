@@ -666,6 +666,7 @@
 								<configuration>
 									<executable>ssh</executable>
 									<arguments>
+										<argument>-o StrictHostKeyChecking=no -i /var/volumes/jenkins/home/id_rsa</argument>
 										<argument>root@pinea.cohorte.tech</argument>
 										<argument>/var/volumes/jenkins/home/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_base.sh ${DOCKER_USER} ${DOCKER_PASS}</argument>
 									</arguments>
@@ -796,6 +797,7 @@
 								<configuration>
 									<executable>ssh</executable>
 									<arguments>
+										<argument>-o StrictHostKeyChecking=no -i /var/volumes/jenkins/home/id_rsa</argument>
 										<argument>root@pinea.cohorte.tech</argument>
 										<argument>/var/volumes/jenkins/home/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_runtime.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS}</argument>
 									</arguments>
@@ -924,6 +926,7 @@
 								<configuration>
 									<executable>ssh</executable>
 									<arguments>
+										<argument>-o StrictHostKeyChecking=no -i /var/volumes/jenkins/home/id_rsa</argument>
 										<argument>root@pinea.cohorte.tech</argument>
 										<argument>/var/volumes/jenkins/home/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_node.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS} </argument>
 									</arguments>
@@ -1052,6 +1055,7 @@
 								<configuration>
 									<executable>ssh</executable>
 									<arguments>
+										<argument>-o StrictHostKeyChecking=no -i /var/volumes/jenkins/home/id_rsa</argument>
 										<argument>root@pinea.cohorte.tech</argument>
 										<argument>/var/volumes/jenkins/home/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_demo.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS}</argument>
 									</arguments>
@@ -1113,6 +1117,7 @@
 								<configuration>
 									<executable>ssh</executable>
 									<arguments>
+										<argument>-o StrictHostKeyChecking=no -i /var/volumes/jenkins/home/id_rsa</argument>
 										<argument>root@pinea.cohorte.tech</argument>
 										<argument>/var/volumes/jenkins/home/workspace/cohorte/cohorte-platforms/cohorte-home/tests/deploy_demo.sh</argument>
 										<argument>/var/volumes/jenkins/home/.ssh/id_rsa</argument>
@@ -1129,6 +1134,7 @@
 								<configuration>
 									<executable>ssh</executable>
 									<arguments>
+										<argument>-o StrictHostKeyChecking=no -i /var/volumes/jenkins/home/id_rsa</argument>
 										<argument>root@pinea.cohorte.tech</argument>
 										<argument>/var/volumes/jenkins/home/workspace/cohorte/cohorte-platforms/cohorte-home/tests/wait_demo.sh</argument>
 									</arguments>
@@ -1144,6 +1150,7 @@
 								<configuration>
 									<executable>ssh</executable>
 									<arguments>
+										<argument>-o StrictHostKeyChecking=no -i /var/volumes/jenkins/home/id_rsa</argument>
 										<argument>root@pinea.cohorte.tech</argument>
 										<argument>/var/volumes/jenkins/home/workspace/cohorte/cohorte-platforms/cohorte-home/tests/test_demo.sh CohortePlatform_Demo.postman_collection.json api-dev.cohorte.tech</argument>
 									</arguments>
