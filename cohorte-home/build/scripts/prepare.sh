@@ -46,14 +46,14 @@ fi
 
 # Set up the virtual environment
 VENV_NAME=tmp_venv
-INDEX_URL=http://devpi.cohorte.tech:3141/root/cohorte/+simple/
+INDEX_URL=http://devpi.cohorte.tech/root/cohorte/+simple/
 rm -fr $VENV_NAME
 virtualenv $VENV_NAME -p python || return 1
 PATH=$WORKSPACE/$VENV_NAME/bin:$PATH
 . $VENV_NAME/bin/activate
 
 # Install test and deployment tools
-PIP_HOST=devpi
+PIP_HOST=devpi.cohorte.tech
 #--trusted-host $PIP_HOST
 pip --version
 pip install --force --upgrade --index-url=$INDEX_URL pip==8.1.2 setuptools  #|| return 2
