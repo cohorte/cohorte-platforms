@@ -46,7 +46,7 @@ fi
 
 # Set up the virtual environment
 VENV_NAME=tmp_venv
-INDEX_URL=http://devpi:3141/jenkins/cohorte/+simple/
+INDEX_URL=http://devpi.cohorte.tech:3141/root/cohorte/+simple/
 rm -fr $VENV_NAME
 virtualenv $VENV_NAME -p python3 || return 1
 PATH=$WORKSPACE/$VENV_NAME/bin:$PATH
@@ -78,6 +78,7 @@ cp -r build/extra/windows/* repo
 fi
 
 # Install dependencies
+pip install --upgrade -r requirements_ipopo.txt
 pip install --upgrade --index-url=$INDEX_URL --trusted-host=$PIP_HOST -r requirements.txt
 
 # Copy dependencies to repo
