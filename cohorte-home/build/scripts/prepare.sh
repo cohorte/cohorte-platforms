@@ -92,7 +92,8 @@ mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/sleekxmpp repo
 ### requests
 mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/requests repo
 ### Herald
-mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/herald repo
+#mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/herald repo
+cp -r /var/jenkins_home/workspace/cohorte/cohorte-herald/python/herald repo/
 
 ### JPYPE
 #if test "$1" != "windows"; then
@@ -105,13 +106,14 @@ mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/herald repo
 ### iPOPO
 mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/pelix repo
 ### Cohorte Python
-mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/cohorte repo
+#mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/cohorte repo
+cp -r /var/jenkins_home/workspace/cohorte/cohorte-runtime/python/cohorte repo/
 ### Cohorte Webadmin
 #mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/webadmin repo
 
 # Clean up
 deactivate
-#rm -fr $VENV_NAME
+rm -fr $VENV_NAME
 
 echo "[INFO] Python dependencies are installed on repo"
 
