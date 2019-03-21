@@ -48,7 +48,7 @@ fi
 VENV_NAME=tmp_venv
 INDEX_URL=http://devpi.cohorte.tech:3141/root/cohorte/+simple/
 rm -fr $VENV_NAME
-virtualenv $VENV_NAME -p python3 || return 1
+virtualenv $VENV_NAME -p python || return 1
 PATH=$WORKSPACE/$VENV_NAME/bin:$PATH
 . $VENV_NAME/bin/activate
 
