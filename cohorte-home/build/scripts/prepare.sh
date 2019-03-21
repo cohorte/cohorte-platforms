@@ -86,13 +86,13 @@ pip install --upgrade --index-url=$INDEX_URL --trusted-host=$PIP_HOST -r require
 ## copy python packages
 PYTHON_INSTALLED=`ls $VENV_NAME/lib`
 ### Jsonrpclib
-mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/jsonrpclib repo
+mv /usr/local/lib/python2.7/dist-packages/jsonrpclib repo
 ### sleekxmpp
-mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/sleekxmpp repo
+mv /usr/local/lib/python2.7/dist-packages/sleekxmpp repo
 ### requests
-mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/requests repo
+mv /usr/local/lib/python2.7/dist-packages/requests repo
 ### Herald
-mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/herald repo
+mv /usr/local/lib/python2.7/dist-packages/herald repo
 
 ### JPYPE
 #if test "$1" != "windows"; then
@@ -103,9 +103,9 @@ mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/herald repo
 #	fi
 #fi
 ### iPOPO
-mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/pelix repo
+mv /usr/local/lib/python2.7/dist-packages/pelix repo
 ### Cohorte Python
-mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/cohorte repo
+mv /usr/local/lib/python2.7/dist-packages/cohorte repo
 ### Cohorte Webadmin
 #mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/webadmin repo
 
