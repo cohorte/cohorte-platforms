@@ -86,13 +86,13 @@ pip install --upgrade --index-url=$INDEX_URL --trusted-host=$PIP_HOST -r require
 ## copy python packages
 PYTHON_INSTALLED=`ls $VENV_NAME/lib`
 ### Jsonrpclib
-mv /usr/local/lib/python2.7/dist-packages/jsonrpclib repo
+mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/jsonrpclib repo
 ### sleekxmpp
-mv /usr/local/lib/python2.7/dist-packages/sleekxmpp repo
+mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/sleekxmpp repo
 ### requests
-mv /usr/local/lib/python2.7/dist-packages/requests repo
+mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/requests repo
 ### Herald
-mv /usr/local/lib/python2.7/dist-packages/herald repo
+mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/herald repo
 
 ### JPYPE
 #if test "$1" != "windows"; then
@@ -103,15 +103,15 @@ mv /usr/local/lib/python2.7/dist-packages/herald repo
 #	fi
 #fi
 ### iPOPO
-mv /usr/local/lib/python2.7/dist-packages/pelix repo
+mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/pelix repo
 ### Cohorte Python
-mv /usr/local/lib/python2.7/dist-packages/cohorte repo
+mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/cohorte repo
 ### Cohorte Webadmin
 #mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/webadmin repo
 
 # Clean up
 deactivate
-rm -fr $VENV_NAME
+#rm -fr $VENV_NAME
 
 echo "[INFO] Python dependencies are installed on repo"
 
