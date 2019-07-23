@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 
 #-----------------------------------------------------------------------------
 # Cohorte Base image X86 for cohorte device
@@ -21,7 +21,6 @@ FROM ubuntu:16.04
 MAINTAINER "Bassem Debbabi" <bassem.debbabi@cohorte-technologies.com>
 
 
-RUN cp /sbin/init /sbin/init.real
 # force rebuilind all this Dockerfile by changing the date
 ENV REFRESHED_AT 20161013_1730
 ENV JAVA_VERSION 8u151
@@ -40,7 +39,7 @@ RUN apt-get update
 
 
 
-RUN apt-get update
+RUN apt-get install -y tzdata 
 
 # installer d'autres outils and python3.4 for ubuntu 16.04 @see https://github.com/mhbashari/Install-Python3.4-on-Ubuntu-16.04
 RUN apt-get  install -y curl vim wget tar netcat-openbsd
