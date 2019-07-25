@@ -672,7 +672,21 @@
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
 							</execution>
-							
+							<execution>
+								<id>prepare-device</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>ssh</executable>
+									<arguments>
+										<argument>root@pinea.cohorte.tech</argument>
+										<argument>/var/volumes/jenkins/home/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_base-device.sh ${DOCKER_USER} ${DOCKER_PASS}</argument>
+									</arguments>
+									<workingDirectory>${basedir}/docker</workingDirectory>
+								</configuration>
+							</execution>
 							<!--<execution>
 								<id>prepare-arm</id>
 								<phase>generate-sources</phase>
@@ -689,21 +703,7 @@
 								</configuration>
 							</execution>
 							
-							<execution>
-								<id>prepare-device</id>
-								<phase>generate-sources</phase>
-								<goals>
-									<goal>exec</goal>
-								</goals>
-								<configuration>
-									<executable>ssh</executable>
-									<arguments>
-										<argument>root@pinea.cohorte.tech</argument>
-										<argument>/var/volumes/jenkins/home/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_base-device.sh ${DOCKER_USER} ${DOCKER_PASS}</argument>
-									</arguments>
-									<workingDirectory>${basedir}/docker</workingDirectory>
-								</configuration>
-							</execution>-->
+							-->
 							
 						</executions>
 					</plugin>
@@ -737,6 +737,23 @@
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
 							</execution>
+							<execution>
+								<id>prepare-device</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>sh</executable>
+									<arguments>
+										<argument>build_runtime-device.sh</argument>
+										<argument>${project.version}</argument>
+										<argument>${DOCKER_USER}</argument>
+										<argument>${DOCKER_PASS}</argument>										
+									</arguments>
+									<workingDirectory>${basedir}/docker</workingDirectory>
+								</configuration>
+							</execution>
 							<!-- <execution>
 								<id>prepare-arm</id>
 								<phase>generate-sources</phase>
@@ -755,23 +772,7 @@
 								</configuration>
 							</execution>
 							
-							<execution>
-								<id>prepare-device</id>
-								<phase>generate-sources</phase>
-								<goals>
-									<goal>exec</goal>
-								</goals>
-								<configuration>
-									<executable>sh</executable>
-									<arguments>
-										<argument>build_runtime-device.sh</argument>
-										<argument>${project.version}</argument>
-										<argument>${DOCKER_USER}</argument>
-										<argument>${DOCKER_PASS}</argument>										
-									</arguments>
-									<workingDirectory>${basedir}/docker</workingDirectory>
-								</configuration>
-							</execution> -->
+							 -->
 						</executions>
 					</plugin>
 					
@@ -802,6 +803,21 @@
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
 							</execution>
+							<execution>
+								<id>prepare-device</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>ssh</executable>
+									<arguments>
+										<argument>root@pinea.cohorte.tech</argument>
+										<argument>/var/volumes/jenkins/home/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_runtime-device.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS}</argument>
+									</arguments>
+									<workingDirectory>${basedir}/docker</workingDirectory>
+								</configuration>
+							</execution> 
 							<!-- <execution>
 								<id>prepare-arm</id>
 								<phase>generate-sources</phase>
@@ -817,21 +833,7 @@
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
 							</execution>
-							<execution>
-								<id>prepare-device</id>
-								<phase>generate-sources</phase>
-								<goals>
-									<goal>exec</goal>
-								</goals>
-								<configuration>
-									<executable>ssh</executable>
-									<arguments>
-										<argument>root@pinea.cohorte.tech</argument>
-										<argument>/var/volumes/jenkins/home/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_runtime-device.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS}</argument>
-									</arguments>
-									<workingDirectory>${basedir}/docker</workingDirectory>
-								</configuration>
-							</execution> -->
+							-->
 						</executions>
 					</plugin>
 				
@@ -864,7 +866,23 @@
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
 							</execution>
-							
+							<execution>
+								<id>prepare-device</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>bash</executable>
+									<arguments>
+										<argument>build_node-device.sh</argument>
+										<argument>${project.version}</argument>
+										<argument>${DOCKER_USER}</argument>
+										<argument>${DOCKER_PASS}</argument>										
+									</arguments>
+									<workingDirectory>${basedir}/docker</workingDirectory>
+								</configuration>
+							</execution>
 							<!-- <execution>
 								<id>prepare-arm</id>
 								<phase>generate-sources</phase>
@@ -883,23 +901,7 @@
 								</configuration>
 							</execution>
 							
-							<execution>
-								<id>prepare-device</id>
-								<phase>generate-sources</phase>
-								<goals>
-									<goal>exec</goal>
-								</goals>
-								<configuration>
-									<executable>bash</executable>
-									<arguments>
-										<argument>build_node-device.sh</argument>
-										<argument>${project.version}</argument>
-										<argument>${DOCKER_USER}</argument>
-										<argument>${DOCKER_PASS}</argument>										
-									</arguments>
-									<workingDirectory>${basedir}/docker</workingDirectory>
-								</configuration>
-							</execution> -->
+							 -->
 						</executions>
 					</plugin>
 					
@@ -930,7 +932,21 @@
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
 							</execution>
-								
+							<execution>
+								<id>prepare-device</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>ssh</executable>
+									<arguments>
+										<argument>root@pinea.cohorte.tech</argument>
+										<argument>/var/volumes/jenkins/home/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_node-device.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS} </argument>
+									</arguments>
+									<workingDirectory>${basedir}/docker</workingDirectory>
+								</configuration>
+							</execution> 
 							<!-- <execution>
 								<id>prepare-arm</id>
 								<phase>generate-sources</phase>
@@ -947,21 +963,7 @@
 								</configuration>
 							</execution>
 							
-							<execution>
-								<id>prepare-device</id>
-								<phase>generate-sources</phase>
-								<goals>
-									<goal>exec</goal>
-								</goals>
-								<configuration>
-									<executable>ssh</executable>
-									<arguments>
-										<argument>root@pinea.cohorte.tech</argument>
-										<argument>/var/volumes/jenkins/home/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_node-device.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS} </argument>
-									</arguments>
-									<workingDirectory>${basedir}/docker</workingDirectory>
-								</configuration>
-							</execution> -->
+							-->
 						</executions>
 					</plugin>
 					

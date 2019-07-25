@@ -21,7 +21,10 @@ then
         echo "Building $DOCKER_FULL_NAME version .."
         echo "Tag=$DOCKER_FULL_NAME"
         echo "Tag=$DOCKER_FULL_NAME_LATEST"
-        docker build --force-rm=true --pull=true --tag="$DOCKER_FULL_NAME" --tag="$DOCKER_FULL_NAME_LATEST" -f Dockerfile "$(pwd)"        
+        docker build --force-rm=true --pull=true --tag="$DOCKER_FULL_NAME" --tag="$DOCKER_FULL_NAME_LATEST" -f Dockerfile "$(pwd)"    
+
+        docker history "$DOCKER_FULL_NAME"
+        docker images | grep "$DOCKER_FULL_NAME"
 
         if [ "$?" -eq 0 ]
         then
