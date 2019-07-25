@@ -17,16 +17,16 @@ ENV COHORTE_DATA /opt/data
 
 RUN mkdir -p $COHORTE_BASE
 RUN mkdir -p $COHORTE_DATA
+RUN apt update
+RUN  apt install python3-pip -y
 COPY ./install/run_service /opt
 COPY ./install/boot.sh /opt
 COPY ./install/cohorte.service ./etc/systemd/system/cohorte.service
-COPY ./install/get-pip.py /tmp/
 COPY ./install/init_* /opt/
 
 RUN chmod +x /opt/init*.sh
 
 # install pip 
-RUN python3 /tmp/get-pip.py 
 RUN pip3 install jsoncomment simpleeval
 
 RUN chmod +x /opt/boot.sh

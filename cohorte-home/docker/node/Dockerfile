@@ -27,7 +27,7 @@ COPY ./install/init_* /opt/
 RUN chmod +x /opt/init*.sh
 
 # install simpleeval and jsoncomment
-
+RUN pip3 install simpleeval jsoncomment
 RUN apt-get install -y psmisc
 
 RUN chmod +x /opt/boot.sh
