@@ -22,20 +22,18 @@ MAINTAINER "Bassem Debbabi" <bassem.debbabi@cohorte-technologies.com>
 
 
 # force rebuilind all this Dockerfile by changing the date
-ENV REFRESHED_AT 20161013_1730
-ENV JAVA_VERSION 8u151
-ENV JAVA_LONG_VERSION 8u151-b12
-ENV JAVA_HOME /opt/java
-ENV PATH $JAVA_HOME/bin:$PATH
+
 
 # informer systemd qu'il s'execute sur un conteneur docker
 ENV container docker
-
 
 # installation du systemd au lieu du fakesystemd
 # ceci est necessaire pour pouvoir lancer mysql et openldap comme un service OS
 # avec les commandes "service" et "systemctl".
 RUN apt-get update
+RUN apt-get install -y java-common libasound2 libx11-6 libxau6 libxcb1 libxdmcp6 libxext6 libxi6 libxrender1 libxtst6 libfontconfig1
+RUN wget https://cdn.azul.com/zulu/bin/zulu8.42.0.23-ca-jdk8.0.232-linux_amd64.deb
+RUN dpkg -i *.deb
 
 RUN apt-get install -y tzdata 
 
@@ -66,11 +64,8 @@ RUN ln -s /opt/python3.4/bin/pip3.4 /usr/bin/pip3.4s
 
 # to have systemctl command
 RUN apt-get install -y systemd
-# Installer Java 8 (Oracle)
-# inspired from: https://hub.docker.com/r/cooniur/java/
-RUN mkdir -p $JAVA_HOME
-COPY ./jdk/* /opt/java/
-RUN chmod +x /opt/java/bin/*
+
+
 RUN cd Python-3.4.4 ; make clean
 
 
