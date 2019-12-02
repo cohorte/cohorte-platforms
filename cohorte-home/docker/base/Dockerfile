@@ -30,9 +30,9 @@ ENV container docker
 # installation du systemd au lieu du fakesystemd
 # ceci est necessaire pour pouvoir lancer mysql et openldap comme un service OS
 # avec les commandes "service" et "systemctl".
-RUN apt-get  install -y curl vim wget tar netcat-openbsd
 
 RUN apt-get update
+RUN apt-get  install -y curl vim wget tar netcat-openbsd
 RUN apt-get install -y java-common libasound2 libx11-6 libxau6 libxcb1 libxdmcp6 libxext6 libxi6 libxrender1 libxtst6 libfontconfig1
 RUN wget https://cdn.azul.com/zulu/bin/zulu8.42.0.23-ca-jdk8.0.232-linux_amd64.deb
 RUN dpkg -i *.deb
