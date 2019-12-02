@@ -44,7 +44,7 @@ RUN apt-get  install -y curl vim wget tar netcat-openbsd
 
 RUN apt-get  remove -y python3 python
 
-RUN apt-get install -y build-essential checkinstall libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libssl-dev openssl lzma lzma-dev liblzma-dev
+RUN apt-get install -y build-essential checkinstall libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libssl-dev openssl lzma lzma-dev liblzma-dev make
 
 
 RUN wget https://www.python.org/ftp/python/3.4.4/Python-3.4.4.tgz
