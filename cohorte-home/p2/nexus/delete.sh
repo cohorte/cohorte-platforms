@@ -18,4 +18,4 @@ curl -v -u $user:$pass --header "Content-Type: application/json" 'https://nrm.co
 
 printf "Running $name script..."
 
-curl -v -X POST -u $user:$pass --header "Content-Type: text/plain" 'https://nrm.cohorte.tech/service/rest/v1/script/$name/run" -d $repo
+curl -v -X POST -u $user:$pass --header "Content-Type: text/plain" "https://nrm.cohorte.tech/service/rest/v1/script/$name/run" -d $repo
