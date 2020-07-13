@@ -1,4 +1,4 @@
-FROM cohorte/runtime:latest
+FROM cohorte/runtime:1.3.2
 
 #-----------------------------------------------------------------------------
 # Cohorte Runtime image.
@@ -17,19 +17,28 @@ ENV COHORTE_DATA /opt/data
 
 RUN mkdir -p $COHORTE_BASE
 RUN mkdir -p $COHORTE_DATA
+# not possible to have pip 3.4 ith ubuntu 18.04
+
 COPY ./install/run_service /opt
 COPY ./install/boot.sh /opt
 COPY ./install/cohorte.service ./etc/systemd/system/cohorte.service
-COPY ./install/get-pip.py /tmp/
 COPY ./install/init_* /opt/
 
 RUN chmod +x /opt/init*.sh
 
-# install pip 
-RUN python3 /tmp/get-pip.py 
-RUN pip3 install jsoncomment simpleeval
+# install simpleeval and jsoncomment
+RUN pip3 install simpleeval jsoncomment
+RUN apt-get install -y psmisc
 
 RUN chmod +x /opt/boot.sh
+
+
+RUN systemctl disable getty@tty1.service
+RUN systemctl disable getty@tty2.service
+RUN systemctl disable getty@tty3.service
+RUN systemctl disable getty@tty4.service
+RUN systemctl disable getty@tty5.service
+RUN systemctl disable getty@tty6.service
 
 RUN systemctl enable cohorte.service
 

@@ -143,7 +143,7 @@ def main(argv=None):
     # Parse arguments
     parser = argparse.ArgumentParser(description="Package download utility")
     parser.add_argument("--index", metavar="URL", dest="index_url",
-                        default="http://forge.cohorte.tech:7080/devpi/jenkins/cohorte/+simple/",
+                        default="http://devpi:3141/devpi/pipy/cohorte/+simple/",
                         help="The PyPI index URL to use")
     parser.add_argument("--package", metavar="NAME", dest="package",
                         required=True, help="Name of the package to install")

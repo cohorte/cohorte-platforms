@@ -610,7 +610,7 @@
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
 							</execution>
-							<execution>
+							<!--execution>
 								<id>prepare-arm</id>
 								<phase>generate-sources</phase>
 								<goals>
@@ -641,7 +641,7 @@
 									</arguments>
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
-							</execution>
+							</execution>-->
 						</executions>
 					</plugin>
 					
@@ -666,29 +666,12 @@
 								<configuration>
 									<executable>ssh</executable>
 									<arguments>
-										<argument>root@forge.cohorte.tech</argument>
-										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_base.sh ${DOCKER_USER} ${DOCKER_PASS}</argument>
+										<argument>root@pinea.cohorte.tech</argument>
+										<argument>/var/volumes/jenkins/home/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_base.sh ${DOCKER_USER} ${DOCKER_PASS}</argument>
 									</arguments>
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
 							</execution>
-							
-							<execution>
-								<id>prepare-arm</id>
-								<phase>generate-sources</phase>
-								<goals>
-									<goal>exec</goal>
-								</goals>
-								<configuration>
-									<executable>ssh</executable>
-									<arguments>
-										<argument>root@forge.cohorte.tech</argument>
-										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_base-arm64v8.sh ${DOCKER_USER} ${DOCKER_PASS} ${DOCKER_ARM_HOST} /var/volumes/jenkins/.ssh/id_rsa</argument>
-									</arguments>
-									<workingDirectory>${basedir}/docker</workingDirectory>
-								</configuration>
-							</execution>
-							
 							<execution>
 								<id>prepare-device</id>
 								<phase>generate-sources</phase>
@@ -698,12 +681,29 @@
 								<configuration>
 									<executable>ssh</executable>
 									<arguments>
-										<argument>root@forge.cohorte.tech</argument>
-										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_base-device.sh ${DOCKER_USER} ${DOCKER_PASS}</argument>
+										<argument>root@pinea.cohorte.tech</argument>
+										<argument>/var/volumes/jenkins/home/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_base-device.sh ${DOCKER_USER} ${DOCKER_PASS}</argument>
 									</arguments>
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
 							</execution>
+							<!--<execution>
+								<id>prepare-arm</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>ssh</executable>
+									<arguments>
+										<argument>root@pinea.cohorte.tech</argument>
+										<argument>/var/volumes/jenkins/home/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_base-arm64v8.sh ${DOCKER_USER} ${DOCKER_PASS} ${DOCKER_ARM_HOST} /var/volumes/jenkins/.ssh/id_rsa</argument>
+									</arguments>
+									<workingDirectory>${basedir}/docker</workingDirectory>
+								</configuration>
+							</execution>
+							
+							-->
 							
 						</executions>
 					</plugin>
@@ -737,6 +737,23 @@
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
 							</execution>
+							<execution>
+								<id>prepare-device</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>sh</executable>
+									<arguments>
+										<argument>build_runtime-device.sh</argument>
+										<argument>${project.version}</argument>
+										<argument>${DOCKER_USER}</argument>
+										<argument>${DOCKER_PASS}</argument>										
+									</arguments>
+									<workingDirectory>${basedir}/docker</workingDirectory>
+								</configuration>
+							</execution>
 							<!-- <execution>
 								<id>prepare-arm</id>
 								<phase>generate-sources</phase>
@@ -755,23 +772,7 @@
 								</configuration>
 							</execution>
 							
-							<execution>
-								<id>prepare-device</id>
-								<phase>generate-sources</phase>
-								<goals>
-									<goal>exec</goal>
-								</goals>
-								<configuration>
-									<executable>sh</executable>
-									<arguments>
-										<argument>build_runtime-device.sh</argument>
-										<argument>${project.version}</argument>
-										<argument>${DOCKER_USER}</argument>
-										<argument>${DOCKER_PASS}</argument>										
-									</arguments>
-									<workingDirectory>${basedir}/docker</workingDirectory>
-								</configuration>
-							</execution> -->
+							 -->
 						</executions>
 					</plugin>
 					
@@ -796,23 +797,8 @@
 								<configuration>
 									<executable>ssh</executable>
 									<arguments>
-										<argument>root@forge.cohorte.tech</argument>
-										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_runtime.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS}</argument>
-									</arguments>
-									<workingDirectory>${basedir}/docker</workingDirectory>
-								</configuration>
-							</execution>
-							<!-- <execution>
-								<id>prepare-arm</id>
-								<phase>generate-sources</phase>
-								<goals>
-									<goal>exec</goal>
-								</goals>
-								<configuration>
-									<executable>ssh</executable>
-									<arguments>
-										<argument>root@forge.cohorte.tech</argument>
-										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_runtime-arm64v8.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS} ${DOCKER_ARM_HOST} /var/volumes/jenkins/.ssh/id_rsa</argument>
+										<argument>root@pinea.cohorte.tech</argument>
+										<argument>/var/volumes/jenkins/home/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_runtime.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS}</argument>
 									</arguments>
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
@@ -826,12 +812,28 @@
 								<configuration>
 									<executable>ssh</executable>
 									<arguments>
-										<argument>root@forge.cohorte.tech</argument>
-										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_runtime-device.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS}</argument>
+										<argument>root@pinea.cohorte.tech</argument>
+										<argument>/var/volumes/jenkins/home/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_runtime-device.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS}</argument>
 									</arguments>
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
-							</execution> -->
+							</execution> 
+							<!-- <execution>
+								<id>prepare-arm</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>ssh</executable>
+									<arguments>
+										<argument>root@pinea.cohorte.tech</argument>
+										<argument>/var/volumes/jenkins/home/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_runtime-arm64v8.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS} ${DOCKER_ARM_HOST} /var/volumes/jenkins/.ssh/id_rsa</argument>
+									</arguments>
+									<workingDirectory>${basedir}/docker</workingDirectory>
+								</configuration>
+							</execution>
+							-->
 						</executions>
 					</plugin>
 				
@@ -864,7 +866,23 @@
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
 							</execution>
-							
+							<execution>
+								<id>prepare-device</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>bash</executable>
+									<arguments>
+										<argument>build_node-device.sh</argument>
+										<argument>${project.version}</argument>
+										<argument>${DOCKER_USER}</argument>
+										<argument>${DOCKER_PASS}</argument>										
+									</arguments>
+									<workingDirectory>${basedir}/docker</workingDirectory>
+								</configuration>
+							</execution>
 							<!-- <execution>
 								<id>prepare-arm</id>
 								<phase>generate-sources</phase>
@@ -883,23 +901,7 @@
 								</configuration>
 							</execution>
 							
-							<execution>
-								<id>prepare-device</id>
-								<phase>generate-sources</phase>
-								<goals>
-									<goal>exec</goal>
-								</goals>
-								<configuration>
-									<executable>bash</executable>
-									<arguments>
-										<argument>build_node-device.sh</argument>
-										<argument>${project.version}</argument>
-										<argument>${DOCKER_USER}</argument>
-										<argument>${DOCKER_PASS}</argument>										
-									</arguments>
-									<workingDirectory>${basedir}/docker</workingDirectory>
-								</configuration>
-							</execution> -->
+							 -->
 						</executions>
 					</plugin>
 					
@@ -924,29 +926,12 @@
 								<configuration>
 									<executable>ssh</executable>
 									<arguments>
-										<argument>root@forge.cohorte.tech</argument>
-										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_node.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS} </argument>
+										<argument>root@pinea.cohorte.tech</argument>
+										<argument>/var/volumes/jenkins/home/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_node.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS} </argument>
 									</arguments>
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
 							</execution>
-								
-							<!-- <execution>
-								<id>prepare-arm</id>
-								<phase>generate-sources</phase>
-								<goals>
-									<goal>exec</goal>
-								</goals>
-								<configuration>
-									<executable>ssh</executable>
-									<arguments>
-										<argument>root@forge.cohorte.tech</argument>
-										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_node-arm64v8.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS}  ${DOCKER_ARM_HOST} /var/volumes/jenkins/.ssh/id_rsa</argument>
-									</arguments>
-									<workingDirectory>${basedir}/docker</workingDirectory>
-								</configuration>
-							</execution>
-							
 							<execution>
 								<id>prepare-device</id>
 								<phase>generate-sources</phase>
@@ -956,12 +941,29 @@
 								<configuration>
 									<executable>ssh</executable>
 									<arguments>
-										<argument>root@forge.cohorte.tech</argument>
-										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_node-device.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS} </argument>
+										<argument>root@pinea.cohorte.tech</argument>
+										<argument>/var/volumes/jenkins/home/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_node-device.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS} </argument>
 									</arguments>
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
-							</execution> -->
+							</execution> 
+							<!-- <execution>
+								<id>prepare-arm</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>ssh</executable>
+									<arguments>
+										<argument>root@pinea.cohorte.tech</argument>
+										<argument>/var/volumes/jenkins/home/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_node-arm64v8.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS}  ${DOCKER_ARM_HOST} /var/volumes/jenkins/.ssh/id_rsa</argument>
+									</arguments>
+									<workingDirectory>${basedir}/docker</workingDirectory>
+								</configuration>
+							</execution>
+							
+							-->
 						</executions>
 					</plugin>
 					
@@ -1052,8 +1054,8 @@
 								<configuration>
 									<executable>ssh</executable>
 									<arguments>
-										<argument>root@forge.cohorte.tech</argument>
-										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_demo.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS}</argument>
+										<argument>root@pinea.cohorte.tech</argument>
+										<argument>/var/volumes/jenkins/home/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_demo.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS}</argument>
 									</arguments>
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
@@ -1067,8 +1069,8 @@
 								<configuration>
 									<executable>ssh</executable>
 									<arguments>
-										<argument>root@forge.cohorte.tech</argument>
-										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_demo-arm64v8.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS} ${DOCKER_ARM_HOST} /var/volumes/jenkins/.ssh/id_rsa</argument>
+										<argument>root@pinea.cohorte.tech</argument>
+										<argument>/var/volumes/jenkins/home/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_demo-arm64v8.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS} ${DOCKER_ARM_HOST} /var/volumes/jenkins/.ssh/id_rsa</argument>
 									</arguments>
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
@@ -1083,8 +1085,8 @@
 								<configuration>
 									<executable>ssh</executable>
 									<arguments>
-										<argument>root@forge.cohorte.tech</argument>
-										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_demo-device.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS}</argument>
+										<argument>root@pinea.cohorte.tech</argument>
+										<argument>/var/volumes/jenkins/home/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_demo-device.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS}</argument>
 									</arguments>
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
@@ -1113,9 +1115,9 @@
 								<configuration>
 									<executable>ssh</executable>
 									<arguments>
-										<argument>root@forge.cohorte.tech</argument>
-										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/cohorte-home/tests/deploy_demo.sh</argument>
-										<argument>/var/volumes/jenkins/.ssh/id_rsa</argument>
+										<argument>root@pinea.cohorte.tech</argument>
+										<argument>/var/volumes/jenkins/home/workspace/cohorte/cohorte-platforms/cohorte-home/tests/deploy_demo.sh</argument>
+										<argument>/var/volumes/jenkins/home/.ssh/id_rsa</argument>
 									</arguments>
 									<workingDirectory>${basedir}/tests</workingDirectory>
 								</configuration>
@@ -1129,8 +1131,8 @@
 								<configuration>
 									<executable>ssh</executable>
 									<arguments>
-										<argument>root@forge.cohorte.tech</argument>
-										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/cohorte-home/tests/wait_demo.sh</argument>
+										<argument>root@pinea.cohorte.tech</argument>
+										<argument>/var/volumes/jenkins/home/workspace/cohorte/cohorte-platforms/cohorte-home/tests/wait_demo.sh</argument>
 									</arguments>
 									<workingDirectory>${basedir}/tests</workingDirectory>
 								</configuration>
@@ -1144,13 +1146,13 @@
 								<configuration>
 									<executable>ssh</executable>
 									<arguments>
-										<argument>root@forge.cohorte.tech</argument>
-										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/cohorte-home/tests/test_demo.sh CohortePlatform_Demo.postman_collection.json api-dev.cohorte.tech</argument>
+										<argument>root@pinea.cohorte.tech</argument>
+										<argument>/var/volumes/jenkins/home/workspace/cohorte/cohorte-platforms/cohorte-home/tests/test_demo.sh CohortePlatform_Demo.postman_collection.json api-dev.cohorte.tech</argument>
 									</arguments>
 									<workingDirectory>${basedir}/tests</workingDirectory>
 								</configuration>
 							</execution>
-							<execution>
+							<!--<execution>
 								<id>test-arm</id>
 								<phase>test</phase>
 								<goals>
@@ -1159,12 +1161,12 @@
 								<configuration>
 									<executable>ssh</executable>
 									<arguments>
-										<argument>root@forge.cohorte.tech</argument>
-										<argument>/var/volumes/jenkins/workspace/cohorte/cohorte-platforms/cohorte-home/tests/test_demo.sh CohortePlatform_Demo.postman_collection.json api-dev-arm.cohorte.tech</argument>
+										<argument>root@pinea.cohorte.tech</argument>
+										<argument>/var/volumes/jenkins/home/workspace/cohorte/cohorte-platforms/cohorte-home/tests/test_demo.sh CohortePlatform_Demo.postman_collection.json api-dev-arm.cohorte.tech</argument>
 									</arguments>
 									<workingDirectory>${basedir}/tests</workingDirectory>
 								</configuration>
-							</execution>
+							</execution>-->
 						</executions>
 					</plugin>
 				</plugins>
@@ -1194,7 +1196,7 @@
 		<repository>
 			<id>cohorte.snapshots</id>
 			<name>Cohorte Snapshot Repository</name>
-			<url>http://nrm.cohorte.tech/repository/cohorte-snapshots</url>
+			<url>https://nrm.cohorte.tech/repository/cohorte-snapshots</url>
 			<releases>
 				<enabled>false</enabled>
 			</releases>
@@ -1205,7 +1207,7 @@
 		<repository>
 			<id>cohorte.releases</id>
 			<name>Cohorte Releases Repository</name>
-			<url>http://nrm.cohorte.tech/repository/cohorte-releases</url>
+			<url>https://nrm.cohorte.tech/repository/cohorte-releases</url>
 			<releases>
 				<enabled>true</enabled>
 			</releases>
@@ -1218,13 +1220,13 @@
 		<repository>
 			<id>cohorte-nexus</id>
 			<name>Cohorte Releases Repository</name>
-			<url>http://nrm.cohorte.tech/repository/cohorte-releases/</url>
+			<url>https://nrm.cohorte.tech/repository/cohorte-releases/</url>
 			<layout>default</layout>
 		</repository>
 		<snapshotRepository>
 			<id>cohorte-nexus</id>
 			<name>Cohorte Snapshots Repository</name>
-			<url>http://nrm.cohorte.tech/repository/cohorte-snapshots/</url>
+			<url>https://nrm.cohorte.tech/repository/cohorte-snapshots/</url>
 			<uniqueVersion>true</uniqueVersion>
 			<layout>default</layout>
 		</snapshotRepository>

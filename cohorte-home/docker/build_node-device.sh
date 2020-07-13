@@ -33,7 +33,6 @@ DOCKER_REGISTRY="dr.cohorte.tech"
 
 cp -r $DIR/node/install $DIRECTORY/install
 cd $DIRECTORY
-wget https://bootstrap.pypa.io/get-pip.py
 
 
 bash $DIR/build_image.sh "$DIRECTORY" "$DOCKER_REPOSITORY" "$DOCKER_TAG" "$DOCKER_USER" "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"

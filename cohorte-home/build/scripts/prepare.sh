@@ -46,14 +46,14 @@ fi
 
 # Set up the virtual environment
 VENV_NAME=tmp_venv
-INDEX_URL=http://forge.cohorte.tech:7080/jenkins/cohorte/+simple/
+INDEX_URL=http://devpi.cohorte.tech/root/cohorte/+simple/
 rm -fr $VENV_NAME
-virtualenv $VENV_NAME -p python3 || return 1
+virtualenv $VENV_NAME -p python || return 1
 PATH=$WORKSPACE/$VENV_NAME/bin:$PATH
 . $VENV_NAME/bin/activate
 
 # Install test and deployment tools
-PIP_HOST=forge.cohorte.tech
+PIP_HOST=devpi.cohorte.tech
 #--trusted-host $PIP_HOST
 pip --version
 pip install --force --upgrade --index-url=$INDEX_URL pip==8.1.2 setuptools  #|| return 2
@@ -78,6 +78,7 @@ cp -r build/extra/windows/* repo
 fi
 
 # Install dependencies
+pip install --upgrade -r requirements_ipopo.txt
 pip install --upgrade --index-url=$INDEX_URL --trusted-host=$PIP_HOST -r requirements.txt
 
 # Copy dependencies to repo
@@ -91,7 +92,8 @@ mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/sleekxmpp repo
 ### requests
 mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/requests repo
 ### Herald
-mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/herald repo
+#mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/herald repo
+cp -r /var/jenkins_home/workspace/cohorte/cohorte-herald/python/herald repo/
 
 ### JPYPE
 #if test "$1" != "windows"; then
@@ -104,7 +106,8 @@ mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/herald repo
 ### iPOPO
 mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/pelix repo
 ### Cohorte Python
-mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/cohorte repo
+#mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/cohorte repo
+cp -r /var/jenkins_home/workspace/cohorte/cohorte-runtime/python/cohorte repo/
 ### Cohorte Webadmin
 #mv tmp_venv/lib/$PYTHON_INSTALLED/site-packages/webadmin repo
 
