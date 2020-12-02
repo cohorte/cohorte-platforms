@@ -4,7 +4,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 DIRECTORY="$DIR/base"
 DOCKER_REPOSITORY="cohorte/base"
 
-DOCKER_TAG="1.3"
+DOCKER_TAG="1.4"
 DOCKER_USER=$1
 DOCKER_PASSWORD=$2
 

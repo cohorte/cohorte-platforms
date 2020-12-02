@@ -5,7 +5,7 @@ FROM ubuntu:18.04
 #
 # Contains: 
 # - ubuntu Bionic 
-# - Oracle JVM 8 
+# - ZULU JVM 8 
 # - Python 3.6
 #
 # Installed tools:
@@ -21,10 +21,6 @@ FROM ubuntu:18.04
 MAINTAINER "Bassem Debbabi" <bassem.debbabi@cohorte-technologies.com>
 
 
-# force rebuilind all this Dockerfile by changing the date
-
-
-# informer systemd qu'il s'execute sur un conteneur docker
 ENV container docker
 
 # installation du systemd au lieu du fakesystemd
@@ -64,8 +60,6 @@ RUN ln -s /opt/python3.4/bin/pip3.4 /usr/bin/pip
 RUN ln -s /opt/python3.4/bin/pip3.4 /usr/bin/pip3.4s
 
 # to have systemctl command
-RUN apt-get install -y systemd
-
 
 RUN cd Python-3.4.4 ; make clean
 

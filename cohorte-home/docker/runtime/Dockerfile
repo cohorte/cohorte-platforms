@@ -1,4 +1,4 @@
-FROM cohorte/base:1.1
+FROM cohorte/base:1.4
 
 #-----------------------------------------------------------------------------
 # Cohorte Runtime image.
