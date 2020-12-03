@@ -1,6 +1,7 @@
 #!/bin/bash
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+echo "DIR=$DIR"
 DIRECTORY="$DIR/base-win"
 DOCKER_REPOSITORY="cohorte/base"
 

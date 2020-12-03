@@ -23,9 +23,6 @@ ENV PATH=%PATH%;C:/Python34/;"C:/Program Files/Git/bin/";"C:/Program Files/Zulu/
 RUN python.exe --version
 RUN java.exe -version
 RUN bash.exe --version
-RUN sh.exe --version
-RUN sh.exe ln -s C:/Python34/python.exe C:/Python34/python
-RUN sh.exe ln -s C:/Program\ Files/Zulu/zulu-8/bin/java.exe C:/Program\ Files/Zulu/zulu-8/bin/java
 
 
 CMD ["bash"]
