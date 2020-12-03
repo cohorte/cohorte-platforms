@@ -4,7 +4,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 DIRECTORY="$DIR/base-devices"
 DOCKER_REPOSITORY="cohorte/base-devices"
 
-DOCKER_TAG="1.0"
+DOCKER_TAG="1.5"
 DOCKER_USER=$1
 DOCKER_PASSWORD=$2
 DOCKER_ARM_HOST=$3
@@ -18,4 +18,4 @@ echo "ID_RSA=$ID_RSA"
 DOCKER_REGISTRY="dr.cohorte.tech"
 
 echo -e "\x1B[1;32m[INFO] Building Image [$DOCKER_REPOSITORY:$DOCKER_TAG] located on [$DIRECTORY]\x1B[0m"
-bash $DIR/build_image.sh "$DIRECTORY" "$DOCKER_REPOSITORY" "$DOCKER_TAG" "$DOCKER_USER" "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
+bash $DIR/build_image.sh "$DIRECTORY" "$DOCKER_REPOSITORY" "$DOCKER_TAG" Dockerfile "$DOCKER_USER" "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"

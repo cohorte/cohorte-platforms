@@ -1,10 +1,10 @@
-FROM ubuntu:18.04
+FROM alpine:3.12
 
 #-----------------------------------------------------------------------------
 # Cohorte Base image X86 for cohorte device
 #
 # Contains: 
-# - ubuntu Bionic 
+# - alpine linux 
 # - ZULU JVM 8 
 # - Python 3.6
 #
@@ -18,7 +18,7 @@ FROM ubuntu:18.04
 #-----------------------------------------------------------------------------
 
 # meta-data
-MAINTAINER "Bassem Debbabi" <bassem.debbabi@cohorte-technologies.com>
+MAINTAINER "Aurelien Pisu" <aurelien.pisu@cohorte-technologies.com>
 
 
 ENV container docker
@@ -59,7 +59,6 @@ RUN ln -s /opt/python3.4/bin/pip3.4 /usr/bin/pip3
 RUN ln -s /opt/python3.4/bin/pip3.4 /usr/bin/pip
 RUN ln -s /opt/python3.4/bin/pip3.4 /usr/bin/pip3.4s
 
-# to have systemctl command
 
 RUN cd Python-3.4.4 ; make clean
 
@@ -71,5 +70,4 @@ RUN java -version
 # Pour definir des limitations (cpu, ram, etc) a des groupes de processus
 VOLUME [ "/sys/fs/cgroup", "/var/log/journal" ]
 
-# au demarage lancer du conteneur, il faut lancer /usr/sbin/init (systemd)
-CMD ["/usr/sbin/init"]
+CMD ["bash"]

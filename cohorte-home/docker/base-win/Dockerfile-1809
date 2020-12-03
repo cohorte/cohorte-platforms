@@ -1,0 +1,29 @@
+FROM mcr.microsoft.com/windows/servercore:1809
+
+ARG PASSWORD
+ENV PASSWORD ${PASSWORD:-root_password}
+
+COPY install/install.psl C:/install.ps1
+COPY install/Python34 C:/Python34
+
+
+RUN powershell C:/install.ps1 ; \
+    powershell -Command "Remove-Item C:/install.ps1 -Force"
+
+RUN C:/Python34/python.exe --version
+
+RUN choco install -y --force git 
+
+
+RUN choco install -y --force zulu8 
+
+
+ENV PATH=%PATH%;C:/Python34/;"C:/Program Files/Git/bin/";"C:/Program Files/Zulu/zulu-8/bin/"
+
+RUN python.exe --version
+RUN java.exe -version
+RUN bash.exe --version
+RUN sh.exe --version
+
+
+CMD ["bash"]

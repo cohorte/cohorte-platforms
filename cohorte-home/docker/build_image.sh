@@ -5,10 +5,12 @@ then
         DIRECTORY=$1
         DOCKER_REPOSITORY=$2
         DOCKER_TAG=$3
+        DOCKER_FILE=$4
 	
 		echo "DIRECTORY=$DIRECTORY"
        	echo "DOCKER_REPOSITORY=$DOCKER_REPOSITORY"
-        echo "DOCKER_TAG=$DOCKER_TAG"
+    	echo "DOCKER_TAG=$DOCKER_TAG"
+        echo "DOCKER_FILE=$DOCKER_FILE"
 		
 
 
@@ -21,7 +23,7 @@ then
         echo "Building $DOCKER_FULL_NAME version .."
         echo "Tag=$DOCKER_FULL_NAME"
         echo "Tag=$DOCKER_FULL_NAME_LATEST"
-        docker build --force-rm=true --pull=true --tag="$DOCKER_FULL_NAME" --tag="$DOCKER_FULL_NAME_LATEST" -f Dockerfile "$(pwd)"    
+        docker build --force-rm=true --pull=true --tag="$DOCKER_FULL_NAME" --tag="$DOCKER_FULL_NAME_LATEST" -f $DOCKER_FILE "$(pwd)"    
 
         docker history "$DOCKER_FULL_NAME"
 
@@ -36,7 +38,7 @@ then
                 if [ "$#" -ge 5 ]
                 then
                         echo -e "\x1B[1;32mPushing to Docker Hub...\x1B[0m"
-                        docker login -u $4 -p $5 $6                        
+                        docker login -u $5 -p $6 $7                        
                         docker push $DOCKER_FULL_NAME
                         docker push $DOCKER_FULL_NAME_LATEST                        
 
