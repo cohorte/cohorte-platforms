@@ -1,4 +1,4 @@
-FROM alpine:3.12
+FROM azul/zulu-openjdk-alpine:8
 
 #-----------------------------------------------------------------------------
 # Cohorte Base image X86 for cohorte device
@@ -27,19 +27,14 @@ ENV container docker
 # ceci est necessaire pour pouvoir lancer mysql et openldap comme un service OS
 # avec les commandes "service" et "systemctl".
 
-RUN apt-get update
-RUN apt-get  install -y curl vim wget tar netcat-openbsd
-RUN apt-get install -y java-common libasound2 libx11-6 libxau6 libxcb1 libxdmcp6 libxext6 libxi6 libxrender1 libxtst6 libfontconfig1
-RUN wget https://cdn.azul.com/zulu/bin/zulu8.42.0.23-ca-jdk8.0.232-linux_amd64.deb
-RUN dpkg -i *.deb
+RUN apk update
+RUN apk add  vim wget tar netcat-openbsd
 
-RUN apt-get install -y tzdata 
+RUN apk add  tzdata 
 
-# installer d'autres outils and python3.4 for ubuntu 16.04 @see https://github.com/mhbashari/Install-Python3.4-on-Ubuntu-16.04
 
-RUN apt-get  remove -y python3 python
 
-RUN apt-get install -y build-essential checkinstall libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libssl-dev openssl lzma lzma-dev liblzma-dev make
+RUN apk add build-essential checkinstall libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libssl-dev openssl lzma lzma-dev liblzma-dev make
 
 
 RUN wget https://www.python.org/ftp/python/3.4.4/Python-3.4.4.tgz
@@ -49,8 +44,6 @@ RUN tar xzf Python-3.4.4.tgz
 RUN cd Python-3.4.4; ./configure --prefix=/opt/python3.4 --with-zlib-dir=/usr/local/lib/ --with-ensurepip=install
 
 RUN cd Python-3.4.4 ; make altinstall
-RUN apt-get remove -y build-essential checkinstall libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libssl-dev openssl lzma lzma-dev liblzma-dev
-RUN apt-get auto-remove -y
 
 RUN ln -s /opt/python3.4/bin/python3.4 /usr/bin/python
 RUN ln -s /opt/python3.4/bin/python3.4 /usr/bin/python3

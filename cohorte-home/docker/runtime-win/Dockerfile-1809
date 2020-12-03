@@ -1,4 +1,4 @@
-FROM cohorte/base:1809
+FROM cohorte/base:1.5-win1809
 
 #-----------------------------------------------------------------------------
 # Cohorte Runtime image.
