@@ -3,7 +3,7 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 echo $DIR
 
-DIRECTORY="$DIR/runtime"
+DIRECTORY="$DIR/runtime-win"
 DOCKER_REPOSITORY="cohorte/runtime"
 
 DOCKER_TAG=$1
