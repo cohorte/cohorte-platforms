@@ -23,8 +23,8 @@ then
         echo "Building $DOCKER_FULL_NAME version .."
         echo "Tag=$DOCKER_FULL_NAME"
         echo "Tag=$DOCKER_FULL_NAME_LATEST"
-        echo "docker build --force-rm=true --pull=true --tag="$DOCKER_FULL_NAME" --tag="$DOCKER_FULL_NAME_LATEST" -f $DOCKER_FILE $(pwd) "
-        docker build --force-rm=true --pull=true --tag="$DOCKER_FULL_NAME" --tag="$DOCKER_FULL_NAME_LATEST" -f $DOCKER_FILE "$(pwd)"    
+        echo "docker build --force-rm=true --pull=true --tag="$DOCKER_FULL_NAME" --tag="$DOCKER_FULL_NAME_LATEST" -f $DOCKER_FILE ."
+        docker build --force-rm=true --pull=true --tag="$DOCKER_FULL_NAME" --tag="$DOCKER_FULL_NAME_LATEST" -f $DOCKER_FILE .    
 
         docker history "$DOCKER_FULL_NAME"
 
