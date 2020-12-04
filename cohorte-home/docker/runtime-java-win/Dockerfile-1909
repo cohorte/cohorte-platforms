@@ -14,13 +14,9 @@ ENV COHORTE_HOME /opt/cohorte
 
 COPY ./install/cohorte.tar.gz ./opt/cohorte.tar.gz
 
-RUN sh -c cd ./opt ; tar xvf cohorte.tar.gz
-RUN sh -c  rm -f ./opt/cohorte.tar.gz
-RUN sh -c ls -l ./opt
-RUN sh -c mv -f /opt/cohorte-* /opt/cohorte
-RUN sh -c ls -l ./opt
-RUN sh -c cd ${COHORTE_HOME}
-#RUN mv -f /opt/cohorte/extra/windows /opt/cohorte/extra/windows
-RUN sh -c ls -l /opt/cohorte/extra/windows/
-RUN sh ${COHORTE_HOME}/setup.sh
-RUN sh ${COHORTE_HOME}/bin/cohorte-version
+RUN sh -c "cd ./opt ; tar xvf cohorte.tar.gz"
+RUN sh -c "rm -f ./opt/cohorte.tar.gz"
+RUN sh -c "ls -l ./opt"
+RUN sh -c "mv -f /opt/cohorte-* ./opt/cohorte"
+RUN sh -c "ls -l ./opt"
+RUN sh -c "cd ${COHORTE_HOME}"
