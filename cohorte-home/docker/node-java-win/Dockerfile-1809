@@ -15,16 +15,15 @@ ENV REFRESHED_AT 20170707_1130
 ENV COHORTE_BASE /opt/node
 ENV COHORTE_DATA /opt/node/data
 
-RUN mkdir -p $COHORTE_BASE
-RUN mkdir -p $COHORTE_DATA
+RUN mkdir -p ./opt/node/data
 
-COPY ./install/run.sh /opt
-
-
-RUN sh -c "chmod +x /opt/run.sh"
+COPY ./install/run.sh ./opt
 
 
-ENTRYPOINT ["bash /opt/run.sh"]
+RUN sh -c "chmod +x ./opt/run.sh"
+
+
+ENTRYPOINT ["bash","./opt/run.sh"]
 
 
 VOLUME [ "/opt/node" ]
