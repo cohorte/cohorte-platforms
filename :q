@@ -1,0 +1,12 @@
+ add if then else 
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# Committer: Aurelien PISU <apisu@MBP-de-admin-2.home>
+#
+# On branch windowAndAlpine
+# Your branch is up to date with 'origin/windowAndAlpine'.
+#
+# Changes to be committed:
+#	modified:   cohorte-home/docker/node-java-win/install/run.sh
+#
