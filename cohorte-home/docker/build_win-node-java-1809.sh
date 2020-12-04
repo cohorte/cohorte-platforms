@@ -23,7 +23,6 @@ DOCKER_PASSWORD=$3
 DOCKER_REGISTRY="dr.cohorte.tech"
 
 # download get-pip 
-cd $DIR/node/install/
 
 
 echo -e "\x1B[1;32m[INFO] Building Image [$DOCKER_REPOSITORY:$DOCKER_TAG] located on [$DIRECTORY]\x1B[0m"
