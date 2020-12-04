@@ -20,7 +20,7 @@ echo "check launch_jvm.sh exists"
 if [ -f /c/opt/node/felix/launch/launch_jvm.sh ]; then
 	echo "launch launch_jvm.sh "
 	echo "start cohorte" 
-	sh ./c/opt/node/felix/launch/launch_jvm.sh
+	sh /c/opt/node/felix/launch/launch_jvm.sh
 else
 	echo "no file /c/opt/node/felix/launch/launch_jvm.sh"
 	ls /c/opt/node/felix/launch/
