@@ -18,13 +18,13 @@ ENV COHORTE_DATA /opt/node/data
 RUN sh -c "mkdir ./opt/node/"
 RUN sh -c "mkdir ./opt/node/data"
 
-COPY ./install/run.sh ./opt
-COPY ./install/run.bat ./opt
+COPY ./install/run.sh ./opt/run.sh
+COPY ./install/run.bat ./opt/run.bat
 
 RUN sh -c "chmod +x ./opt/run.sh"
 
 
-ENTRYPOINT ["./opt/run.bat"]
+ENTRYPOINT ["C:/opt/run.bat"]
 
 
 
