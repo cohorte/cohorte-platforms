@@ -19,8 +19,12 @@ trap _term SIGTERM
 echo "check launch_jvm.sh exists"
 if [ -f ./opt/node/felix/launch/launch_jvm.sh ]; then
 	echo "launch launch_jvm.sh "
+	echo "start cohorte" 
 	sh ./opt/node/felix/launch/launch_jvm.sh
+else
+	echo "no file ./opt/node/felix/launch/launch_jvm.sh"
+	ls ./opt/node/felix/launch/
+
 fi
 
-echo "start cohorte" 
 #/usr/lib/systemd/systemd --system
