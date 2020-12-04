@@ -24,7 +24,7 @@ COPY ./install/run.sh ./opt
 RUN sh -c "chmod +x ./opt/run.sh"
 
 
-ENTRYPOINT ["bash","./opt/run.sh"]
+ENTRYPOINT ["./opt/run.bat"]
 
 
 
