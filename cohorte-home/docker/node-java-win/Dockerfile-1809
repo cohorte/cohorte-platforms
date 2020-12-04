@@ -14,7 +14,7 @@ ENV REFRESHED_AT 20170707_1130
 
 ENV COHORTE_BASE /opt/node
 ENV COHORTE_DATA /opt/node/data
-"
+
 RUN sh -c "mkdir ./opt/node/"
 RUN sh -c "mkdir ./opt/node/data"
 
