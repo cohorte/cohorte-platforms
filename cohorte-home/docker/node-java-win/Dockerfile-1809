@@ -24,7 +24,7 @@ COPY ./install/run.bat ./opt/run.bat
 RUN sh -c "chmod +x ./opt/run.sh"
 
 
-ENTRYPOINT ["C:/opt/run.bat"]
+windowAndAlpine ["C:/opt/run.bat"]
 
 
 
