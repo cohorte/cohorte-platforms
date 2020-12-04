@@ -6,9 +6,6 @@ PWD=`pwd`
 echo "current dir $PWD"
 cd ./opt
 
-if [ -f ./opt/node/felix/launch/launch_jvm.sh ]; then
-	sh ./opt/node/felix/launch/launch_jvm.sh
-fi
 
 
 echo "set handle sigterm/ sigkill"
@@ -18,6 +15,12 @@ _term() {
 }
 
 trap _term SIGTERM
+
+echo "check launch_jvm.sh exists"
+if [ -f ./opt/node/felix/launch/launch_jvm.sh ]; then
+	echo "launch launch_jvm.sh "
+	sh ./opt/node/felix/launch/launch_jvm.sh
+fi
 
 echo "start cohorte" 
 #/usr/lib/systemd/systemd --system
