@@ -10,8 +10,6 @@ COPY install/Python34 C:/Python34
 RUN powershell C:/install.ps1 ; \
     powershell -Command "Remove-Item C:/install.ps1 -Force"
 
-RUN C:/Python34/python.exe --version
-
 RUN choco install -y --force git 
 
 
@@ -20,7 +18,6 @@ RUN choco install -y --force zulu8
 
 ENV PATH=%PATH%;C:/Python34/;"C:/Program Files/Git/bin/";"C:/Program Files/Zulu/zulu-8/bin/"
 
-RUN python.exe --version
 RUN java.exe -version
 RUN bash.exe --version
 

@@ -10,7 +10,6 @@ COPY install/Python34 C:/Python34
 RUN powershell C:/install.ps1 ; \
     powershell -Command "Remove-Item C:/install.ps1 -Force"
 
-RUN C:/Python34/python.exe --version
 
 RUN choco install -y --force git 
 
