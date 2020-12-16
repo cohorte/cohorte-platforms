@@ -4,7 +4,6 @@ ARG PASSWORD
 ENV PASSWORD ${PASSWORD:-root_password}
 
 COPY install/install.psl C:/install.ps1
-COPY install/Python34 C:/Python34
 
 
 RUN powershell C:/install.ps1 ; \
