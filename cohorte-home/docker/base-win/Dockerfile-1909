@@ -15,5 +15,10 @@ RUN choco install -y --force git
 RUN choco install -y --force zulu8 
 
 
+ENV PATH=%PATH%;C:/Python34/;"C:/Program Files/Git/bin/";"C:/Program Files/Zulu/zulu-8/bin/";"C:\Windows\System32\WindowsPowerShell\v1.0\powershell";"C:\ProgramData\chocolatey\bin"
+
+RUN java.exe -version
+RUN bash.exe --version
+
 
 CMD ["bash"]
