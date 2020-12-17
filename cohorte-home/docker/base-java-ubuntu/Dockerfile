@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM azul/zulu-openjdk:8
 
 #-----------------------------------------------------------------------------
 # Cohorte Base image X86 for cohorte device
@@ -20,17 +20,14 @@ MAINTAINER "Aurelien Pisu" <aurelien.pisu@cohorte-technologies.com>
 
 
 ENV container docker
-ENV JAVA_HOME /opt/java
-ENV PATH $JAVA_HOME/bin:$PATH
+
 # installation du systemd au lieu du fakesystemd
 # ceci est necessaire pour pouvoir lancer mysql et openldap comme un service OS
 # avec les commandes "service" et "systemctl".
-RUN mkdir -p $JAVA_HOME
-COPY ./jdk/* /opt/java/
-RUN chmod +x /opt/java/bin/*
+
 
 RUN apt-get update
-RUN apt-get install  vim wget tar netcat-openbsd
+RUN apt-get install -y  vim wget tar netcat-openbsd
 
 # Test de java
 RUN java -version

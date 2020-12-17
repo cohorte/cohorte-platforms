@@ -15,7 +15,6 @@ then
 
 
         DOCKER_FULL_NAME="$DOCKER_REPOSITORY:$DOCKER_TAG"
-        DOCKER_FULL_NAME_LATEST="$DOCKER_REPOSITORY:latest"
 
         cd $DIRECTORY
         echo -e "\x1B[1;32m---- Building docker image \x1B[1;33m[$DOCKER_LOCAL_TAG]\x1B[1;32m...\x1B[0m"
@@ -23,8 +22,8 @@ then
         echo "Building $DOCKER_FULL_NAME version .."
         echo "Tag=$DOCKER_FULL_NAME"
         echo "Tag=$DOCKER_FULL_NAME_LATEST"
-        echo "docker build --force-rm=true --pull=true --tag="$DOCKER_FULL_NAME" --tag="$DOCKER_FULL_NAME_LATEST" -f $DOCKER_FILE ."
-        docker build --force-rm=true --pull=true --tag="$DOCKER_FULL_NAME" --tag="$DOCKER_FULL_NAME_LATEST" -f $DOCKER_FILE .    
+        echo "docker build --force-rm=true --pull=true --tag="$DOCKER_FULL_NAME"  -f $DOCKER_FILE ."
+        docker build --force-rm=true --pull=true --tag="$DOCKER_FULL_NAME"  -f $DOCKER_FILE .    
 
         docker history "$DOCKER_FULL_NAME"
 
@@ -41,7 +40,6 @@ then
                         echo -e "\x1B[1;32mPushing to Docker Hub...\x1B[0m"
                         docker login -u $5 -p $6 $7                        
                         docker push $DOCKER_FULL_NAME
-                        docker push $DOCKER_FULL_NAME_LATEST                        
 
                 else
                         echo -e "\x1B[1;32m[WARN] You have not provided your Docker Hub user/pass. Images are not pushed to the Hub!\x1B[0m"

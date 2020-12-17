@@ -13,6 +13,7 @@ RUN choco install -y --force git
 
 
 RUN choco install -y --force zulu8 
+RUN choco install -y --force docker-cli
 
 
 ENV PATH=%PATH%;C:/Python34/;"C:/Program Files/Git/bin/";"C:/Program Files/Zulu/zulu-8/bin/"
