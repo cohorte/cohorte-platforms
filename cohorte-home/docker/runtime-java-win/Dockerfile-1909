@@ -14,8 +14,8 @@ ENV COHORTE_HOME /opt/cohorte
 
 COPY ./install/cohorte.tar.gz ./opt/cohorte.tar.gz
 
-RUN "C:/Program\ Files/Git/bin/bash.exe" -c "cd ./opt ; tar xvf cohorte.tar.gz"
-RUN "C:/Program\ Files/Git/bin/bash.exe" -c "rm -f ./opt/cohorte.tar.gz"
-RUN "C:/Program\ Files/Git/bin/bash.exe" -c "ls -l ./opt"
-RUN "C:/Program\ Files/Git/bin/bash.exe" -c "mv -f ./opt/cohorte-* ./opt/cohorte"
-RUN "C:/Program\ Files/Git/bin/bash.exe" -c "ls -l ./opt"
+RUN "C:/Program Files/Git/bin/bash.exe" -c "cd ./opt ; tar xvf cohorte.tar.gz"
+RUN "C:/Program Files/Git/bin/bash.exe" -c "rm -f ./opt/cohorte.tar.gz"
+RUN "C:/Program Files/Git/bin/bash.exe" -c "ls -l ./opt"
+RUN "C:/Program Files/Git/bin/bash.exe" -c "mv -f ./opt/cohorte-* ./opt/cohorte"
+RUN "C:/Program Files/Git/bin/bash.exe" -c "ls -l ./opt"
