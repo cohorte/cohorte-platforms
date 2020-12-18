@@ -23,7 +23,6 @@ COPY ./install/run.bat ./opt/run.bat
 
 RUN sh -c "chmod +x ./opt/run.sh"
 
-RUN sh -c "ln -s /c/opt /opt"
 
 CMD ["C:/opt/run.bat"]
 
