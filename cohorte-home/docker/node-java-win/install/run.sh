@@ -4,7 +4,7 @@ echo "--- Boot of Cohorte Container..."
 # check what kind of init we have. init.sh or init.py 
 PWD=`pwd`
 echo "current dir $PWD"
-
+whoami
 
 echo "set handle sigterm/ sigkill"
 _term() { 
