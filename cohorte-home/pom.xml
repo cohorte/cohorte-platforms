@@ -172,6 +172,22 @@
 						<version>2.10</version>
 						<executions>
 							<execution>
+								<id>cohorte-runner.basic</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>copy-dependencies</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>repo/java/runner</outputDirectory>
+									<overWriteReleases>false</overWriteReleases>
+									<overWriteSnapshots>true</overWriteSnapshots>
+									<excludeTypes>pom</excludeTypes>
+									<includeGroupIds>
+										org.cohorte.eclipse.runner.basic
+									</includeGroupIds>
+								</configuration>
+							</execution>
+							<execution>
 								<id>cohorte-utilities</id>
 								<phase>generate-sources</phase>
 								<goals>
