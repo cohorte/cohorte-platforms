@@ -31,7 +31,9 @@
 		<cohorte-utilities-version>1.2.0</cohorte-utilities-version>
 		<cohorte-remote-version>1.2.1</cohorte-remote-version>
 		<cohorte-herald-version>1.0.1</cohorte-herald-version>
-		<cohorte-runtime-version>1.2.1</cohorte-runtime-version>		
+		<cohorte-runtime-version>1.2.1</cohorte-runtime-version>	
+		<cohorte-runner-version>1.1.2</cohorte-runner-version>		
+			
 		<!-- ======================================================== -->
 	</properties>
 
@@ -41,6 +43,13 @@
 			<groupId>org.cohorte.utilities</groupId>
 			<artifactId>org.cohorte.utilities</artifactId>
 			<version>${cohorte-utilities-version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<!--  org.cohorte.eclipse.runner.basic  -->
+			<dependency>
+			<groupId>org.cohorte.eclipse</groupId>
+			<artifactId>org.cohorte.eclipse.runner.basic</artifactId>
+			<version>${cohorte-runner-version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<!-- cohorte-jabsorb -->
