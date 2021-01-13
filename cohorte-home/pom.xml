@@ -143,6 +143,7 @@
 									org.cohorte.jabsorb,
 									org.cohorte.remote,
 									org.cohorte.herald,
+									org.cohorte.eclipse,
 									org.cohorte.runtime
 								</includeGroupIds>
 							</configuration>
@@ -183,7 +184,7 @@
 									<overWriteSnapshots>true</overWriteSnapshots>
 									<excludeTypes>pom</excludeTypes>
 									<includeGroupIds>
-										org.cohorte.eclipse.runner.basic
+										org.cohorte.eclipse
 									</includeGroupIds>
 								</configuration>
 							</execution>
