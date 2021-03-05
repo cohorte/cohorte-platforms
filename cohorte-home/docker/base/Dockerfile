@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM azul/zulu-openjdk:8
 
 #-----------------------------------------------------------------------------
 # Cohorte Base image X86 for cohorte device
@@ -26,9 +26,9 @@ ENV container docker
 # avec les commandes "service" et "systemctl".
 
 RUN apt-get update
-RUN apt-get install -y vim wget tar netcat-openbsd
+RUN apt-get install -y vim wget tar netcat-openbsd 
 
-RUN apt-get install -y tzdata python3 pyton3-pip
+RUN apt-get install -y tzdata python3
 
 
 RUN python3 --version
