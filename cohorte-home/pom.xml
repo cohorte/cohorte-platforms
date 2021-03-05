@@ -639,7 +639,7 @@
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
 							</execution>
-							<!--execution>
+							<execution>
 								<id>prepare-arm</id>
 								<phase>generate-sources</phase>
 								<goals>
@@ -648,14 +648,14 @@
 								<configuration>
 									<executable>bash</executable>
 									<arguments>
-										<argument>build_base-arm64v8.sh</argument>
+										<argument>build_base-java-ubuntu.sh</argument>
 										<argument>${DOCKER_USER}</argument>
 										<argument>${DOCKER_PASS}</argument>										
 									</arguments>
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
 							</execution>
-							<execution>
+							<!--<execution>
 								<id>prepare-device</id>
 								<phase>generate-sources</phase>
 								<goals>
@@ -711,7 +711,7 @@
 									<executable>ssh</executable>
 									<arguments>
 										<argument>root@pinea.cohorte.tech</argument>
-										<argument>/var/volumes/jenkins/home/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_base-device.sh ${DOCKER_USER} ${DOCKER_PASS}</argument>
+										<argument>/var/volumes/jenkins/home/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_base-java-ubuntu.sh ${DOCKER_USER} ${DOCKER_PASS}</argument>
 									</arguments>
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
