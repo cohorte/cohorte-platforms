@@ -904,7 +904,7 @@
 								<configuration>
 									<executable>bash</executable>
 									<arguments>
-										<argument>build_node-device.sh</argument>
+										<argument>build_node-java-ubuntu.sh</argument>
 										<argument>${project.version}</argument>
 										<argument>${DOCKER_USER}</argument>
 										<argument>${DOCKER_PASS}</argument>										
@@ -971,7 +971,7 @@
 									<executable>ssh</executable>
 									<arguments>
 										<argument>root@pinea.cohorte.tech</argument>
-										<argument>/var/volumes/jenkins/home/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_node-device.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS} </argument>
+										<argument>/var/volumes/jenkins/home/workspace/cohorte/cohorte-platforms/cohorte-home/docker/build_node-java-ubuntu.sh ${project.version} ${DOCKER_USER} ${DOCKER_PASS} </argument>
 									</arguments>
 									<workingDirectory>${basedir}/docker</workingDirectory>
 								</configuration>
