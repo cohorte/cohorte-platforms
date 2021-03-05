@@ -3,8 +3,8 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 echo $DIR
 
-DIRECTORY="$DIR/runtime-devices"
-DOCKER_REPOSITORY="cohorte/runtime-devices"
+DIRECTORY="$DIR/runtime"
+DOCKER_REPOSITORY="cohorte/runtime"
 
 DOCKER_TAG=$1
 DOCKER_USER=$2
@@ -20,8 +20,8 @@ DOCKER_REGISTRY="dr.cohorte.tech"
 
 echo -e "\x1B[1;32m[INFO] Building Image [$DOCKER_REPOSITORY:$DOCKER_TAG] located on [$DIRECTORY]\x1B[0m"
 
-mkdir -p $DIR/runtime-devices/install
-rm -rf $DIR/runtime-devices/install/*
+mkdir -p $DIR/runtime/install
+rm -rf $DIR/runtime/install/*
 
 
 
