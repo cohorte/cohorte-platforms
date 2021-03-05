@@ -1,0 +1,1 @@
+bash ./opt/run.sh
