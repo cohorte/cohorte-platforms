@@ -26,9 +26,9 @@ ENV container docker
 # avec les commandes "service" et "systemctl".
 
 RUN apt-get update
-RUN apt-get install  vim wget tar netcat-openbsd
+RUN apt-get install -y vim wget tar netcat-openbsd
 
-RUN apt-get install tzdata python3 pyton3-pip
+RUN apt-get install -y tzdata python3 pyton3-pip
 
 
 RUN python3 --version
