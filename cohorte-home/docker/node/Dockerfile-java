@@ -20,10 +20,11 @@ RUN mkdir -p $COHORTE_DATA
 
 COPY ./install/run.sh /opt
 
-RUN apt-get install -y psmisc
+RUN apt-get install -y psmisc dos2unix
 
 RUN chmod +x /opt/run.sh
 
+RUN dos2unix /opt/run.sh
 
 
 CMD ["/opt/run.sh"]
