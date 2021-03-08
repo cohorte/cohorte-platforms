@@ -76,7 +76,6 @@
 			<groupId>org.cohorte.eclipse</groupId>
 			<artifactId>org.cohorte.eclipse.runner.basic</artifactId>
 			<version>${cohorte-runner-basic-version}</version>
-			<type>pom</type>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -176,7 +175,7 @@
 						<version>2.10</version>
 						<executions>
 							<execution>
-								<id>cohorte-runner.basic</id>
+								<id>cohorte-runner-basic</id>
 								<phase>generate-sources</phase>
 								<goals>
 									<goal>copy-dependencies</goal>
@@ -187,7 +186,7 @@
 									<overWriteSnapshots>true</overWriteSnapshots>
 									<excludeTypes>pom</excludeTypes>
 									<includeGroupIds>
-										org.cohorte.eclipse
+									org.cohorte.eclipse
 									</includeGroupIds>
 								</configuration>
 							</execution>
@@ -1247,7 +1246,7 @@
 		<repository>
 			<id>runner.basic.snapshots</id>
 			<name>Runner Basic Snapshots Repository</name>
-			<url>https://nrm.cohorte.tech/repository/cohorte-snapshots</url>
+			<url>https://nrm.cohorte.tech/repository/cohorte-runner-snapshots</url>
 			<releases>
 				<enabled>false</enabled>
 			</releases>
