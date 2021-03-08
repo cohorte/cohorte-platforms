@@ -20,6 +20,6 @@ echo -e "\x1B[1;32m[INFO] Building Image [$DOCKER_REPOSITORY:$DOCKER_TAG] locate
 mkdir -p $DIR/runtime/install
 rm -rf $DIR/runtime/install/*
 
-cp $DIR/../target/cohorte-*-distribution.tar.gz $DIR/runtime-java-ubuntu/install/cohorte.tar.gz
+cp $DIR/../target/cohorte-*-distribution.tar.gz $DIR/runtime/install/cohorte.tar.gz
 
 bash $DIR/build_image.sh "$DIRECTORY" "$DOCKER_REPOSITORY" "$DOCKER_TAG" Dockerfile-python "$DOCKER_USER" "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"

@@ -497,9 +497,14 @@
 											</fileset>
 											<fileset dir="${basedir}/repo/java/jabsorb">
 												<include name="*.jar" />
-											</fileset><fileset dir="${basedir}/repo/java/remote">
+											</fileset>
+											<fileset dir="${basedir}/repo/java/remote">
 												<include name="*.jar" />
-											</fileset><fileset dir="${basedir}/repo/java/runtime">
+											</fileset>
+											<fileset dir="${basedir}/repo/java/runner">
+												<include name="*.jar" />
+											</fileset>
+											<fileset dir="${basedir}/repo/java/runtime">
 												<include name="*.jar" />
 											</fileset>
 											<fileset dir="${basedir}/repo/java/">

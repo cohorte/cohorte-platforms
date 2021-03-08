@@ -25,7 +25,7 @@ rm -rf $DIR/runtime/install/*
 
 
 
-cp $DIR/../target/cohorte-*-distribution.tar.gz $DIR/runtime-devices/install/cohorte.tar.gz
+cp $DIR/../target/cohorte-*-distribution.tar.gz $DIR/runtime/install/cohorte.tar.gz
 
 
 bash $DIR/build_image.sh "$DIRECTORY" "$DOCKER_REPOSITORY" "$DOCKER_TAG" Dockerfile "$DOCKER_USER" "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
