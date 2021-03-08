@@ -1271,7 +1271,7 @@
 		<repository>
 			<id>cohorte-nexus</id>
 			<name>Cohorte Releases Repository</name>
-			<url>https://nrm.cohorte.tech/repository/cohorte-runner-releases/</url>
+			<url>https://nrm.cohorte.tech/repository/cohorte-releases/</url>
 			<layout>default</layout>
 		</repository>
 		<snapshotRepository>
