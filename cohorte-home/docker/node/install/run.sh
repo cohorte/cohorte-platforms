@@ -18,6 +18,9 @@ echo "check launch_jvm.sh exists"
 if [ -f /opt/node/felix/launch/launch_jvm.sh ]; then
 	echo "launch launch_jvm.sh "
 	echo "start cohorte" 
+	dos2unix  /opt/node/felix/launch/launch_jvm.sh
+	dos2unix  /opt/node/felix/launch/config.properties
+	
 	bash /opt/node/felix/launch/launch_jvm.sh
 else
 	echo "no file /c/opt/node/felix/launch/launch_jvm.sh"
