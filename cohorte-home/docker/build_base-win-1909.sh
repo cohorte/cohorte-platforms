@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-DIRECTORY="$DIR/base-win"
+DIRECTORY="$DIR/base"
 DOCKER_REPOSITORY="cohorte/base"
 
 DOCKER_USER=$1

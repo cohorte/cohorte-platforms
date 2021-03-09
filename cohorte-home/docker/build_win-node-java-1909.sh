@@ -13,7 +13,7 @@
 ##
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-DIRECTORY="$DIR/node-java-win"
+DIRECTORY="$DIR/node"
 DOCKER_REPOSITORY="cohorte/node"
 
 DOCKER_TAG=$1-java-win1909

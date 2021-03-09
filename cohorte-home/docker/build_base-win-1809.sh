@@ -2,7 +2,7 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 echo "DIR=$DIR"
-DIRECTORY="$DIR/base-win"
+DIRECTORY="$DIR/base"
 DOCKER_REPOSITORY="cohorte/base"
 
 DOCKER_USER=$1
@@ -12,6 +12,6 @@ DOCKER_REGISTRY="dr.cohorte.tech"
 
 echo -e "\x1B[1;32m[INFO] Building Image [$DOCKER_REPOSITORY:1809] located on [$DIRECTORY]\x1B[0m"
 
-bash $DIR/build_image.sh "$DIRECTORY" "$DOCKER_REPOSITORY" ""1.5-win1809"" Dockerfile-1809 "$DOCKER_USER" "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
+bash $DIR/build_image.sh "$DIRECTORY" "$DOCKER_REPOSITORY" "1.5-win1809" Dockerfile-1809 "$DOCKER_USER" "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
 
 docker history "$DOCKER_REPOSITORY:$DOCKER_TAG"
