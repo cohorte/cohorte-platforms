@@ -22,6 +22,8 @@ if [ -f /opt/node/felix/launch/launch_jvm.sh ]; then
 	dos2unix  /opt/node/felix/launch/config.properties
 	
 	bash /opt/node/felix/launch/launch_jvm.sh
+	echo "finish started"
+	
 else
 	echo "no file /c/opt/node/felix/launch/launch_jvm.sh"
 	ls /opt/node/felix/launch/

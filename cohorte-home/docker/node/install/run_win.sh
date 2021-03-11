@@ -20,6 +20,8 @@ if [ -f /c/opt/node/felix/launch/launch_jvm_win.sh ]; then
 	echo "start cohorte" 
 	
 	bash /c/opt/node/felix/launch/launch_jvm_win.sh
+	echo "finish started"
+	
 else
 	echo "no file /c/opt/node/felix/launch/launch_jvm_win.sh"
 	ls /c/opt/node/felix/launch/
