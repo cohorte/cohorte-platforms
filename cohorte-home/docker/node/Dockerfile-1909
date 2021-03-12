@@ -23,7 +23,7 @@ COPY ./install/run_win.sh ./opt/run_win.sh
 RUN sh -c "chmod +x ./opt/run_win.sh"
 
 
-CMD ["bash","C:/opt/run_win.sh"]
+ENTRYPOINT ["bash","C:/opt/run_win.sh"]
 
 
 
