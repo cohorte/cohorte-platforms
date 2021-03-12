@@ -20,6 +20,7 @@ RUN mkdir -p $COHORTE_DATA
 # not possible to have pip 3.4 ith ubuntu 18.04
 
 COPY ./install/init_* /opt/
+COPY ./install/run.sh /opt/
 
 RUN chmod +x /opt/init*.sh
 
