@@ -23,6 +23,7 @@ COPY ./install/init_* /opt/
 COPY ./install/run.sh /opt/
 
 RUN chmod +x /opt/init*.sh
+RUN chmod +x /opt/run.sh
 
 RUN ls -l /opt
 
