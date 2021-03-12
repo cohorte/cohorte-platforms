@@ -23,8 +23,6 @@ COPY ./install/init_* /opt/
 
 RUN chmod +x /opt/init*.sh
 
-RUN chmod +x /opt/boot.sh
-
 RUN ls -l /opt
 
 VOLUME [ "/opt/node" ]
