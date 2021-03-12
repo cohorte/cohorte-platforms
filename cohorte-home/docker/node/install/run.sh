@@ -25,12 +25,6 @@ for deps in init_container_*.sh ; do
 	sh $deps $*
 done
 
-echo "run python init_container_*.py $*"
-# for all init container call by alphabetical order in
-for init in init_container_*.py ; do
-	echo "call python3 $init $* "
-	python3 $init $*
-done
 echo "check launch_jvm.sh exists"
 if [ -f /opt/node/felix/launch/launch_jvm.sh ]; then
 	echo "launch launch_jvm.sh "
