@@ -14,6 +14,17 @@ _term() {
 
 trap _term SIGTERM
 
+if [ -f /opt/init.sh ]; then
+	sh /opt/init.sh
+fi
+
+# execute shell 
+echo "execute dependencies if we need a new dependency in the docker container"
+for deps in init_container_*.sh ; do
+	echo "call sh $deps $*"
+	sh $deps $*
+done
+
 echo "check launch_jvm.sh exists"
 if [ -f /opt/node/felix/launch/launch_jvm.sh ]; then
 	echo "launch launch_jvm.sh "
