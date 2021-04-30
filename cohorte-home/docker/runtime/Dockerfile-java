@@ -1,4 +1,4 @@
-FROM cohorte/runtime:1.3.2-java-ubuntu
+FROM cohorte/base:1.3.2-java-ubuntu
 
 #-----------------------------------------------------------------------------
 # Cohorte Runtime image.
