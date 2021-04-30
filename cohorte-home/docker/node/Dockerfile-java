@@ -24,6 +24,9 @@ COPY ./install/run.sh /opt/
 
 RUN chmod +x /opt/init*.sh
 RUN chmod +x /opt/run.sh
+RUN apt-get install -y dos2unix
+RUN dos2unix /opt/run.sh
+
 
 RUN ls -l /opt
 
