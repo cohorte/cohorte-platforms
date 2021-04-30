@@ -1,4 +1,4 @@
-FROM azul/zulu-openjdk:8
+FROM ubuntu:16.04
 
 #-----------------------------------------------------------------------------
 # Cohorte Base image X86 for cohorte device
@@ -27,8 +27,13 @@ MAINTAINER "Bassem Debbabi" <bassem.debbabi@cohorte-technologies.com>
 # informer systemd qu'il s'execute sur un conteneur docker
 ENV container docker
 
+# installation du systemd au lieu du fakesystemd
+# ceci est necessaire pour pouvoir lancer mysql et openldap comme un service OS
+# avec les commandes "service" et "systemctl".
 RUN apt-get update
-
+RUN apt-get install -y wget java-common libasound2 libx11-6 libxau6 libxcb1 libxdmcp6 libxext6 libxi6 libxrender1 libxtst6 libfontconfig1
+RUN wget https://cdn.azul.com/zulu/bin/zulu1.8.0_66-8.11.0.1-x86lx64.deb
+RUN dpkg -i *.deb
 
 RUN apt-get install -y tzdata 
 

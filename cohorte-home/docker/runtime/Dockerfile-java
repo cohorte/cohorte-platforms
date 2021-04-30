@@ -1,4 +1,4 @@
-FROM cohorte/base:1.3.2-java-ubuntu
+FROM cohorte/base:1.5-java-ubuntu
 
 #-----------------------------------------------------------------------------
 # Cohorte Runtime image.
@@ -10,24 +10,16 @@ MAINTAINER "Bassem Debbabi" <bassem.debbabi@cohorte-technologies.com>
 
 ENV REFRESHED_AT 20170707_1130
 
-# Installation commands
 
-ENV COHORTE_BASE /opt/node
-ENV COHORTE_DATA /opt/data
+ENV COHORTE_HOME /opt/cohorte 
 
-RUN mkdir -p $COHORTE_BASE
-RUN mkdir -p $COHORTE_DATA
+COPY ./install/cohorte.tar.gz ./opt/cohorte.tar.gz
 
-COPY ./install/run.sh /opt
-
-RUN apt-get install -y psmisc dos2unix
-
-RUN chmod +x /opt/run.sh
-
-RUN dos2unix /opt/run.sh
-
-
-RUN ls -l /opt
-
-
-EXPOSE 9000 9001 8000 8001 8002 8003 8004 8005 8006 8007 8008 8009 8010
+RUN cd ./opt ; tar xvf cohorte.tar.gz
+RUN rm -f ./opt/cohorte.tar.gz
+RUN ls -l ./opt
+RUN mv -f /opt/cohorte-* /opt/cohorte
+RUN ls -l ./opt
+RUN cd ${COHORTE_HOME}
+#RUN mv -f /opt/cohorte/extra/linux /opt/cohorte/extra/Linux
+RUN ls -l /opt/cohorte/extra/linux/
