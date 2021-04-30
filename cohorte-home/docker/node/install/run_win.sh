@@ -19,8 +19,7 @@ if [ -f /c/opt/node/felix/launch/launch_jvm_win.sh ]; then
 	echo "launch launch_jvm.sh "
 	echo "start cohorte"
 	# add ln to allow visibilité  for shell like linux
-	ln -s /c/var /var 
-	ln -s /c/opt /opt 
+	
 	bash /c/opt/node/felix/launch/launch_jvm_win.sh
 	echo "finish started"
 	
