@@ -63,7 +63,7 @@
    <bundle id="org.cohorte.shell.remote" version="1.2.1">
       <category name="shell"/>
    </bundle>
-   <bundle id="org.cohorte.utilities" version="1.3.4">
+   <bundle id="org.cohorte.utilities" version="1.4.0">
       <category name="utilities"/>
    </bundle>
    <bundle id="org.cohorte.slf4j-OCIL" version="1.2.1">
