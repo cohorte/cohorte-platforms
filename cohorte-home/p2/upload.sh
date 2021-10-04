@@ -10,10 +10,10 @@ cd $DIR/target/repository
 
 for file in ./*
 do
-	curl -v --user "$USERNAME:$PASSWORD" --upload-file ${file} https://nrm.cohorte.tech/repository/${REPO_NAME}/${file}
+	curl -k -v --user "$USERNAME:$PASSWORD" --upload-file ${file} https://nrm.cohorte.tech/repository/${REPO_NAME}/${file}
 done;
 
 for file in plugins/*
 do
-	curl -v --user "$USERNAME:$PASSWORD" --upload-file ${file} https://nrm.cohorte.tech/repository/${REPO_NAME}/${file}
+	curl -k -v --user "$USERNAME:$PASSWORD" --upload-file ${file} https://nrm.cohorte.tech/repository/${REPO_NAME}/${file}
 done;
